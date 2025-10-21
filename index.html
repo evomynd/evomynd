@@ -171,6 +171,7 @@
             
             <form id="task-form">
                 <input type="hidden" id="modal-task-id">
+                <input type="hidden" id="modal-mode">
                 
                 <div id="destination-container" class="mb-4">
                     <label class="block text-gray-400 text-sm font-bold mb-2">Mover para:</label>
@@ -288,6 +289,7 @@
                     title: document.getElementById('modal-title'),
                     taskText: document.getElementById('modal-task-text'),
                     taskId: document.getElementById('modal-task-id'),
+                    mode: document.getElementById('modal-mode'),
                     form: document.getElementById('task-form'),
                     formFields: document.getElementById('form-fields'),
                     formError: document.getElementById('form-error'),
@@ -326,7 +328,7 @@
             
             // --- TEMPLATES DE FORMULÁRIO ---
             const formTemplates = {
-                'next-action': `
+                'next-action-process': `
                     <div class="mb-4">
                         <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Próxima Ação</label>
                         <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -335,6 +337,37 @@
                         <label for="context-input" class="block text-gray-400 text-sm font-bold mb-2">Contexto</label>
                         <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
+                    </div>`,
+                'next-action-edit': `
+                    <div class="mb-4">
+                        <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Próxima Ação</label>
+                        <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4" id="context-wrapper">
+                        <label for="context-input" class="block text-gray-400 text-sm font-bold mb-2">Contexto</label>
+                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <datalist id="context-list"></datalist>
+                    </div>
+                     <div class="border-t border-gray-700 pt-4 mt-4">
+                         <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="due-date-input" class="block text-gray-400 text-sm font-bold mb-2">Data</label>
+                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="due-time-input" class="block text-gray-400 text-sm font-bold mb-2">Hora</label>
+                                <input type="time" id="due-time-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="border-t border-gray-700 pt-4 mt-4">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-700 border border-gray-600 rounded text-blue-500 focus:ring-blue-600">
+                            <span class="text-gray-400">É uma ação de 2 minutos?</span>
+                        </label>
+                        <div id="timer-starter" class="hidden text-center mt-4">
+                            <button type="button" id="start-timer-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-md transition w-full">Iniciar Timer de 2 Minutos</button>
+                        </div>
                     </div>`,
                 'project': `<div class="mb-4">
                                 <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Nome do Projeto</label>
@@ -603,6 +636,7 @@
             const openTaskModal = (task, mode = 'process') => {
                 app.modal.title.textContent = mode === 'process' ? 'Processar Item' : 'Editar / Mover Item';
                 app.modal.taskId.value = task.id;
+                app.modal.mode.value = mode;
                 
                 app.modal.destinationContainer.style.display = 'block';
 
@@ -610,18 +644,23 @@
                     app.modal.taskText.textContent = task.text;
                     app.modal.taskText.classList.remove('hidden');
                     app.modal.form.elements.destination.value = 'next-action';
-                    updateModalForm('next-action', task);
+                    updateModalForm('next-action', task, mode);
                 } else { // 'edit' mode
                     app.modal.taskText.classList.add('hidden');
                     const destination = task.status;
                     app.modal.form.elements.destination.value = destination;
-                    updateModalForm(destination, task);
+                    updateModalForm(destination, task, mode);
                 }
                 app.modal.element.classList.remove('hidden');
             };
             
-            const updateModalForm = (destination, task) => {
-                app.modal.formFields.innerHTML = formTemplates[destination];
+            const updateModalForm = (destination, task, mode) => {
+                let template = formTemplates[destination];
+                if(destination === 'next-action'){
+                    template = mode === 'process' ? formTemplates['next-action-process'] : formTemplates['next-action-edit'];
+                }
+                app.modal.formFields.innerHTML = template;
+                
                 const textInput = document.getElementById('task-text-input');
                 if (textInput) {
                     textInput.value = task.text; textInput.focus();
@@ -636,6 +675,17 @@
                     const contextInput = document.getElementById('context-input');
                     contextInput.value = task.context || '';
                     document.getElementById('context-list').innerHTML = getExistingContexts().map(c => `<option value="${c}"></option>`).join('');
+                    
+                    const twoMinCheckbox = document.getElementById('two-min-rule-checkbox');
+                    if(twoMinCheckbox){
+                        app.modal.saveBtn.classList.remove('hidden');
+                        document.getElementById('timer-starter').classList.add('hidden');
+                        twoMinCheckbox.checked = false;
+                        twoMinCheckbox.addEventListener('change', (e) => {
+                            document.getElementById('timer-starter').classList.toggle('hidden', !e.target.checked);
+                            app.modal.saveBtn.classList.toggle('hidden', e.target.checked);
+                        });
+                    }
                 }
             };
 
@@ -647,6 +697,7 @@
             const saveTask = (e) => { 
                 e.preventDefault(); 
                 const id = app.modal.taskId.value; 
+                const mode = app.modal.mode.value;
                 const task = findTask(id); 
                 if (!task) return; 
                 const destination = app.modal.form.elements.destination.value; 
@@ -668,10 +719,17 @@
 
                 switch (destination) { 
                     case 'next-action': 
-                        context = document.getElementById('context-input').value.trim(); 
-                        if (!context) isValid = false; 
-                        if (context && !context.startsWith('@')) context = '@' + context; 
-                        task.context = context; 
+                        const twoMinCheckbox = document.getElementById('two-min-rule-checkbox');
+                        const isTwoMinAction = twoMinCheckbox && twoMinCheckbox.checked;
+
+                        if (!isTwoMinAction) {
+                            context = document.getElementById('context-input').value.trim(); 
+                            if (!context) isValid = false; 
+                            if (context && !context.startsWith('@')) context = '@' + context; 
+                            task.context = context; 
+                        } else {
+                            task.context = null;
+                        }
                         break; 
                     default: 
                         task.context = null; 
@@ -685,7 +743,7 @@
                     }
                     closeModal(); 
                     render(); 
-                    if (destination === 'next-action') {
+                    if (destination === 'next-action' && mode === 'process') {
                         openQuickActionPrompt(task.id);
                     }
                 } else { 
@@ -706,8 +764,13 @@
                 isTimerPaused = false;
                 app.timer.pauseBtn.textContent = 'Pausar';
                 timerSeconds = 120;
-                currentTimerTask = findTask(pendingActionTaskId);
-                tasks = tasks.filter(t => t.id !== pendingActionTaskId);
+                
+                const taskId = pendingActionTaskId || app.modal.taskId.value;
+                currentTimerTask = findTask(taskId);
+                
+                if (tasks.some(t => t.id === taskId)) {
+                     tasks = tasks.filter(t => t.id !== taskId);
+                }
                 render();
 
                 app.timer.taskText.textContent = currentTimerTask.text;
@@ -965,6 +1028,13 @@
                     return;
                 }
                 
+                 if (button.id === 'start-timer-btn') {
+                    pendingActionTaskId = app.modal.taskId.value;
+                    closeModal();
+                    startTimer();
+                    return;
+                }
+
                 if (button.classList.contains('edit-btn')) openTaskModal(findTask(id), 'edit');
                 if (button.classList.contains('delete-btn')) deleteTask(id);
                 if (button.classList.contains('done-btn')) deleteTask(id);
@@ -1044,7 +1114,8 @@
                 const currentTask = findTask(taskId);
                 const currentText = document.getElementById('task-text-input')?.value || currentTask.text;
                 const tempTask = { ...currentTask, text: currentText };
-                updateModalForm(e.target.value, tempTask);
+                const mode = app.modal.mode.value;
+                updateModalForm(e.target.value, tempTask, mode);
             }));
 
             // --- INICIALIZAÇÃO ---
