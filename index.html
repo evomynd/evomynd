@@ -1039,14 +1039,18 @@
                     return;
                 }
                 
-                if (button.classList.contains('direct-process-btn')) {
+                if (button.classList.contains('direct-process-btn') || button.classList.contains('process-btn')) {
                     e.preventDefault();
-                    directProcessTask(id, button.dataset.destination);
-                    return;
-                }
-                if (button.classList.contains('process-btn')) {
-                     e.preventDefault();
-                    openTaskModal(findTask(id), 'process');
+                    const dropdown = button.closest('[id^="process-dropdown-"]');
+                    if (dropdown) {
+                        dropdown.classList.add('hidden');
+                    }
+
+                    if (button.classList.contains('direct-process-btn')) {
+                        directProcessTask(id, button.dataset.destination);
+                    } else {
+                        openTaskModal(findTask(id), 'process');
+                    }
                     return;
                 }
                 
