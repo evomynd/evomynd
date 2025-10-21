@@ -21,6 +21,9 @@
             transform: scale(0.95);
             display: none;
         }
+        .task-item:hover .task-actions {
+            opacity: 1;
+        }
         .modal-overlay {
             transition: opacity 0.3s ease-in-out;
         }
@@ -54,8 +57,7 @@
 
         <header class="text-center mb-8">
             <h1 class="text-4xl sm:text-5xl font-bold text-white">Fluxo Ativo</h1>
-            <p class="text-lg text-gray-400 mt-2">Suas "coisas" não devem ficar ocupando espaço na mente, descarregue aqui.</p>
-            <p class="text-sm text-gray-500 mt-2">(coisas = tarefas, compromissos, lembretes, ideias, projetos e tudo que te preocupa)</p>
+            <p class="text-lg text-gray-400 mt-2">Deixe sua mente mais leve, registre aqui o que está pensando e seja mais produtivo.</p>
         </header>
 
         <div class="mb-8 text-center">
@@ -78,11 +80,10 @@
         <main>
             <!-- Visualização: Caixa de Entrada -->
             <div id="inbox-view" class="view">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold mb-4 text-white">Capture Tudo</h2>
-                    <div class="flex flex-col sm:flex-row gap-4">
+                <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                    <div class="flex gap-2">
                         <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-700 border border-gray-600 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-md">Adicionar à Caixa</button>
+                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-md flex-shrink-0">Adicionar</button>
                     </div>
                 </div>
                 <div id="inbox-list" class="mt-8"></div>
