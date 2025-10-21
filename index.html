@@ -447,7 +447,7 @@
                         <button data-id="${task.id}" class="toggle-process-dropdown-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center">
                             Processar <svg class="ml-2 -mr-1 h-4 w-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                         </button>
-                        <div id="process-dropdown-${task.id}" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
+                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
                             <div class="py-1">
                                 <a href="#" class="process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}">➡️ Próxima Ação...</a>
                                 <a href="#" class="direct-process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
@@ -1017,8 +1017,8 @@
             
             
             document.body.addEventListener('click', (e) => {
-                const isDropdownButton = e.target.closest('.toggle-process-dropdown-btn');
-                if (!isDropdownButton) {
+                const isInsideDropdown = e.target.closest('.relative');
+                if (!isInsideDropdown) {
                     document.querySelectorAll('[id^="process-dropdown-"]').forEach(d => d.classList.add('hidden'));
                 }
 
@@ -1028,8 +1028,14 @@
                 const id = button.dataset.id;
                 
                 if (button.classList.contains('toggle-process-dropdown-btn')) {
-                    const dropdown = document.getElementById(`process-dropdown-${id}`);
-                    dropdown.classList.toggle('hidden');
+                    const targetDropdown = document.getElementById(`process-dropdown-${id}`);
+                    const isCurrentlyHidden = targetDropdown.classList.contains('hidden');
+                    
+                    document.querySelectorAll('[id^="process-dropdown-"]').forEach(d => d.classList.add('hidden'));
+
+                    if (isCurrentlyHidden) {
+                        targetDropdown.classList.remove('hidden');
+                    }
                     return;
                 }
                 
