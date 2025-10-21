@@ -21,9 +21,6 @@
             transform: scale(0.95);
             display: none;
         }
-        .task-item:hover .task-actions {
-            opacity: 1;
-        }
         .modal-overlay {
             transition: opacity 0.3s ease-in-out;
         }
@@ -138,7 +135,7 @@
     </div>
 
     <!-- Tutorial Modal -->
-    <div id="tutorial-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 hidden">
+    <div id="tutorial-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
         <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg relative">
             <div id="tutorial-content"></div>
             <div class="flex justify-between mt-6">
@@ -302,7 +299,7 @@
                     </div>
                      <div class="border-t border-gray-700 pt-4 mt-4">
                         <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-700 border-gray-600 rounded text-blue-500 focus:ring-blue-600">
+                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-700 border border-gray-600 rounded text-blue-500 focus:ring-blue-600">
                             <span class="text-gray-400">É uma ação de 2 minutos?</span>
                         </label>
                         <div id="timer-starter" class="hidden text-center mt-4">
@@ -414,7 +411,7 @@
                         </div>
                         <div class="flex items-center ml-4">
                             ${task.status === 'next-action' && task.context ? `<span class="text-xs bg-gray-700 text-blue-400 font-semibold py-1 px-3 rounded-full mr-4 flex-shrink-0">${task.context}</span>` : ''}
-                            <div class="task-actions flex gap-2 opacity-100 sm:opacity-0 transition-opacity duration-300">
+                            <div class="task-actions flex gap-2 opacity-100 transition-opacity duration-300">
                                 ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md">Ações</button>` : ''}
                                 ${task.status === 'inbox' ? inboxActionsHTML : ''}
                                 ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md">Editar</button>` : ''}
@@ -724,6 +721,101 @@
                     currentTimerTask = null;
                 }
             };
+            
+            // --- Lógica do Tutorial ---
+            let tutorialStep = 0;
+            const tutorialSteps = [
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Bem-vindo ao Fluxo Ativo!</h3>
+                        <p class="text-gray-400">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-white">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `<p class="text-gray-400">Clique no botão <strong class="text-white">Processar</strong> para decidir o que fazer com este item.</p>`,
+                    target: () => document.querySelector('.toggle-process-dropdown-btn'),
+                    action: 'click_target',
+                },
+                {
+                    content: `<p class="text-gray-400">Como esta é uma tarefa que você precisa fazer, clique em <strong class="text-white">Próxima Ação...</strong></p>`,
+                    target: () => document.querySelector('.process-btn'),
+                    action: 'click_target',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">O que é um "Contexto"?</h3>
+                        <p class="text-gray-400">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
+                        <p class="text-gray-300 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-white">@telefone</strong>. Tente adicionar um contexto e salvar.</p>
+                    `,
+                    target: () => document.getElementById('context-wrapper'),
+                    action: 'submit_form',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Pronto!</h3>
+                        <p class="text-gray-400">Você processou seu primeiro item! Agora você pode encontrar "Marcar dentista" na sua lista de "Próximas Ações".</p>
+                    `,
+                    action: 'next',
+                }
+            ];
+
+            function advanceTutorial() {
+                tutorialStep++;
+                executeTutorialStep();
+            }
+
+            function endTutorial() {
+                app.tutorial.modal.classList.add('hidden');
+                document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                localStorage.setItem('gtd_tutorial_completed', 'true');
+            }
+
+            function executeTutorialStep() {
+                document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                
+                if (tutorialStep >= tutorialSteps.length) {
+                    endTutorial();
+                    return;
+                }
+
+                const step = tutorialSteps[tutorialStep];
+                app.tutorial.content.innerHTML = step.content;
+                app.tutorial.modal.classList.remove('hidden');
+
+                const targetElement = step.target ? step.target() : null;
+
+                if (step.action === 'next') {
+                    app.tutorial.nextBtn.textContent = (tutorialStep === tutorialSteps.length - 1) ? 'Concluir' : 'Próximo';
+                    app.tutorial.nextBtn.onclick = advanceTutorial;
+                } else {
+                    app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.onclick = () => {
+                        app.tutorial.modal.classList.add('hidden');
+                        if (targetElement) {
+                            targetElement.classList.add('tutorial-highlight');
+                            const eventType = step.action === 'submit_form' ? 'submit' : 'click';
+                            const listenerTarget = step.action === 'submit_form' ? app.modal.form : targetElement;
+                            
+                            listenerTarget.addEventListener(eventType, function handler(e) {
+                                setTimeout(() => {
+                                    document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                                    advanceTutorial();
+                                }, 150);
+                            }, { once: true });
+                        }
+                    };
+                }
+            }
+
+            app.tutorial.skipBtn.addEventListener('click', endTutorial);
+
+            function startTutorial() {
+                if (localStorage.getItem('gtd_tutorial_completed') !== 'true' && tasks.some(t => t.text === 'Marcar dentista')) {
+                    tutorialStep = 0;
+                    executeTutorialStep();
+                }
+            }
 
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
@@ -895,6 +987,7 @@
 
             // --- INICIALIZAÇÃO ---
             render();
+            startTutorial();
         });
     </script>
 </body>
