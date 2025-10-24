@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EVOMYND</title>
     <!-- PWA meta tags for home screen app name -->
-    <meta name="application-name" content="EVOMYND">
+    <meta name="application-name" content="EVOMYND_01">
     <meta name="apple-mobile-web-app-title" content="EVOMYND">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -63,7 +63,7 @@
             <p class="text-lg text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
         </header>
 
-        <div class="mb-8 text-center">
+        <div class="flex flex-col sm:flex-row justify-center gap-3 mb-8">
             <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg sm:px-10 bg-gray-800 text-gray-400 hover:bg-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
@@ -743,6 +743,9 @@
             const closeModal = () => { 
                 app.modal.element.classList.add('hidden'); 
                 app.modal.formError.textContent = '';
+                if (currentView === 'review-view') {
+                    render(); 
+                }
             };
 
             const saveTask = (e) => { 
@@ -1191,8 +1194,7 @@
                         if(!project.subTasks) project.subTasks = [];
                         project.subTasks.push({ id: Date.now().toString(), text, completed: false, dueDate: null });
                         input.value = '';
-                        saveTasks();
-                        renderSubTasks(projectId);
+                        render();
                     }
                 }
                 if (button.classList.contains('delete-subtask-btn')) {
@@ -1201,8 +1203,7 @@
                     const project = findTask(projectId);
                     if (project) {
                         project.subTasks = project.subTasks.filter(st => st.id !== subtaskId);
-                        saveTasks();
-                        renderSubTasks(projectId);
+                        render();
                     }
                 }
             });
@@ -1216,19 +1217,23 @@
                         const subtask = project.subTasks.find(st => st.id === subtaskId);
                         if (subtask) {
                             subtask.completed = target.checked;
-                            saveTasks();
-                            renderSubTasks(projectId);
+                           render();
                         }
                     }
                 }
                 if (target.classList.contains('subtask-date')) {
                     const { projectId, subtaskId } = target.dataset;
+                    if(target.value && target.value < today) {
+                        alert('Não é possível agendar para uma data passada.');
+                        target.value = '';
+                        return;
+                    }
                     const project = findTask(projectId);
                     if (project) {
                         const subtask = project.subTasks.find(st => st.id === subtaskId);
                         if (subtask) {
                             subtask.dueDate = target.value;
-                            saveTasks();
+                            render();
                         }
                     }
                 }
@@ -1260,6 +1265,4 @@
     </script>
 </body>
 </html>
-
-
 
