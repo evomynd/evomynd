@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="dark">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#111827">
+    <meta name="theme-color" content="#ffffff">
     
     <!-- Ícones para diferentes dispositivos e resoluções -->
     <link rel="icon" type="image/png" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
@@ -69,17 +69,17 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
     <div id="app" class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
 
         <header class="text-center mb-8">
-            <h1 class="text-4xl sm:text-5xl font-bold text-white">EVOMYND</h1>
-            <p class="text-lg text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">EVOMYND</h1>
+            <p class="text-lg text-gray-600 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
         </header>
 
         <div class="mb-8 text-center flex gap-4 justify-center">
-            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-gray-800 text-gray-400 hover:bg-gray-700">
+            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
             </button>
@@ -97,20 +97,20 @@
 
         <!-- Navegação Principal -->
         <nav class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Caixa de Entrada</button>
-            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Próximas Ações</button>
-            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Projetos</button>
-            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Aguardando</button>
-            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Algum Dia/Talvez</button>
-            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-gray-800 text-gray-400 hover:bg-gray-700">Referência</button>
+            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Caixa de Entrada</button>
+            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Próximas Ações</button>
+            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Projetos</button>
+            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Aguardando</button>
+            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Algum Dia/Talvez</button>
+            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Referência</button>
         </nav>
 
         <main>
             <!-- Visualização: Caixa de Entrada -->
             <div id="inbox-view" class="view">
-                <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
                     <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-700 border border-gray-600 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-50 border border-gray-300 rounded-md py-3 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                         <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-md flex-shrink-0">Adicionar</button>
                     </div>
                 </div>
@@ -119,44 +119,44 @@
 
             <!-- Other views are the same -->
             <div id="next-actions-view" class="view hidden">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-white">Filtre por Contexto</h2>
+                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-900">Filtre por Contexto</h2>
                     <div id="context-filters" class="flex flex-wrap gap-3"></div>
                 </div>
                 <div id="next-actions-list"></div>
             </div>
             <div id="projects-view" class="view hidden">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold text-white">Projetos Ativos</h2>
-                    <p class="text-gray-400 mt-1">Resultados que requerem mais de uma ação.</p>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-900">Projetos Ativos</h2>
+                    <p class="text-gray-600 mt-1">Resultados que requerem mais de uma ação.</p>
                 </div>
                 <div id="projects-list" class="mt-8"></div>
             </div>
             <div id="calendar-view" class="view hidden">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold text-white">Itens Agendados</h2>
-                    <p class="text-gray-400 mt-1">Seus compromissos e tarefas com data marcada.</p>
+                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-900">Itens Agendados</h2>
+                    <p class="text-gray-600 mt-1">Seus compromissos e tarefas com data marcada.</p>
                 </div>
                 <div id="calendar-list" class="mt-8"></div>
             </div>
             <div id="waiting-for-view" class="view hidden">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold text-white">Aguardando Resposta/Evento</h2>
-                     <p class="text-gray-400 mt-1">Itens que delegou ou que dependem de outros.</p>
+                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-900">Aguardando Resposta/Evento</h2>
+                     <p class="text-gray-600 mt-1">Itens que delegou ou que dependem de outros.</p>
                 </div>
                 <div id="waiting-for-list" class="mt-8"></div>
             </div>
             <div id="someday-maybe-view" class="view hidden">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold text-white">Algum Dia / Talvez</h2>
-                     <p class="text-gray-400 mt-1">Ideias para o futuro, sem compromisso imediato.</p>
+                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-900">Algum Dia / Talvez</h2>
+                     <p class="text-gray-600 mt-1">Ideias para o futuro, sem compromisso imediato.</p>
                 </div>
                 <div id="someday-maybe-list" class="mt-8"></div>
             </div>
             <div id="reference-view" class="view hidden">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold text-white">Material de Referência</h2>
-                     <p class="text-gray-400 mt-1">Informações úteis e não acionáveis.</p>
+                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-900">Material de Referência</h2>
+                     <p class="text-gray-600 mt-1">Informações úteis e não acionáveis.</p>
                 </div>
                 <div id="reference-list" class="mt-8"></div>
             </div>
@@ -165,10 +165,10 @@
 
     <!-- Tutorial Modal -->
     <div id="tutorial-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg relative">
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg relative">
             <div id="tutorial-content"></div>
             <div class="flex justify-between mt-6">
-                <button id="tutorial-skip-btn" class="text-gray-400 hover:text-white transition">Pular</button>
+                <button id="tutorial-skip-btn" class="text-gray-500 hover:text-gray-900 transition">Pular</button>
                 <button id="tutorial-next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Próximo</button>
             </div>
         </div>
@@ -176,13 +176,13 @@
 
 
     <!-- Timer Overlay -->
-    <div id="timer-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center p-4 text-white hidden z-50">
+    <div id="timer-overlay" class="fixed inset-0 bg-white bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 hidden z-50">
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
         <div id="timer-display" class="text-8xl md:text-9xl font-mono font-bold">02:00</div>
         <div id="timer-running-controls" class="mt-12 flex flex-col sm:flex-row gap-4">
             <button id="timer-early-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Concluir Ação</button>
             <button id="timer-pause-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Pausar</button>
-            <button id="timer-cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Cancelar</button>
+            <button id="timer-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-md transition text-lg">Cancelar</button>
         </div>
         <div id="timer-finished-controls" class="mt-12 flex flex-col sm:flex-row gap-4 hidden">
             <button id="timer-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Ação Concluída</button>
@@ -193,22 +193,22 @@
 
     <!-- Modal para Processar / Editar Item -->
     <div id="task-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-start justify-center overflow-y-auto hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all my-8 mx-4">
-            <h3 id="modal-title" class="text-2xl font-bold text-white mb-6">Processar Item</h3>
-            <p id="modal-task-text" class="bg-gray-700 p-4 rounded-md text-gray-300 mb-6 hidden"></p>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all my-8 mx-4">
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-900 mb-6">Processar Item</h3>
+            <p id="modal-task-text" class="bg-gray-100 p-4 rounded-md text-gray-700 mb-6 hidden"></p>
             
             <form id="task-form">
                 <input type="hidden" id="modal-task-id">
                 <input type="hidden" id="modal-mode">
                 
                 <div id="destination-container" class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2">Mover para:</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Mover para:</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <label class="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
-                        <label class="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
-                        <label class="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
-                        <label class="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
-                        <label class="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
+                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
+                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
+                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
+                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
+                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
                     </div>
                 </div>
 
@@ -216,11 +216,11 @@
                     <!-- Fields will be dynamically inserted here -->
                 </div>
 
-                <div id="form-error" class="text-red-400 text-sm mt-4 mb-20"></div>
+                <div id="form-error" class="text-red-600 text-sm mt-4 mb-20"></div>
                 
-                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 p-4">
+                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4">
                     <div class="flex justify-end gap-4 container mx-auto max-w-lg">
-                        <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
+                        <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
                         <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Salvar</button>
                     </div>
                 </div>
@@ -230,10 +230,10 @@
 
     <!-- Modal de Ação Rápida -->
     <div id="quick-action-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
-            <p class="text-white text-lg mb-6">É uma ação de até 2 minutos e deseja fazer agora?</p>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
+            <p class="text-gray-900 text-lg mb-6">É uma ação de até 2 minutos e deseja fazer agora?</p>
             <div class="flex justify-center gap-4">
-                <button id="quick-action-no-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-md transition">Não</button>
+                <button id="quick-action-no-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Não</button>
                 <button id="quick-action-yes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Sim</button>
             </div>
         </div>
@@ -241,21 +241,21 @@
 
     <!-- Modal de Agendamento -->
     <div id="schedule-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all">
-            <h3 class="text-2xl font-bold text-white mb-6">Programar Ação</h3>
-            <p id="schedule-task-text" class="bg-gray-700 p-4 rounded-md text-gray-300 mb-6"></p>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">Programar Ação</h3>
+            <p id="schedule-task-text" class="bg-gray-100 p-4 rounded-md text-gray-700 mb-6"></p>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="schedule-date-input" class="block text-gray-400 text-sm font-bold mb-2">Data</label>
-                    <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
+                    <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label for="schedule-time-input" class="block text-gray-400 text-sm font-bold mb-2">Hora</label>
-                    <input type="time" id="schedule-time-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
+                    <input type="time" id="schedule-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
             <div class="flex justify-end gap-4 mt-6">
-                <button id="schedule-later-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-md transition">Agora não</button>
+                <button id="schedule-later-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Agora não</button>
                 <button id="schedule-save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition disabled:bg-gray-500 disabled:cursor-not-allowed" disabled>Programar</button>
             </div>
         </div>
@@ -263,21 +263,21 @@
     
     <!-- Modal de Confirmação -->
     <div id="confirm-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
-            <p id="confirm-modal-text" class="text-white text-lg mb-6"></p>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
+            <p id="confirm-modal-text" class="text-gray-900 text-lg mb-6"></p>
             <div class="flex justify-center gap-4">
-                <button id="confirm-cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
+                <button id="confirm-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
                 <button id="confirm-ok-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition">Confirmar</button>
             </div>
         </div>
     </div>
     
     <!-- Revisão Semanal Footer -->
-    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 hidden">
+    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 hidden">
         <div class="container mx-auto max-w-4xl flex flex-col gap-3 p-4">
-            <span id="weekly-review-step" class="text-green-500 font-semibold text-center"></span>
+            <span id="weekly-review-step" class="text-green-600 font-semibold text-center"></span>
             <div class="flex justify-center px-4">
-                <div class="h-2 bg-gray-700 rounded-full w-full max-w-lg">
+                <div class="h-2 bg-gray-300 rounded-full w-full max-w-lg">
                     <div id="weekly-review-progress" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
                 </div>
             </div>
@@ -292,14 +292,14 @@
     
     <!-- Modal de Conclusão da Revisão -->
     <div id="review-complete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all text-center relative">
-            <button id="review-complete-close" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all text-center relative">
+            <button id="review-complete-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl">&times;</button>
             <div class="mb-6">
                 <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <h3 class="text-2xl font-bold text-white mb-2">Parabéns!</h3>
-                <p class="text-gray-400">Você completou sua revisão semanal com sucesso.</p>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Parabéns!</h3>
+                <p class="text-gray-600">Você completou sua revisão semanal com sucesso.</p>
             </div>
         </div>
     </div>
@@ -413,75 +413,75 @@
             const formTemplates = {
                 'next-action-process': `
                     <div class="mb-4">
-                        <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Próxima Ação</label>
+                        <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4" id="context-wrapper">
-                        <label for="context-input" class="block text-gray-400 text-sm font-bold mb-2">Contexto</label>
-                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="context-input" class="block text-gray-700 text-sm font-bold mb-2">Contexto</label>
+                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
                     </div>`,
                 'next-action-edit': `
                     <div class="mb-4">
-                        <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Próxima Ação</label>
+                        <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4" id="context-wrapper">
-                        <label for="context-input" class="block text-gray-400 text-sm font-bold mb-2">Contexto</label>
-                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="context-input" class="block text-gray-700 text-sm font-bold mb-2">Contexto</label>
+                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
                     </div>
-                     <div class="border-t border-gray-700 pt-4 mt-4">
+                     <div class="border-t border-gray-300 pt-4 mt-4">
                          <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="due-date-input" class="block text-gray-400 text-sm font-bold mb-2">Data</label>
-                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
+                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
-                                <label for="due-time-input" class="block text-gray-400 text-sm font-bold mb-2">Hora</label>
-                                <input type="time" id="due-time-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
+                                <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                     </div>
-                     <div class="border-t border-gray-700 pt-4 mt-4">
+                     <div class="border-t border-gray-300 pt-4 mt-4">
                         <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-700 border border-gray-600 rounded text-blue-500 focus:ring-blue-600">
-                            <span class="text-gray-400">É uma ação de 2 minutos?</span>
+                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-50 border border-gray-300 rounded text-blue-500 focus:ring-blue-600">
+                            <span class="text-gray-700">É uma ação de 2 minutos?</span>
                         </label>
                         <div id="timer-starter" class="hidden text-center mt-4">
                             <button type="button" id="start-timer-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-md transition w-full">Iniciar Timer de 2 Minutos</button>
                         </div>
                     </div>`,
                 'project': `<div class="mb-4">
-                                <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Nome do Projeto</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Nome do Projeto</label>
+                                <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
-                                    <label for="due-date-input" class="block text-gray-400 text-sm font-bold mb-2">Data de Conclusão</label>
-                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data de Conclusão</label>
+                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label for="due-time-input" class="block text-gray-400 text-sm font-bold mb-2">Hora</label>
-                                    <input type="time" id="due-time-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
+                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>`,
                 'waiting': `<div class="mb-4">
-                                <label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Aguardando por</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Aguardando por</label>
+                                <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
-                                    <label for="due-date-input" class="block text-gray-400 text-sm font-bold mb-2">Data de Acompanhamento</label>
-                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data de Acompanhamento</label>
+                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label for="due-time-input" class="block text-gray-400 text-sm font-bold mb-2">Hora</label>
-                                    <input type="time" id="due-time-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
+                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>`,
-                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Ideia</label><input type="text" id="task-text-input" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></div>`,
-                'reference': `<div class="mb-4"><label for="task-text-input" class="block text-gray-400 text-sm font-bold mb-2">Referência</label><textarea id="task-text-input" rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`
+                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Ideia</label><input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></div>`,
+                'reference': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Referência</label><textarea id="task-text-input" rows="4" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`
             };
 
 
@@ -530,26 +530,26 @@
                         <button data-id="${task.id}" class="toggle-process-dropdown-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center">
                             Processar <svg class="ml-2 -mr-1 h-4 w-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                         </button>
-                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
+                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10 border border-gray-200">
                             <div class="py-1">
-                                <a href="#" class="process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}">➡️ Próxima Ação...</a>
-                                <a href="#" class="direct-process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
-                                <a href="#" class="direct-process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}" data-destination="waiting">⏳ Mover p/ Aguardando</a>
-                                <a href="#" class="direct-process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}" data-destination="someday">💡 Mover p/ Algum Dia</a>
-                                <a href="#" class="direct-process-btn text-gray-300 block px-4 py-2 text-sm hover:bg-gray-600" data-id="${task.id}" data-destination="reference">📋 Mover p/ Referência</a>
+                                <a href="#" class="process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}">➡️ Próxima Ação...</a>
+                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
+                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="waiting">⏳ Mover p/ Aguardando</a>
+                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="someday">💡 Mover p/ Algum Dia</a>
+                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="reference">📋 Mover p/ Referência</a>
                             </div>
                         </div>
                     </div>`;
 
                 const mainItemHTML = `
-                    <div class="task-item bg-gray-800 p-4 ${isProject ? 'rounded-t-lg' : 'rounded-lg'} shadow-md flex flex-col sm:flex-row justify-between sm:items-start border-l-4 ${currentStatus.color} transition-all duration-300">
+                    <div class="task-item bg-white p-4 ${isProject ? 'rounded-t-lg' : 'rounded-lg'} shadow-md flex flex-col sm:flex-row justify-between sm:items-start border-l-4 ${currentStatus.color} transition-all duration-300 border border-gray-200">
                         <div class="flex items-start gap-4 flex-grow min-w-0">
-                           <div class="text-lg font-mono text-gray-400 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
+                           <div class="text-lg font-mono text-gray-600 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
                            <div class="flex-grow">
-                                <span class="text-gray-300">${task.text}</span>
-                                ${task.context ? `<p class="text-xs text-blue-400 mt-1">${task.context}</p>` : ''}
+                                <span class="text-gray-900">${task.text}</span>
+                                ${task.context ? `<p class="text-xs text-blue-600 mt-1">${task.context}</p>` : ''}
                                 ${task.dueDate ? `
-                                <p class="text-xs text-cyan-400 mt-1 flex items-center gap-1">
+                                <p class="text-xs text-cyan-600 mt-1 flex items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                                     <span>${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
                                 </p>
@@ -567,7 +567,7 @@
                 `;
                 
                 if (isProject) { 
-                    return `<div class="mb-4">${mainItemHTML}<div id="subtasks-container-${task.id}" class="subtasks-container hidden bg-gray-800/60 rounded-b-lg p-4 -mt-2"></div></div>`; 
+                    return `<div class="mb-4">${mainItemHTML}<div id="subtasks-container-${task.id}" class="subtasks-container hidden bg-gray-100 rounded-b-lg p-4 -mt-2 border border-t-0 border-gray-200"></div></div>`; 
                 } else { 
                     return `<div class="mb-4">${mainItemHTML}</div>`; 
                 }
@@ -579,23 +579,23 @@
                 if (!project || !container) return; 
                 project.subTasks.sort((a, b) => a.completed - b.completed); 
                 const subTasksHTML = project.subTasks.map(subtask => `
-                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-700/50">
-                        <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-700 border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
+                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200">
+                        <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 border-gray-300 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
                         <div class="flex-grow">
-                            <span class="text-gray-400 ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
-                            <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-700 border-gray-600 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2">
+                            <span class="text-gray-700 ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
+                            <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-50 border-gray-300 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2 text-gray-700">
                         </div>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
                     </div>
                 `).join(''); 
-                const formHTML = `<div class="add-subtask-form flex gap-3 mt-4 pt-4 border-t border-gray-700/50"><input type="text" data-project-id="${projectId}" class="new-subtask-input flex-grow bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nova ação para este projeto..."><button data-project-id="${projectId}" class="add-subtask-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">Adicionar</button></div>`; 
-                container.innerHTML = `<h4 class="text-sm font-bold text-gray-400 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
+                const formHTML = `<div class="add-subtask-form flex gap-3 mt-4 pt-4 border-t border-gray-300"><input type="text" data-project-id="${projectId}" class="new-subtask-input flex-grow bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nova ação para este projeto..."><button data-project-id="${projectId}" class="add-subtask-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">Adicionar</button></div>`; 
+                container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
             };
             
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
                 const filteredTasks = tasks.filter(t => t.status === status); 
                 if (filteredTasks.length === 0) { 
-                    element.innerHTML = `<div class="text-center py-10 px-6 bg-gray-800 rounded-lg"><p class="text-gray-400">${emptyMessage}</p></div>`; 
+                    element.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">${emptyMessage}</p></div>`; 
                 } else { 
                     element.innerHTML = filteredTasks.map(task => createTaskItemHTML(task, options)).join(''); 
                 }
@@ -609,7 +609,7 @@
                     nextActionsTasks = nextActionsTasks.filter(t => t.context === currentFilter); 
                 } 
                 if (nextActionsTasks.length === 0) { 
-                    app.nextActionsList.innerHTML = `<div class="text-center py-10 px-6 bg-gray-800 rounded-lg"><p class="text-gray-400">${currentFilter === 'all' ? 'Nenhuma próxima ação definida.' : `Nenhuma ação com o contexto ${currentFilter}.`}</p></div>`; 
+                    app.nextActionsList.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">${currentFilter === 'all' ? 'Nenhuma próxima ação definida.' : `Nenhuma ação com o contexto ${currentFilter}.`}</p></div>`; 
                 } else { 
                     app.nextActionsList.innerHTML = nextActionsTasks.map(createTaskItemHTML).join(''); 
                 } 
@@ -625,7 +625,7 @@
                     });
 
                 if (scheduledTasks.length === 0) {
-                    app.calendarList.innerHTML = `<div class="text-center py-10 px-6 bg-gray-800 rounded-lg"><p class="text-gray-400">Nenhum item agendado no calendário.</p></div>`;
+                    app.calendarList.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">Nenhum item agendado no calendário.</p></div>`;
                     return;
                 }
 
@@ -646,18 +646,18 @@
 
                     html += `
                         <div class="mb-6">
-                            <h3 class="text-xl font-semibold text-white mb-3">${dayName}, <span class="text-gray-400">${formattedDate}</span></h3>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">${dayName}, <span class="text-gray-600">${formattedDate}</span></h3>
                             <div class="space-y-2">
                                 ${tasksByDate[date].map(task => {
-                                    const time = task.dueTime ? `<span class="font-semibold text-gray-300 w-16 text-right">${task.dueTime}</span>` : `<span class="w-16"></span>`;
+                                    const time = task.dueTime ? `<span class="font-semibold text-gray-700 w-16 text-right">${task.dueTime}</span>` : `<span class="w-16"></span>`;
                                     const colorClass = (statusInfo[task.status]?.color || 'border-gray-500').replace('border-', 'bg-');
                                     const statusName = statusInfo[task.status]?.name || task.status;
                                     return `
-                                        <div class="flex items-center gap-4 bg-gray-800 p-3 rounded-lg">
+                                        <div class="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-200">
                                             ${time}
                                             <div class="w-1 h-8 ${colorClass} rounded-full"></div>
-                                            <span class="text-gray-300">${task.text}</span>
-                                            <span class="ml-auto text-xs text-gray-500">(${statusName})</span>
+                                            <span class="text-gray-700">${task.text}</span>
+                                            <span class="ml-auto text-xs text-gray-600">(${statusName})</span>
                                         </div>
                                     `;
                                 }).join('')}
@@ -670,9 +670,9 @@
 
             const renderContextFilters = () => { 
                 const contexts = getExistingContexts(); 
-                let filtersHTML = `<button class="context-filter ${currentFilter === 'all' ? 'active-filter bg-blue-600' : 'bg-gray-700'} text-white font-semibold py-2 px-4 rounded-full text-sm transition" data-context="all">Todos</button>`; 
+                let filtersHTML = `<button class="context-filter ${currentFilter === 'all' ? 'active-filter bg-blue-600' : 'bg-gray-100 border border-gray-300'} text-gray-900 font-semibold py-2 px-4 rounded-full text-sm transition hover:bg-gray-200" data-context="all">Todos</button>`; 
                 contexts.forEach(context => { 
-                    filtersHTML += `<button class="context-filter ${currentFilter === context ? 'active-filter bg-blue-600' : 'bg-gray-700'} text-white font-semibold py-2 px-4 rounded-full text-sm transition" data-context="${context}">${context}</button>`; 
+                    filtersHTML += `<button class="context-filter ${currentFilter === context ? 'active-filter bg-blue-600 text-white' : 'bg-gray-100 border border-gray-300 text-gray-900'} font-semibold py-2 px-4 rounded-full text-sm transition hover:bg-gray-200" data-context="${context}">${context}</button>`; 
                 }); 
                 app.contextFilters.innerHTML = filtersHTML; 
             };
@@ -682,10 +682,10 @@
                 app.navTabs.forEach(tab => {
                     if (tab.dataset.view === currentView) {
                         tab.classList.add('bg-blue-600', 'text-white');
-                        tab.classList.remove('bg-gray-800', 'text-gray-400', 'hover:bg-gray-700');
+                        tab.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
                     } else {
                         tab.classList.remove('bg-blue-600', 'text-white');
-                        tab.classList.add('bg-gray-800', 'text-gray-400', 'hover:bg-gray-700');
+                        tab.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
                     }
                 });
             };
@@ -922,25 +922,25 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Bem-vindo ao EVOMYND!</h3>
-                        <p class="text-gray-400">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-white">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
+                        <p class="text-gray-600">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-gray-900">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
                     `,
                     action: 'next',
                 },
                 {
-                    content: `<p class="text-gray-400">Clique no botão <strong class="text-white">Processar</strong> para decidir o que fazer com este item.</p>`,
+                    content: `<p class="text-gray-600">Clique no botão <strong class="text-gray-900">Processar</strong> para decidir o que fazer com este item.</p>`,
                     target: () => document.querySelector('.toggle-process-dropdown-btn'),
                     action: 'click_target',
                 },
                 {
-                    content: `<p class="text-gray-400">Como esta é uma tarefa que você precisa fazer, clique em <strong class="text-white">Próxima Ação...</strong></p>`,
+                    content: `<p class="text-gray-600">Como esta é uma tarefa que você precisa fazer, clique em <strong class="text-gray-900">Próxima Ação...</strong></p>`,
                     target: () => document.querySelector('.process-btn'),
                     action: 'click_target',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">O que é um "Contexto"?</h3>
-                        <p class="text-gray-400">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
-                        <p class="text-gray-300 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-white">@telefone</strong>. Tente adicionar um contexto, iniciando com @, e salvar.</p>
+                        <p class="text-gray-600">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
+                        <p class="text-gray-700 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-gray-900">@telefone</strong>. Tente adicionar um contexto, iniciando com @, e salvar.</p>
                     `,
                     target: () => document.getElementById('context-wrapper'),
                     action: 'submit_form',
@@ -948,7 +948,7 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Fazer agora?</h3>
-                        <p class="text-gray-400">sta é uma ação para fazer em menos de 2 minutos? Se sim, você pode fazê-la agora com um timer de 2 minutos. Para continuar o guia, clique em <strong class="text-white">"Não"</strong>.</p>
+                        <p class="text-gray-600">Esta é uma ação para fazer em menos de 2 minutos? Se sim, você pode fazê-la agora com um timer de 2 minutos. Para continuar o guia, clique em <strong class="text-gray-900">"Não"</strong>.</p>
                     `,
                     target: () => app.quickActionModal.noBtn,
                     action: 'click_target_special'
@@ -956,7 +956,7 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Agendar?</h3>
-                        <p class="text-gray-400">Você pode programar esta ação para uma data e hora específicas, e ela aparecerá no Calendário aqui do EVOMYND. Por agora, vamos apenas adicioná-la à lista de Próximas Ações. Clique em <strong class="text-white">"Agora não"</strong>.</p>
+                        <p class="text-gray-600">Você pode programar esta ação para uma data e hora específicas, e ela aparecerá no Calendário aqui do EVOMYND. Por agora, vamos apenas adicioná-la à lista de Próximas Ações. Clique em <strong class="text-gray-900">"Agora não"</strong>.</p>
                     `,
                     target: () => app.scheduleModal.laterBtn,
                     action: 'click_target_special'
@@ -964,7 +964,7 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Pronto!</h3>
-                        <p class="text-gray-400">Você processou seu primeiro item! Agora você pode encontrar "Marcar dentista" na sua lista de "Próximas Ações".</p>
+                        <p class="text-gray-600">Você processou seu primeiro item! Agora você pode encontrar "Marcar dentista" na sua lista de "Próximas Ações".</p>
                     `,
                     action: 'next',
                 }
@@ -1365,3 +1365,4 @@
     </script>
 </body>
 </html>
+ 
