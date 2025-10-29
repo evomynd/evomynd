@@ -257,18 +257,21 @@
     
     <!-- Revisão Semanal Footer -->
     <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 hidden">
-        <div class="container mx-auto max-w-4xl flex flex-col gap-4 p-4 mb-6">
-            <div class="flex items-center gap-4 justify-center">
-                <span id="weekly-review-step" class="text-green-500 font-semibold"></span>
-                <div class="h-2 bg-gray-700 rounded-full w-96">
+        <div class="container mx-auto max-w-4xl flex flex-col gap-3 p-4">
+            <span id="weekly-review-step" class="text-green-500 font-semibold text-center"></span>
+            <div class="flex justify-center px-4">
+                <div class="h-2 bg-gray-700 rounded-full w-full max-w-lg">
                     <div id="weekly-review-progress" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
                 </div>
             </div>
             <div class="flex justify-center">
-                <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-12 rounded-md transition text-lg">Próximo</button>
+                <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-md transition">Próximo</button>
             </div>
         </div>
     </div>
+    
+    <!-- Espaçador para evitar que o footer cubra conteúdo -->
+    <div id="footer-spacer" class="h-48 mb-12 hidden"></div>
     
     <!-- Modal de Conclusão da Revisão -->
     <div id="review-complete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
@@ -1230,8 +1233,9 @@
             function startWeeklyReview() {
                 isWeeklyReviewActive = true;
                 weeklyReviewStep = 0;
-                updateWeeklyReviewStep();
+                document.getElementById('footer-spacer').classList.remove('hidden');
                 app.weeklyReview.footer.classList.remove('hidden');
+                updateWeeklyReviewStep();
             }
 
             function updateWeeklyReviewStep() {
@@ -1258,12 +1262,23 @@
                 setTimeout(() => {
                     const viewElement = document.getElementById(step.view);
                     if (viewElement) {
-                        const headerHeight = 200; // altura aproximada do cabeçalho
+                        const headerHeight = 100; // altura aproximada do cabeçalho
                         const targetScroll = viewElement.offsetTop - headerHeight;
                         window.scrollTo({
                             top: targetScroll,
                             behavior: 'smooth'
                         });
+
+                        // Garante que o footer-spacer está visível e rolado para o fim da lista
+                        const spacer = document.getElementById('footer-spacer');
+                        if (spacer) {
+                            spacer.classList.remove('hidden');
+                            
+                            // Adiciona classe para margens extras nas listas quando a revisão está ativa
+                            document.querySelectorAll('[id$="-list"]').forEach(list => {
+                                list.classList.add('review-active');
+                            });
+                        }
                     }
                 }, 100);
             }
@@ -1297,6 +1312,7 @@
             function completeWeeklyReview() {
                 isWeeklyReviewActive = false;
                 app.weeklyReview.footer.classList.add('hidden');
+                document.getElementById('footer-spacer').classList.add('hidden');
                 app.weeklyReview.completeModal.classList.remove('hidden');
                 updateNextReviewDate();
             }
