@@ -63,10 +63,17 @@
             <p class="text-lg text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
         </header>
 
-        <div class="mb-8 text-center">
+        <div class="mb-8 text-center flex gap-4 justify-center">
             <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-gray-800 text-gray-400 hover:bg-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
+            </button>
+            <button id="weekly-review-btn" class="inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Revisão Semanal
             </button>
         </div>
 
@@ -244,6 +251,33 @@
             </div>
         </div>
     </div>
+    
+    <!-- Revisão Semanal Footer -->
+    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700 hidden">
+        <div class="container mx-auto max-w-4xl flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span id="weekly-review-step" class="text-green-500 font-semibold"></span>
+                <div class="h-2 bg-gray-700 rounded-full w-64">
+                    <div id="weekly-review-progress" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
+                </div>
+            </div>
+            <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-md transition">Próximo</button>
+        </div>
+    </div>
+    
+    <!-- Modal de Conclusão da Revisão -->
+    <div id="review-complete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
+        <div class="modal-content bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all text-center relative">
+            <button id="review-complete-close" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+            <div class="mb-6">
+                <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-2xl font-bold text-white mb-2">Parabéns!</h3>
+                <p class="text-gray-400">Você completou sua revisão semanal com sucesso.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -258,6 +292,17 @@
             let currentTimerTask = null;
             let isTimerPaused = false;
             let pendingActionTaskId = null;
+            let isWeeklyReviewActive = false;
+            let weeklyReviewStep = 0;
+
+            // Configuração da Revisão Semanal
+            const WEEKLY_REVIEW_STEPS = [
+                { view: 'next-actions-view', title: 'Passo 1/5 - Revisar Próximas Ações' },
+                { view: 'projects-view', title: 'Passo 2/5 - Revisar Projetos' },
+                { view: 'waiting-for-view', title: 'Passo 3/5 - Revisar Aguardando' },
+                { view: 'someday-maybe-view', title: 'Passo 4/5 - Revisar Algum Dia/Talvez' },
+                { view: 'reference-view', title: 'Passo 5/5 - Revisar Referências' }
+            ];
             const today = new Date().toISOString().split('T')[0];
 
             // --- ELEMENTOS DO DOM ---
@@ -274,6 +319,15 @@
                 referenceList: document.getElementById('reference-list'),
                 calendarList: document.getElementById('calendar-list'),
                 contextFilters: document.getElementById('context-filters'),
+                weeklyReview: {
+                    button: document.getElementById('weekly-review-btn'),
+                    footer: document.getElementById('weekly-review-footer'),
+                    stepLabel: document.getElementById('weekly-review-step'),
+                    progress: document.getElementById('weekly-review-progress'),
+                    nextBtn: document.getElementById('weekly-review-next-btn'),
+                    completeModal: document.getElementById('review-complete-modal'),
+                    completeCloseBtn: document.getElementById('review-complete-close'),
+                },
                 timer: {
                     overlay: document.getElementById('timer-overlay'),
                     taskText: document.getElementById('timer-task-text'),
@@ -1166,6 +1220,61 @@
                 updateModalForm(e.target.value, tempTask, mode);
             }));
 
+            // --- REVISÃO SEMANAL ---
+            function startWeeklyReview() {
+                isWeeklyReviewActive = true;
+                weeklyReviewStep = 0;
+                updateWeeklyReviewStep();
+                app.weeklyReview.footer.classList.remove('hidden');
+            }
+
+            function updateWeeklyReviewStep() {
+                const step = WEEKLY_REVIEW_STEPS[weeklyReviewStep];
+                if (!step) return;
+
+                // Atualiza a view
+                currentView = step.view;
+                render();
+
+                // Atualiza o footer
+                app.weeklyReview.stepLabel.textContent = step.title;
+                const progress = ((weeklyReviewStep + 1) / WEEKLY_REVIEW_STEPS.length) * 100;
+                app.weeklyReview.progress.style.width = `${progress}%`;
+
+                // Atualiza o botão
+                if (weeklyReviewStep === WEEKLY_REVIEW_STEPS.length - 1) {
+                    app.weeklyReview.nextBtn.textContent = 'Concluir';
+                } else {
+                    app.weeklyReview.nextBtn.textContent = 'Próximo';
+                }
+            }
+
+            function nextWeeklyReviewStep() {
+                if (weeklyReviewStep < WEEKLY_REVIEW_STEPS.length - 1) {
+                    weeklyReviewStep++;
+                    updateWeeklyReviewStep();
+                } else {
+                    completeWeeklyReview();
+                }
+            }
+
+            function completeWeeklyReview() {
+                isWeeklyReviewActive = false;
+                app.weeklyReview.footer.classList.add('hidden');
+                app.weeklyReview.completeModal.classList.remove('hidden');
+            }
+
+            function closeWeeklyReviewComplete() {
+                app.weeklyReview.completeModal.classList.add('hidden');
+                currentView = 'inbox-view';
+                render();
+            }
+
+            // Event Listeners da Revisão Semanal
+            app.weeklyReview.button.addEventListener('click', startWeeklyReview);
+            app.weeklyReview.nextBtn.addEventListener('click', nextWeeklyReviewStep);
+            app.weeklyReview.completeCloseBtn.addEventListener('click', closeWeeklyReviewComplete);
+
             // --- INICIALIZAÇÃO ---
             render();
             startTutorial();
@@ -1173,4 +1282,3 @@
     </script>
 </body>
 </html>
-
