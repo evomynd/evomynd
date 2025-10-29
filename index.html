@@ -29,6 +29,11 @@
     <link rel="apple-touch-startup-image" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         /* Estilos customizados para transições e foco */
         .view {
@@ -69,21 +74,25 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans antialiased">
 
     <div id="app" class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
 
         <header class="text-center mb-8">
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">EVOMYND</h1>
-            <p class="text-lg text-gray-600 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
+            <div class="flex justify-between items-start mb-4">
+                <div></div>
+                <button id="settings-btn" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-2 px-4 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">⚙️</button>
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">EVOMYND</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
         </header>
 
         <div class="mb-8 text-center flex gap-4 justify-center">
-            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">
+            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
             </button>
-            <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-1 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700">
+            <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-1 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
                 <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
@@ -97,21 +106,21 @@
 
         <!-- Navegação Principal -->
         <nav class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Caixa de Entrada</button>
-            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Próximas Ações</button>
-            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Projetos</button>
-            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Aguardando</button>
-            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Algum Dia/Talvez</button>
-            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white text-gray-700 hover:bg-gray-100 border border-gray-300">Referência</button>
+            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Caixa de Entrada</button>
+            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Próximas Ações</button>
+            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Projetos</button>
+            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Aguardando</button>
+            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Algum Dia/Talvez</button>
+            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Referência</button>
         </nav>
 
         <main>
             <!-- Visualização: Caixa de Entrada -->
             <div id="inbox-view" class="view">
-                <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-50 border border-gray-300 rounded-md py-3 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-md flex-shrink-0">Adicionar</button>
+                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-3 px-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 flex-shrink-0">Adicionar</button>
                     </div>
                 </div>
                 <div id="inbox-list" class="mt-8"></div>
@@ -169,7 +178,7 @@
             <div id="tutorial-content"></div>
             <div class="flex justify-between mt-6">
                 <button id="tutorial-skip-btn" class="text-gray-500 hover:text-gray-900 transition">Pular</button>
-                <button id="tutorial-next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Próximo</button>
+                <button id="tutorial-next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Próximo</button>
             </div>
         </div>
     </div>
@@ -180,14 +189,14 @@
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
         <div id="timer-display" class="text-8xl md:text-9xl font-mono font-bold">02:00</div>
         <div id="timer-running-controls" class="mt-12 flex flex-col sm:flex-row gap-4">
-            <button id="timer-early-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Concluir Ação</button>
-            <button id="timer-pause-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Pausar</button>
-            <button id="timer-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-md transition text-lg">Cancelar</button>
+            <button id="timer-early-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Concluir Ação</button>
+            <button id="timer-pause-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Pausar</button>
+            <button id="timer-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
         </div>
         <div id="timer-finished-controls" class="mt-12 flex flex-col sm:flex-row gap-4 hidden">
-            <button id="timer-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Ação Concluída</button>
-            <button id="timer-restart-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Reiniciar Timer</button>
-            <button id="timer-move-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-md transition text-lg">Mover para Próximas Ações</button>
+            <button id="timer-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Ação Concluída</button>
+            <button id="timer-restart-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Reiniciar Timer</button>
+            <button id="timer-move-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-md transition text-lg shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Mover para Próximas Ações</button>
         </div>
     </div>
 
@@ -220,8 +229,8 @@
                 
                 <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4">
                     <div class="flex justify-end gap-4 container mx-auto max-w-lg">
-                        <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
-                        <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Salvar</button>
+                        <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
+                        <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Salvar</button>
                     </div>
                 </div>
             </form>
@@ -233,8 +242,8 @@
         <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
             <p class="text-gray-900 text-lg mb-6">É uma ação de até 2 minutos e deseja fazer agora?</p>
             <div class="flex justify-center gap-4">
-                <button id="quick-action-no-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Não</button>
-                <button id="quick-action-yes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition">Sim</button>
+                <button id="quick-action-no-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Não</button>
+                <button id="quick-action-yes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Sim</button>
             </div>
         </div>
     </div>
@@ -255,8 +264,8 @@
                 </div>
             </div>
             <div class="flex justify-end gap-4 mt-6">
-                <button id="schedule-later-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Agora não</button>
-                <button id="schedule-save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition disabled:bg-gray-500 disabled:cursor-not-allowed" disabled>Programar</button>
+                <button id="schedule-later-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Agora não</button>
+                <button id="schedule-save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition disabled:bg-gray-500 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0" disabled>Programar</button>
             </div>
         </div>
     </div>
@@ -266,8 +275,8 @@
         <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
             <p id="confirm-modal-text" class="text-gray-900 text-lg mb-6"></p>
             <div class="flex justify-center gap-4">
-                <button id="confirm-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition">Cancelar</button>
-                <button id="confirm-ok-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition">Confirmar</button>
+                <button id="confirm-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
+                <button id="confirm-ok-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Confirmar</button>
             </div>
         </div>
     </div>
@@ -282,7 +291,7 @@
                 </div>
             </div>
             <div class="flex justify-center">
-                <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-md transition">Próximo</button>
+                <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Próximo</button>
             </div>
         </div>
     </div>
@@ -304,6 +313,50 @@
         </div>
     </div>
 
+    <!-- Modal de Configurações -->
+    <div id="settings-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all relative">
+            <button id="settings-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">⚙️ Configurações</h3>
+            
+            <div class="space-y-6">
+                <!-- Toggle de Tema -->
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🌓</span>
+                        <div>
+                            <p class="font-semibold text-gray-900">Tema</p>
+                            <p class="text-sm text-gray-600">Alternar entre claro e escuro</p>
+                        </div>
+                    </div>
+                    <button id="theme-toggle" class="relative inline-flex items-center h-8 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-gray-300">
+                        <span id="theme-toggle-dot" class="inline-block w-6 h-6 transform bg-white rounded-full transition-transform translate-x-1"></span>
+                    </button>
+                </div>
+
+                <!-- Info sobre Tutorial -->
+                <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">💡</span>
+                        <div>
+                            <p class="font-semibold text-gray-900 mb-1">Tutorial</p>
+                            <p class="text-sm text-gray-600 mb-3">Precisa de ajuda para começar?</p>
+                            <button id="restart-tutorial-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
+                                Iniciar Tutorial
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <button id="settings-done-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                    Concluir
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- ESTADO DA APLICAÇÃO ---
@@ -320,6 +373,7 @@
             let isWeeklyReviewActive = false;
             let weeklyReviewStep = 0;
             let nextReviewDate = localStorage.getItem('next_review_date');
+            let currentTheme = localStorage.getItem('theme') || 'light'; // 'light' ou 'dark'
 
             // Configuração da Revisão Semanal
             const WEEKLY_REVIEW_STEPS = [
@@ -406,6 +460,15 @@
                     content: document.getElementById('tutorial-content'),
                     nextBtn: document.getElementById('tutorial-next-btn'),
                     skipBtn: document.getElementById('tutorial-skip-btn'),
+                },
+                settings: {
+                    modal: document.getElementById('settings-modal'),
+                    openBtn: document.getElementById('settings-btn'),
+                    closeBtn: document.getElementById('settings-close'),
+                    doneBtn: document.getElementById('settings-done-btn'),
+                    themeToggle: document.getElementById('theme-toggle'),
+                    themeToggleDot: document.getElementById('theme-toggle-dot'),
+                    restartTutorialBtn: document.getElementById('restart-tutorial-btn'),
                 }
             };
             
@@ -520,6 +583,45 @@
                 if (currentView === 'next-actions-view') renderContextFilters();
                 updateActiveView();
             };
+
+            // --- GERENCIAMENTO DE TEMA ---
+            const applyTheme = (theme) => {
+                const html = document.documentElement;
+                
+                if (theme === 'dark') {
+                    html.classList.add('dark');
+                } else {
+                    html.classList.remove('dark');
+                }
+                
+                // Atualiza meta theme-color
+                const metaTheme = document.querySelector('meta[name="theme-color"]');
+                if (metaTheme) {
+                    metaTheme.content = theme === 'dark' ? '#111827' : '#ffffff';
+                }
+
+                // Salva preferência
+                localStorage.setItem('theme', theme);
+                currentTheme = theme;
+
+                // Atualiza toggle visual
+                if (theme === 'dark') {
+                    app.settings.themeToggle.classList.remove('bg-gray-300');
+                    app.settings.themeToggle.classList.add('bg-blue-600');
+                    app.settings.themeToggleDot.classList.remove('translate-x-1');
+                    app.settings.themeToggleDot.classList.add('translate-x-7');
+                } else {
+                    app.settings.themeToggle.classList.remove('bg-blue-600');
+                    app.settings.themeToggle.classList.add('bg-gray-300');
+                    app.settings.themeToggleDot.classList.remove('translate-x-7');
+                    app.settings.themeToggleDot.classList.add('translate-x-1');
+                }
+            };
+
+            const toggleTheme = () => {
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+            };
             
             const createTaskItemHTML = (task, options = {}) => {
                 const currentStatus = statusInfo[task.status] || statusInfo['inbox'];
@@ -527,29 +629,29 @@
                 
                 const inboxActionsHTML = `
                     <div class="relative inline-block text-left">
-                        <button data-id="${task.id}" class="toggle-process-dropdown-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center">
+                        <button data-id="${task.id}" class="toggle-process-dropdown-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
                             Processar <svg class="ml-2 -mr-1 h-4 w-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                         </button>
-                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10 border border-gray-200">
+                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10 border border-gray-200 dark:border-gray-600">
                             <div class="py-1">
-                                <a href="#" class="process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}">➡️ Próxima Ação...</a>
-                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
-                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="waiting">⏳ Mover p/ Aguardando</a>
-                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="someday">💡 Mover p/ Algum Dia</a>
-                                <a href="#" class="direct-process-btn text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" data-id="${task.id}" data-destination="reference">📋 Mover p/ Referência</a>
+                                <a href="#" class="process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}">➡️ Próxima Ação...</a>
+                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
+                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="waiting">⏳ Mover p/ Aguardando</a>
+                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="someday">💡 Mover p/ Algum Dia</a>
+                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="reference">📋 Mover p/ Referência</a>
                             </div>
                         </div>
                     </div>`;
 
                 const mainItemHTML = `
-                    <div class="task-item bg-white p-4 ${isProject ? 'rounded-t-lg' : 'rounded-lg'} shadow-md flex flex-col sm:flex-row justify-between sm:items-start border-l-4 ${currentStatus.color} transition-all duration-300 border border-gray-200">
+                    <div class="task-item bg-white dark:bg-gray-800 p-4 ${isProject ? 'rounded-t-lg' : 'rounded-lg'} shadow-md flex flex-col sm:flex-row justify-between sm:items-start border-l-4 ${currentStatus.color} transition-all duration-300 border border-gray-200 dark:border-gray-700">
                         <div class="flex items-start gap-4 flex-grow min-w-0">
-                           <div class="text-lg font-mono text-gray-600 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
+                           <div class="text-lg font-mono text-gray-600 dark:text-gray-400 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
                            <div class="flex-grow">
-                                <span class="text-gray-900">${task.text}</span>
-                                ${task.context ? `<p class="text-xs text-blue-600 mt-1">${task.context}</p>` : ''}
+                                <span class="text-gray-900 dark:text-gray-300">${task.text}</span>
+                                ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1">${task.context}</p>` : ''}
                                 ${task.dueDate ? `
-                                <p class="text-xs text-cyan-600 mt-1 flex items-center gap-1">
+                                <p class="text-xs text-cyan-600 dark:text-cyan-400 mt-1 flex items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                                     <span>${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
                                 </p>
@@ -557,17 +659,17 @@
                            </div>
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end">
-                             ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md">Ações</button>` : ''}
+                             ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
-                            ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md">Editar</button>` : ''}
-                            ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md">Concluir</button>` : ''}
-                            <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md">Apagar</button>
+                            ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Editar</button>` : ''}
+                            ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
+                            <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Apagar</button>
                         </div>
                     </div>
                 `;
                 
                 if (isProject) { 
-                    return `<div class="mb-4">${mainItemHTML}<div id="subtasks-container-${task.id}" class="subtasks-container hidden bg-gray-100 rounded-b-lg p-4 -mt-2 border border-t-0 border-gray-200"></div></div>`; 
+                    return `<div class="mb-4">${mainItemHTML}<div id="subtasks-container-${task.id}" class="subtasks-container hidden bg-gray-100 dark:bg-gray-800/60 rounded-b-lg p-4 -mt-2 border border-t-0 border-gray-200 dark:border-gray-700"></div></div>`; 
                 } else { 
                     return `<div class="mb-4">${mainItemHTML}</div>`; 
                 }
@@ -579,17 +681,17 @@
                 if (!project || !container) return; 
                 project.subTasks.sort((a, b) => a.completed - b.completed); 
                 const subTasksHTML = project.subTasks.map(subtask => `
-                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200">
-                        <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 border-gray-300 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
+                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50">
+                        <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
                         <div class="flex-grow">
-                            <span class="text-gray-700 ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
-                            <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-50 border-gray-300 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2 text-gray-700">
+                            <span class="text-gray-700 dark:text-gray-400 ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
+                            <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2 text-gray-700 dark:text-white">
                         </div>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
                     </div>
                 `).join(''); 
-                const formHTML = `<div class="add-subtask-form flex gap-3 mt-4 pt-4 border-t border-gray-300"><input type="text" data-project-id="${projectId}" class="new-subtask-input flex-grow bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nova ação para este projeto..."><button data-project-id="${projectId}" class="add-subtask-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">Adicionar</button></div>`; 
-                container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
+                const formHTML = `<div class="add-subtask-form flex gap-3 mt-4 pt-4 border-t border-gray-300 dark:border-gray-700/50"><input type="text" data-project-id="${projectId}" class="new-subtask-input flex-grow bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nova ação para este projeto..."><button data-project-id="${projectId}" class="add-subtask-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Adicionar</button></div>`; 
+                container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 dark:text-gray-400 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
             };
             
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
@@ -1357,7 +1459,28 @@
             app.weeklyReview.nextBtn.addEventListener('click', nextWeeklyReviewStep);
             app.weeklyReview.completeCloseBtn.addEventListener('click', closeWeeklyReviewComplete);
 
+            // Event Listeners do Modal de Configurações
+            app.settings.openBtn.addEventListener('click', () => {
+                app.settings.modal.classList.remove('hidden');
+            });
+
+            app.settings.closeBtn.addEventListener('click', () => {
+                app.settings.modal.classList.add('hidden');
+            });
+
+            app.settings.doneBtn.addEventListener('click', () => {
+                app.settings.modal.classList.add('hidden');
+            });
+
+            app.settings.themeToggle.addEventListener('click', toggleTheme);
+
+            app.settings.restartTutorialBtn.addEventListener('click', () => {
+                app.settings.modal.classList.add('hidden');
+                startTutorial();
+            });
+
             // --- INICIALIZAÇÃO ---
+            applyTheme(currentTheme); // Aplica o tema salvo
             render();
             startTutorial();
             showNextReviewDate();
@@ -1365,4 +1488,3 @@
     </script>
 </body>
 </html>
- 
