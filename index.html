@@ -70,7 +70,7 @@
             </button>
             <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-1 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700">
                 <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                         <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
@@ -257,14 +257,16 @@
     
     <!-- Revisão Semanal Footer -->
     <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 hidden">
-        <div class="container mx-auto max-w-4xl flex justify-between items-center p-4 mb-6">
-            <div class="flex items-center gap-4">
+        <div class="container mx-auto max-w-4xl flex flex-col gap-4 p-4 mb-6">
+            <div class="flex items-center gap-4 justify-center">
                 <span id="weekly-review-step" class="text-green-500 font-semibold"></span>
-                <div class="h-2 bg-gray-700 rounded-full w-64">
+                <div class="h-2 bg-gray-700 rounded-full w-96">
                     <div id="weekly-review-progress" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
                 </div>
             </div>
-            <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-md transition">Próximo</button>
+            <div class="flex justify-center">
+                <button id="weekly-review-next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-12 rounded-md transition text-lg">Próximo</button>
+            </div>
         </div>
     </div>
     
@@ -1251,6 +1253,19 @@
                 } else {
                     app.weeklyReview.nextBtn.textContent = 'Próximo';
                 }
+
+                // Rola a página para mostrar os itens
+                setTimeout(() => {
+                    const viewElement = document.getElementById(step.view);
+                    if (viewElement) {
+                        const headerHeight = 200; // altura aproximada do cabeçalho
+                        const targetScroll = viewElement.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetScroll,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
             }
 
             function nextWeeklyReviewStep() {
