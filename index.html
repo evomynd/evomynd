@@ -9,9 +9,24 @@
     <meta name="apple-mobile-web-app-title" content="EVOMYND">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#111827">
     
-    <link rel="icon" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    <!-- Ícones para diferentes dispositivos e resoluções -->
+    <link rel="icon" type="image/png" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
     <link rel="apple-touch-icon" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    
+    <!-- Android -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    <link rel="icon" sizes="512x512" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
+    
+    <!-- Splash screen para iOS -->
+    <link rel="apple-touch-startup-image" href="https://github.com/evomynd/evomynd/blob/main/Logo%20Evomynd%20(6).png?raw=true">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -906,8 +921,8 @@
             const tutorialSteps = [
                 {
                     content: `
-                        <h3 class="text-xl font-bold text-white mb-4">Bem-vindo ao EVOMYND!</h3>
-                        <p class="text-gray-400">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-white">"Marcar dentista"</strong> para mostrar como funciona. Vamos processá-la.</p>
+                        <h3 class="text-xl font-bold text-white mb-4">Bem-vindo ao Fluxo Ativo!</h3>
+                        <p class="text-gray-400">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-white">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
                     `,
                     action: 'next',
                 },
@@ -925,7 +940,7 @@
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">O que é um "Contexto"?</h3>
                         <p class="text-gray-400">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
-                        <p class="text-gray-300 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-white">@telefone</strong>. Tente adicionar um contexto, iniciando com @ e salvar.</p>
+                        <p class="text-gray-300 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-white">@telefone</strong>. Tente adicionar um contexto e salvar.</p>
                     `,
                     target: () => document.getElementById('context-wrapper'),
                     action: 'submit_form',
@@ -933,7 +948,7 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Fazer agora?</h3>
-                        <p class="text-gray-400">Esta é uma ação para fazer em menos de 2 minutos? Se sim, você pode fazê-la agora com um timer de 2 minutos. Para continuar o guia, clique em <strong class="text-white">"Não"</strong>.</p>
+                        <p class="text-gray-400">Esta é uma ação rápida? Se sim, você pode fazê-la agora com um timer de 2 minutos. Para continuar o guia, clique em <strong class="text-white">"Não"</strong>.</p>
                     `,
                     target: () => app.quickActionModal.noBtn,
                     action: 'click_target_special'
@@ -941,7 +956,7 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Agendar?</h3>
-                        <p class="text-gray-400">Você pode programar esta ação para uma data e hora específicas, e ela aparecerá no Calendário aqui do EVOMYND. Por agora, vamos apenas adicioná-la à lista de Próximas Ações. Clique em <strong class="text-white">"Agora não"</strong>.</p>
+                        <p class="text-gray-400">Você pode programar esta ação para uma data e hora específicas, e ela aparecerá no seu Calendário. Por agora, vamos apenas adicioná-la à lista de Próximas Ações. Clique em <strong class="text-white">"Agora não"</strong>.</p>
                     `,
                     target: () => app.scheduleModal.laterBtn,
                     action: 'click_target_special'
@@ -1350,5 +1365,3 @@
     </script>
 </body>
 </html>
-
-
