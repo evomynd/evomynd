@@ -68,12 +68,15 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
             </button>
-            <button id="weekly-review-btn" class="inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-                Revisão Semanal
+            <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-1 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Revisão Semanal</span>
+                </div>
+                <span id="next-review-date" class="text-xs font-normal opacity-75"></span>
             </button>
         </div>
 
@@ -253,8 +256,8 @@
     </div>
     
     <!-- Revisão Semanal Footer -->
-    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 border-t border-gray-700 hidden">
-        <div class="container mx-auto max-w-4xl flex justify-between items-center">
+    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 hidden">
+        <div class="container mx-auto max-w-4xl flex justify-between items-center p-4 mb-6">
             <div class="flex items-center gap-4">
                 <span id="weekly-review-step" class="text-green-500 font-semibold"></span>
                 <div class="h-2 bg-gray-700 rounded-full w-64">
@@ -294,14 +297,15 @@
             let pendingActionTaskId = null;
             let isWeeklyReviewActive = false;
             let weeklyReviewStep = 0;
+            let nextReviewDate = localStorage.getItem('next_review_date');
 
             // Configuração da Revisão Semanal
             const WEEKLY_REVIEW_STEPS = [
-                { view: 'next-actions-view', title: 'Passo 1/5 - Revisar Próximas Ações' },
-                { view: 'projects-view', title: 'Passo 2/5 - Revisar Projetos' },
-                { view: 'waiting-for-view', title: 'Passo 3/5 - Revisar Aguardando' },
-                { view: 'someday-maybe-view', title: 'Passo 4/5 - Revisar Algum Dia/Talvez' },
-                { view: 'reference-view', title: 'Passo 5/5 - Revisar Referências' }
+                { view: 'inbox-view', title: 'Passo 1/5 - Revisar Caixa de Entrada' },
+                { view: 'next-actions-view', title: 'Passo 2/5 - Revisar Próximas Ações' },
+                { view: 'projects-view', title: 'Passo 3/5 - Revisar Projetos' },
+                { view: 'waiting-for-view', title: 'Passo 4/5 - Revisar Aguardando' },
+                { view: 'someday-maybe-view', title: 'Passo 5/5 - Revisar Algum Dia/Talvez' }
             ];
             const today = new Date().toISOString().split('T')[0];
 
@@ -1258,16 +1262,46 @@
                 }
             }
 
+            function updateNextReviewDate() {
+                const today = new Date();
+                const nextWeek = new Date(today);
+                nextWeek.setDate(today.getDate() + 7);
+                nextReviewDate = nextWeek.toISOString().split('T')[0];
+                localStorage.setItem('next_review_date', nextReviewDate);
+                
+                const nextReviewDateEl = document.getElementById('next-review-date');
+                if (nextReviewDateEl) {
+                    const formattedDate = new Date(nextReviewDate).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit'
+                    });
+                    nextReviewDateEl.textContent = `Próxima: ${formattedDate}`;
+                }
+            }
+
             function completeWeeklyReview() {
                 isWeeklyReviewActive = false;
                 app.weeklyReview.footer.classList.add('hidden');
                 app.weeklyReview.completeModal.classList.remove('hidden');
+                updateNextReviewDate();
             }
 
             function closeWeeklyReviewComplete() {
                 app.weeklyReview.completeModal.classList.add('hidden');
                 currentView = 'inbox-view';
                 render();
+            }
+
+            // Função para mostrar a data da próxima revisão ao carregar
+            function showNextReviewDate() {
+                const nextReviewDateEl = document.getElementById('next-review-date');
+                if (nextReviewDateEl && nextReviewDate) {
+                    const formattedDate = new Date(nextReviewDate).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit'
+                    });
+                    nextReviewDateEl.textContent = `Próxima: ${formattedDate}`;
+                }
             }
 
             // Event Listeners da Revisão Semanal
@@ -1278,6 +1312,7 @@
             // --- INICIALIZAÇÃO ---
             render();
             startTutorial();
+            showNextReviewDate();
         });
     </script>
 </body>
