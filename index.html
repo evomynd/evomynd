@@ -128,44 +128,44 @@
 
             <!-- Other views are the same -->
             <div id="next-actions-view" class="view hidden">
-                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-900">Filtre por Contexto</h2>
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Filtre por Contexto</h2>
                     <div id="context-filters" class="flex flex-wrap gap-3"></div>
                 </div>
                 <div id="next-actions-list"></div>
             </div>
             <div id="projects-view" class="view hidden">
-                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-900">Projetos Ativos</h2>
-                    <p class="text-gray-600 mt-1">Resultados que requerem mais de uma ação.</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Projetos Ativos</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">Resultados que requerem mais de uma ação.</p>
                 </div>
                 <div id="projects-list" class="mt-8"></div>
             </div>
             <div id="calendar-view" class="view hidden">
-                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-900">Itens Agendados</h2>
-                    <p class="text-gray-600 mt-1">Seus compromissos e tarefas com data marcada.</p>
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Itens Agendados</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">Seus compromissos e tarefas com data marcada.</p>
                 </div>
                 <div id="calendar-list" class="mt-8"></div>
             </div>
             <div id="waiting-for-view" class="view hidden">
-                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-900">Aguardando Resposta/Evento</h2>
-                     <p class="text-gray-600 mt-1">Itens que delegou ou que dependem de outros.</p>
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Aguardando Resposta/Evento</h2>
+                     <p class="text-gray-600 dark:text-gray-400 mt-1">Itens que delegou ou que dependem de outros.</p>
                 </div>
                 <div id="waiting-for-list" class="mt-8"></div>
             </div>
             <div id="someday-maybe-view" class="view hidden">
-                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-900">Algum Dia / Talvez</h2>
-                     <p class="text-gray-600 mt-1">Ideias para o futuro, sem compromisso imediato.</p>
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Algum Dia / Talvez</h2>
+                     <p class="text-gray-600 dark:text-gray-400 mt-1">Ideias para o futuro, sem compromisso imediato.</p>
                 </div>
                 <div id="someday-maybe-list" class="mt-8"></div>
             </div>
             <div id="reference-view" class="view hidden">
-                 <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-900">Material de Referência</h2>
-                     <p class="text-gray-600 mt-1">Informações úteis e não acionáveis.</p>
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Material de Referência</h2>
+                     <p class="text-gray-600 dark:text-gray-400 mt-1">Informações úteis e não acionáveis.</p>
                 </div>
                 <div id="reference-list" class="mt-8"></div>
             </div>
@@ -174,7 +174,7 @@
 
     <!-- Tutorial Modal -->
     <div id="tutorial-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg relative">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg relative">
             <div id="tutorial-content"></div>
             <div class="flex justify-between mt-6">
                 <button id="tutorial-skip-btn" class="text-gray-500 hover:text-gray-900 transition">Pular</button>
@@ -185,7 +185,7 @@
 
 
     <!-- Timer Overlay -->
-    <div id="timer-overlay" class="fixed inset-0 bg-white bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 hidden z-50">
+    <div id="timer-overlay" class="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-95 dark:bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 dark:text-white hidden z-50">
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
         <div id="timer-display" class="text-8xl md:text-9xl font-mono font-bold">02:00</div>
         <div id="timer-running-controls" class="mt-12 flex flex-col sm:flex-row gap-4">
@@ -202,9 +202,9 @@
 
     <!-- Modal para Processar / Editar Item -->
     <div id="task-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-start justify-center overflow-y-auto hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all my-8 mx-4">
-            <h3 id="modal-title" class="text-2xl font-bold text-gray-900 mb-6">Processar Item</h3>
-            <p id="modal-task-text" class="bg-gray-100 p-4 rounded-md text-gray-700 mb-6 hidden"></p>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all my-8 mx-4">
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Processar Item</h3>
+            <p id="modal-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6 hidden"></p>
             
             <form id="task-form">
                 <input type="hidden" id="modal-task-id">
@@ -227,7 +227,7 @@
 
                 <div id="form-error" class="text-red-600 text-sm mt-4 mb-20"></div>
                 
-                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 z-[60]">
+                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 p-4 z-[60]">
                     <div class="flex justify-end gap-4 container mx-auto max-w-lg">
                         <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
                         <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Salvar</button>
@@ -239,8 +239,8 @@
 
     <!-- Modal de Ação Rápida -->
     <div id="quick-action-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
-            <p class="text-gray-900 text-lg mb-6">É uma ação de até 2 minutos e deseja fazer agora?</p>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
+            <p class="text-gray-900 dark:text-white text-lg mb-6">É uma ação de até 2 minutos e deseja fazer agora?</p>
             <div class="flex justify-center gap-4">
                 <button id="quick-action-no-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Não</button>
                 <button id="quick-action-yes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Sim</button>
@@ -250,17 +250,21 @@
 
     <!-- Modal de Agendamento -->
     <div id="schedule-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Programar Ação</h3>
-            <p id="schedule-task-text" class="bg-gray-100 p-4 rounded-md text-gray-700 mb-6"></p>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Programar Ação</h3>
+            <p id="schedule-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6"></p>
+            <div class="mb-4">
+                <label for="schedule-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
+                <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="schedule-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
-                    <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora de Início</label>
+                    <input type="time" id="schedule-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label for="schedule-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-                    <input type="time" id="schedule-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-end-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora de Término</label>
+                    <input type="time" id="schedule-end-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
             <div class="flex justify-end gap-4 mt-6">
@@ -272,22 +276,33 @@
     
     <!-- Modal de Confirmação -->
     <div id="confirm-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
-            <p id="confirm-modal-text" class="text-gray-900 text-lg mb-6"></p>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
+            <p id="confirm-modal-text" class="text-gray-900 dark:text-white text-lg mb-6"></p>
             <div class="flex justify-center gap-4">
                 <button id="confirm-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
                 <button id="confirm-ok-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Confirmar</button>
             </div>
         </div>
     </div>
+
+    <!-- Modal para Enviar ao Calendário -->
+    <div id="calendar-export-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm transform transition-all text-center">
+            <p class="text-gray-900 dark:text-white text-lg mb-6">Deseja enviar este evento para o calendário do seu dispositivo?</p>
+            <div class="flex justify-center gap-4">
+                <button id="calendar-export-no-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Não</button>
+                <button id="calendar-export-yes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Sim</button>
+            </div>
+        </div>
+    </div>
     
     <!-- Revisão Semanal Footer -->
-    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 hidden z-50">
+    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 hidden z-50">
         <div class="container mx-auto max-w-4xl flex flex-col gap-3 p-4">
-            <span id="weekly-review-step" class="text-green-600 font-semibold text-center"></span>
+            <span id="weekly-review-step" class="text-green-600 dark:text-green-400 font-semibold text-center"></span>
             <div class="flex justify-center px-4">
-                <div class="h-2 bg-gray-300 rounded-full w-full max-w-lg">
-                    <div id="weekly-review-progress" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
+                <div class="h-2 bg-gray-300 dark:bg-gray-600 rounded-full w-full max-w-lg">
+                    <div id="weekly-review-progress" class="h-full bg-green-500 dark:bg-green-400 rounded-full transition-all" style="width: 0%"></div>
                 </div>
             </div>
             <div class="flex justify-center">
@@ -301,62 +316,48 @@
     
     <!-- Modal de Conclusão da Revisão -->
     <div id="review-complete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all text-center relative">
-            <button id="review-complete-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl">&times;</button>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all text-center relative">
+            <button id="review-complete-close" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xl">&times;</button>
             <div class="mb-6">
                 <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Parabéns!</h3>
-                <p class="text-gray-600">Você completou sua revisão semanal com sucesso.</p>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Parabéns!</h3>
+                <p class="text-gray-600 dark:text-gray-400">Você completou sua revisão semanal com sucesso.</p>
             </div>
         </div>
     </div>
 
     <!-- Modal de Configurações -->
     <div id="settings-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all relative">
-            <button id="settings-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">⚙️ Configurações</h3>
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md transform transition-all relative">
+            <button id="settings-close" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xl font-bold">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">⚙️ Configurações</h3>
             
             <div class="space-y-6">
                 <!-- Toggle de Tema -->
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                     <div class="flex items-center gap-3">
                         <span class="text-2xl">🌓</span>
                         <div>
-                            <p class="font-semibold text-gray-900">Tema</p>
-                            <p class="text-sm text-gray-600">Alternar entre claro e escuro</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">Tema</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Alternar entre claro e escuro</p>
                         </div>
                     </div>
-                    <button id="theme-toggle" class="relative inline-flex items-center h-8 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-gray-300">
+                    <button id="theme-toggle" class="relative inline-flex items-center h-8 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-gray-300 dark:bg-gray-600">
                         <span id="theme-toggle-dot" class="inline-block w-6 h-6 transform bg-white rounded-full transition-transform translate-x-1"></span>
                     </button>
                 </div>
 
                 <!-- Info sobre Tutorial -->
-                <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
                     <div class="flex items-start gap-3">
                         <span class="text-2xl">💡</span>
                         <div>
-                            <p class="font-semibold text-gray-900 mb-1">Tutorial</p>
-                            <p class="text-sm text-gray-600 mb-3">Precisa de ajuda para começar?</p>
+                            <p class="font-semibold text-gray-900 dark:text-white mb-1">Tutorial</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Precisa de ajuda para começar?</p>
                             <button id="restart-tutorial-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
                                 Iniciar Tutorial
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Exportar para Google Calendar -->
-                <div class="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div class="flex items-start gap-3">
-                        <span class="text-2xl">📅</span>
-                        <div class="w-full">
-                            <p class="font-semibold text-gray-900 mb-1">Google Calendar</p>
-                            <p class="text-sm text-gray-600 mb-3">Exportar eventos agendados</p>
-                            <button id="export-calendar-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
-                                Exportar Todos os Eventos
                             </button>
                         </div>
                     </div>
@@ -384,6 +385,7 @@
             let currentTimerTask = null;
             let isTimerPaused = false;
             let pendingActionTaskId = null;
+            let pendingCalendarExport = null; // Armazena dados temporários para exportação
             let isWeeklyReviewActive = false;
             let weeklyReviewStep = 0;
             let nextReviewDate = localStorage.getItem('next_review_date');
@@ -460,8 +462,14 @@
                     taskText: document.getElementById('schedule-task-text'),
                     dateInput: document.getElementById('schedule-date-input'),
                     timeInput: document.getElementById('schedule-time-input'),
+                    endTimeInput: document.getElementById('schedule-end-time-input'),
                     saveBtn: document.getElementById('schedule-save-btn'),
                     laterBtn: document.getElementById('schedule-later-btn'),
+                },
+                calendarExportModal: {
+                    element: document.getElementById('calendar-export-modal'),
+                    yesBtn: document.getElementById('calendar-export-yes-btn'),
+                    noBtn: document.getElementById('calendar-export-no-btn'),
                 },
                 confirmModal: {
                     element: document.getElementById('confirm-modal'),
@@ -483,7 +491,6 @@
                     themeToggle: document.getElementById('theme-toggle'),
                     themeToggleDot: document.getElementById('theme-toggle-dot'),
                     restartTutorialBtn: document.getElementById('restart-tutorial-btn'),
-                    exportCalendarBtn: document.getElementById('export-calendar-btn'),
                 }
             };
             
@@ -712,7 +719,7 @@
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
                 const filteredTasks = tasks.filter(t => t.status === status); 
                 if (filteredTasks.length === 0) { 
-                    element.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">${emptyMessage}</p></div>`; 
+                    element.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-gray-600 dark:text-gray-400">${emptyMessage}</p></div>`; 
                 } else { 
                     element.innerHTML = filteredTasks.map(task => createTaskItemHTML(task, options)).join(''); 
                 }
@@ -726,7 +733,7 @@
                     nextActionsTasks = nextActionsTasks.filter(t => t.context === currentFilter); 
                 } 
                 if (nextActionsTasks.length === 0) { 
-                    app.nextActionsList.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">${currentFilter === 'all' ? 'Nenhuma próxima ação definida.' : `Nenhuma ação com o contexto ${currentFilter}.`}</p></div>`; 
+                    app.nextActionsList.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-gray-600 dark:text-gray-400">${currentFilter === 'all' ? 'Nenhuma próxima ação definida.' : `Nenhuma ação com o contexto ${currentFilter}.`}</p></div>`; 
                 } else { 
                     app.nextActionsList.innerHTML = nextActionsTasks.map(createTaskItemHTML).join(''); 
                 } 
@@ -742,7 +749,7 @@
                     });
 
                 if (scheduledTasks.length === 0) {
-                    app.calendarList.innerHTML = `<div class="text-center py-10 px-6 bg-white rounded-lg border border-gray-200"><p class="text-gray-600">Nenhum item agendado no calendário.</p></div>`;
+                    app.calendarList.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-gray-600 dark:text-gray-400">Nenhum item agendado no calendário.</p></div>`;
                     return;
                 }
 
@@ -766,7 +773,16 @@
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">${dayName}, <span class="text-gray-600 dark:text-gray-400">${formattedDate}</span></h3>
                             <div class="space-y-2">
                                 ${tasksByDate[date].map(task => {
-                                    const time = task.dueTime ? `<span class="font-semibold text-gray-700 w-16 text-right">${task.dueTime}</span>` : `<span class="w-16"></span>`;
+                                    // Mostrar horário de início e fim se disponível
+                                    let timeDisplay = '';
+                                    if (task.dueTime && task.endTime) {
+                                        timeDisplay = `<span class="font-semibold text-gray-700 dark:text-gray-300 w-auto text-right whitespace-nowrap">${task.dueTime} - ${task.endTime}</span>`;
+                                    } else if (task.dueTime) {
+                                        timeDisplay = `<span class="font-semibold text-gray-700 dark:text-gray-300 w-16 text-right">${task.dueTime}</span>`;
+                                    } else {
+                                        timeDisplay = `<span class="w-16"></span>`;
+                                    }
+                                    
                                     const colorClass = (statusInfo[task.status]?.color || 'border-gray-500').replace('border-', 'bg-');
                                     const statusName = statusInfo[task.status]?.name || task.status;
                                     
@@ -775,15 +791,24 @@
                                         ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
                                         : `${task.dueDate.replace(/-/g, '')}`;
                                     
-                                    const endDateTime = task.dueTime
-                                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
-                                        : `${task.dueDate.replace(/-/g, '')}`;
+                                    // Usar endTime se disponível, senão adicionar 1 hora ao horário de início
+                                    let endDateTime;
+                                    if (task.endTime) {
+                                        endDateTime = `${task.dueDate.replace(/-/g, '')}T${task.endTime.replace(':', '')}00`;
+                                    } else if (task.dueTime) {
+                                        // Adicionar 1 hora ao horário de início
+                                        const [hours, minutes] = task.dueTime.split(':');
+                                        const endHour = (parseInt(hours) + 1).toString().padStart(2, '0');
+                                        endDateTime = `${task.dueDate.replace(/-/g, '')}T${endHour}${minutes}00`;
+                                    } else {
+                                        endDateTime = `${task.dueDate.replace(/-/g, '')}`;
+                                    }
                                     
                                     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
                                     
                                     return `
                                         <div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
-                                            ${time}
+                                            ${timeDisplay}
                                             <div class="w-1 h-8 ${colorClass} rounded-full flex-shrink-0"></div>
                                             <span class="text-gray-700 dark:text-gray-300 break-words flex-grow min-w-0">${task.text}</span>
                                             <a href="${googleCalendarUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" title="Adicionar ao Google Calendar">
@@ -816,10 +841,10 @@
                 app.navTabs.forEach(tab => {
                     if (tab.dataset.view === currentView) {
                         tab.classList.add('bg-blue-600', 'text-white');
-                        tab.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                        tab.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
                     } else {
                         tab.classList.remove('bg-blue-600', 'text-white');
-                        tab.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                        tab.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
                     }
                 });
             };
@@ -1046,6 +1071,7 @@
                 app.scheduleModal.taskText.textContent = task.text;
                 app.scheduleModal.dateInput.value = '';
                 app.scheduleModal.timeInput.value = '';
+                app.scheduleModal.endTimeInput.value = '';
                 app.scheduleModal.saveBtn.disabled = true;
                 app.scheduleModal.element.classList.remove('hidden');
             }
@@ -1153,39 +1179,6 @@
             }
 
             app.tutorial.skipBtn.addEventListener('click', endTutorial);
-
-            // Função para exportar eventos para Google Calendar
-            function exportAllToGoogleCalendar() {
-                const scheduledTasks = tasks.filter(t => t.dueDate);
-                
-                if (scheduledTasks.length === 0) {
-                    alert('Não há eventos agendados para exportar.');
-                    return;
-                }
-                
-                // Abre uma nova janela com instruções
-                let message = `Encontrados ${scheduledTasks.length} evento(s) agendado(s).\n\n`;
-                message += 'Clique em cada link abaixo para adicionar ao Google Calendar:\n\n';
-                
-                scheduledTasks.forEach((task, index) => {
-                    const startDateTime = task.dueTime 
-                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
-                        : `${task.dueDate.replace(/-/g, '')}`;
-                    
-                    const endDateTime = task.dueTime
-                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
-                        : `${task.dueDate.replace(/-/g, '')}`;
-                    
-                    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
-                    
-                    // Abre cada evento em uma nova aba
-                    setTimeout(() => {
-                        window.open(googleCalendarUrl, '_blank');
-                    }, index * 500); // Delay de 500ms entre cada abertura
-                });
-                
-                alert(`Abrindo ${scheduledTasks.length} aba(s) para adicionar eventos ao Google Calendar...`);
-            }
 
             function startTutorial() {
                 if (localStorage.getItem('gtd_tutorial_completed') !== 'true' && tasks.some(t => t.text === 'Marcar dentista')) {
@@ -1295,11 +1288,61 @@
                 if (task) {
                     task.dueDate = app.scheduleModal.dateInput.value;
                     task.dueTime = app.scheduleModal.timeInput.value;
+                    task.endTime = app.scheduleModal.endTimeInput.value;
+                    
+                    // Salvar tarefa e renderizar
+                    saveTasks();
                     render();
+                    
+                    // Preparar dados para exportação
+                    pendingCalendarExport = {
+                        text: task.text,
+                        dueDate: task.dueDate,
+                        dueTime: task.dueTime,
+                        endTime: task.endTime
+                    };
+                    
+                    // Mostrar modal de pergunta
+                    app.scheduleModal.element.classList.add('hidden');
+                    app.calendarExportModal.element.classList.remove('hidden');
                 }
-                app.scheduleModal.element.classList.add('hidden');
                 pendingActionTaskId = null;
             });
+
+            // Listeners do modal de exportação para calendário
+            app.calendarExportModal.yesBtn.addEventListener('click', () => {
+                if (pendingCalendarExport) {
+                    // Criar URL do Google Calendar
+                    const startDateTime = pendingCalendarExport.dueTime 
+                        ? `${pendingCalendarExport.dueDate.replace(/-/g, '')}T${pendingCalendarExport.dueTime.replace(':', '')}00`
+                        : `${pendingCalendarExport.dueDate.replace(/-/g, '')}`;
+                    
+                    let endDateTime;
+                    if (pendingCalendarExport.endTime) {
+                        endDateTime = `${pendingCalendarExport.dueDate.replace(/-/g, '')}T${pendingCalendarExport.endTime.replace(':', '')}00`;
+                    } else if (pendingCalendarExport.dueTime) {
+                        const [hours, minutes] = pendingCalendarExport.dueTime.split(':');
+                        const endHour = (parseInt(hours) + 1).toString().padStart(2, '0');
+                        endDateTime = `${pendingCalendarExport.dueDate.replace(/-/g, '')}T${endHour}${minutes}00`;
+                    } else {
+                        endDateTime = `${pendingCalendarExport.dueDate.replace(/-/g, '')}`;
+                    }
+                    
+                    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(pendingCalendarExport.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
+                    
+                    // Abrir calendário
+                    window.open(googleCalendarUrl, '_blank');
+                    
+                    pendingCalendarExport = null;
+                }
+                app.calendarExportModal.element.classList.add('hidden');
+            });
+
+            app.calendarExportModal.noBtn.addEventListener('click', () => {
+                pendingCalendarExport = null;
+                app.calendarExportModal.element.classList.add('hidden');
+            });
+
             
             
             document.body.addEventListener('click', (e) => {
@@ -1559,10 +1602,6 @@
             app.settings.restartTutorialBtn.addEventListener('click', () => {
                 app.settings.modal.classList.add('hidden');
                 restartTutorial();
-            });
-
-            app.settings.exportCalendarBtn.addEventListener('click', () => {
-                exportAllToGoogleCalendar();
             });
 
             // --- INICIALIZAÇÃO ---
