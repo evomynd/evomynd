@@ -211,13 +211,13 @@
                 <input type="hidden" id="modal-mode">
                 
                 <div id="destination-container" class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Mover para:</label>
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Mover para:</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
-                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
-                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
-                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
-                        <label class="p-3 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
                     </div>
                 </div>
 
@@ -254,17 +254,17 @@
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Programar Ação</h3>
             <p id="schedule-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6"></p>
             <div class="mb-4">
-                <label for="schedule-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
-                <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="schedule-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data</label>
+                <input type="date" id="schedule-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="schedule-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora de Início</label>
-                    <input type="time" id="schedule-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora de Início</label>
+                    <input type="time" id="schedule-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label for="schedule-end-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora de Término</label>
-                    <input type="time" id="schedule-end-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="schedule-end-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora de Término</label>
+                    <input type="time" id="schedule-end-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
             <div class="flex justify-end gap-4 mt-6">
@@ -347,6 +347,20 @@
                     <button id="theme-toggle" class="relative inline-flex items-center h-8 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-gray-300 dark:bg-gray-600">
                         <span id="theme-toggle-dot" class="inline-block w-6 h-6 transform bg-white rounded-full transition-transform translate-x-1"></span>
                     </button>
+                </div>
+
+                <!-- Botão Instalar App -->
+                <div id="install-app-container" class="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800 hidden">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">📱</span>
+                        <div class="flex-grow">
+                            <p class="font-semibold text-gray-900 dark:text-white mb-1">Instalar App</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Adicione o EVOMYND à tela inicial do seu dispositivo</p>
+                            <button id="install-app-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
+                                Instalar Aplicativo
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Info sobre Tutorial -->
@@ -491,82 +505,131 @@
                     themeToggle: document.getElementById('theme-toggle'),
                     themeToggleDot: document.getElementById('theme-toggle-dot'),
                     restartTutorialBtn: document.getElementById('restart-tutorial-btn'),
+                    installAppBtn: document.getElementById('install-app-btn'),
+                    installAppContainer: document.getElementById('install-app-container'),
                 }
             };
+            
+            // --- PWA: INSTALAÇÃO DO APP ---
+            let deferredPrompt;
+            
+            // Capturar o evento beforeinstallprompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevenir que o navegador mostre o prompt automaticamente
+                e.preventDefault();
+                // Armazenar o evento para usar depois
+                deferredPrompt = e;
+                // Mostrar o botão de instalação
+                app.settings.installAppContainer.classList.remove('hidden');
+            });
+            
+            // Event listener para o botão de instalação
+            if (app.settings.installAppBtn) {
+                app.settings.installAppBtn.addEventListener('click', async () => {
+                    if (!deferredPrompt) {
+                        alert('O aplicativo já está instalado ou não pode ser instalado neste dispositivo.');
+                        return;
+                    }
+                    
+                    // Mostrar o prompt de instalação
+                    deferredPrompt.prompt();
+                    
+                    // Aguardar a escolha do usuário
+                    const { outcome } = await deferredPrompt.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        console.log('Usuário aceitou instalar o app');
+                    } else {
+                        console.log('Usuário recusou instalar o app');
+                    }
+                    
+                    // Limpar o prompt
+                    deferredPrompt = null;
+                    // Esconder o botão
+                    app.settings.installAppContainer.classList.add('hidden');
+                });
+            }
+            
+            // Detectar quando o app foi instalado
+            window.addEventListener('appinstalled', () => {
+                console.log('EVOMYND foi instalado com sucesso!');
+                app.settings.installAppContainer.classList.add('hidden');
+                deferredPrompt = null;
+            });
             
             // --- TEMPLATES DE FORMULÁRIO ---
             const formTemplates = {
                 'next-action-process': `
                     <div class="mb-4">
-                        <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Próxima Ação</label>
+                        <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4" id="context-wrapper">
-                        <label for="context-input" class="block text-gray-700 text-sm font-bold mb-2">Contexto</label>
-                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="context-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Contexto</label>
+                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
                     </div>`,
                 'next-action-edit': `
                     <div class="mb-4">
-                        <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Próxima Ação</label>
+                        <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="mb-4" id="context-wrapper">
-                        <label for="context-input" class="block text-gray-700 text-sm font-bold mb-2">Contexto</label>
-                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="context-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Contexto</label>
+                        <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
                     </div>
-                     <div class="border-t border-gray-300 pt-4 mt-4">
+                     <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
                          <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data</label>
-                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data</label>
+                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
-                                <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-                                <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
+                                <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                     </div>
-                     <div class="border-t border-gray-300 pt-4 mt-4">
+                     <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
                         <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-50 border border-gray-300 rounded text-blue-500 focus:ring-blue-600">
-                            <span class="text-gray-700">É uma ação de 2 minutos?</span>
+                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600">
+                            <span class="text-gray-700 dark:text-gray-300">É uma ação de 2 minutos?</span>
                         </label>
                         <div id="timer-starter" class="hidden text-center mt-4">
                             <button type="button" id="start-timer-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-md transition w-full">Iniciar Timer de 2 Minutos</button>
                         </div>
                     </div>`,
                 'project': `<div class="mb-4">
-                                <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Nome do Projeto</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Nome do Projeto</label>
+                                <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
-                                    <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data de Conclusão</label>
-                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Conclusão</label>
+                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
+                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>`,
                 'waiting': `<div class="mb-4">
-                                <label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Aguardando por</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Aguardando por</label>
+                                <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
-                                    <label for="due-date-input" class="block text-gray-700 text-sm font-bold mb-2">Data de Acompanhamento</label>
-                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Acompanhamento</label>
+                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label for="due-time-input" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
+                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>`,
-                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Ideia</label><input type="text" id="task-text-input" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></div>`,
-                'reference': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 text-sm font-bold mb-2">Referência</label><textarea id="task-text-input" rows="4" class="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`
+                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Ideia</label><input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></div>`,
+                'reference': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Referência</label><textarea id="task-text-input" rows="4" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`
             };
 
 
