@@ -227,7 +227,7 @@
 
                 <div id="form-error" class="text-red-600 text-sm mt-4 mb-20"></div>
                 
-                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4">
+                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 z-[60]">
                     <div class="flex justify-end gap-4 container mx-auto max-w-lg">
                         <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
                         <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Salvar</button>
@@ -282,7 +282,7 @@
     </div>
     
     <!-- Revisão Semanal Footer -->
-    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 hidden">
+    <div id="weekly-review-footer" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 hidden z-50">
         <div class="container mx-auto max-w-4xl flex flex-col gap-3 p-4">
             <span id="weekly-review-step" class="text-green-600 font-semibold text-center"></span>
             <div class="flex justify-center px-4">
@@ -343,6 +343,20 @@
                             <p class="text-sm text-gray-600 mb-3">Precisa de ajuda para começar?</p>
                             <button id="restart-tutorial-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
                                 Iniciar Tutorial
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exportar para Google Calendar -->
+                <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">📅</span>
+                        <div class="w-full">
+                            <p class="font-semibold text-gray-900 mb-1">Google Calendar</p>
+                            <p class="text-sm text-gray-600 mb-3">Exportar eventos agendados</p>
+                            <button id="export-calendar-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
+                                Exportar Todos os Eventos
                             </button>
                         </div>
                     </div>
@@ -469,6 +483,7 @@
                     themeToggle: document.getElementById('theme-toggle'),
                     themeToggleDot: document.getElementById('theme-toggle-dot'),
                     restartTutorialBtn: document.getElementById('restart-tutorial-btn'),
+                    exportCalendarBtn: document.getElementById('export-calendar-btn'),
                 }
             };
             
@@ -647,18 +662,18 @@
                     <div class="task-item bg-white dark:bg-gray-800 p-4 ${isProject ? 'rounded-t-lg' : 'rounded-lg'} shadow-md flex flex-col sm:flex-row justify-between sm:items-start border-l-4 ${currentStatus.color} transition-all duration-300 border border-gray-200 dark:border-gray-700">
                         <div class="flex items-start gap-4 flex-grow min-w-0">
                            <div class="text-lg font-mono text-gray-600 dark:text-gray-400 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
-                           <div class="flex-grow">
-                                <span class="text-gray-900 dark:text-gray-300">${task.text}</span>
-                                ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1">${task.context}</p>` : ''}
+                           <div class="flex-grow min-w-0">
+                                <span class="text-gray-900 dark:text-gray-300 break-words">${task.text}</span>
+                                ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1 break-words">${task.context}</p>` : ''}
                                 ${task.dueDate ? `
-                                <p class="text-xs text-cyan-600 dark:text-cyan-400 mt-1 flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
-                                    <span>${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
+                                <p class="text-xs text-cyan-600 dark:text-cyan-400 mt-1 flex items-center gap-1 flex-wrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
+                                    <span class="break-words">${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
                                 </p>
                             ` : ''}
                            </div>
                         </div>
-                        <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end">
+                        <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end flex-shrink-0">
                              ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
                             ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Editar</button>` : ''}
@@ -681,10 +696,10 @@
                 if (!project || !container) return; 
                 project.subTasks.sort((a, b) => a.completed - b.completed); 
                 const subTasksHTML = project.subTasks.map(subtask => `
-                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50">
+                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50 min-w-0">
                         <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
-                        <div class="flex-grow">
-                            <span class="text-gray-700 dark:text-gray-400 ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
+                        <div class="flex-grow min-w-0">
+                            <span class="text-gray-700 dark:text-gray-400 break-words ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
                             <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2 text-gray-700 dark:text-white">
                         </div>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
@@ -748,18 +763,35 @@
 
                     html += `
                         <div class="mb-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-3">${dayName}, <span class="text-gray-600">${formattedDate}</span></h3>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">${dayName}, <span class="text-gray-600 dark:text-gray-400">${formattedDate}</span></h3>
                             <div class="space-y-2">
                                 ${tasksByDate[date].map(task => {
                                     const time = task.dueTime ? `<span class="font-semibold text-gray-700 w-16 text-right">${task.dueTime}</span>` : `<span class="w-16"></span>`;
                                     const colorClass = (statusInfo[task.status]?.color || 'border-gray-500').replace('border-', 'bg-');
                                     const statusName = statusInfo[task.status]?.name || task.status;
+                                    
+                                    // Criar link para Google Calendar
+                                    const startDateTime = task.dueTime 
+                                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
+                                        : `${task.dueDate.replace(/-/g, '')}`;
+                                    
+                                    const endDateTime = task.dueTime
+                                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
+                                        : `${task.dueDate.replace(/-/g, '')}`;
+                                    
+                                    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
+                                    
                                     return `
-                                        <div class="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-200">
+                                        <div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
                                             ${time}
-                                            <div class="w-1 h-8 ${colorClass} rounded-full"></div>
-                                            <span class="text-gray-700">${task.text}</span>
-                                            <span class="ml-auto text-xs text-gray-600">(${statusName})</span>
+                                            <div class="w-1 h-8 ${colorClass} rounded-full flex-shrink-0"></div>
+                                            <span class="text-gray-700 dark:text-gray-300 break-words flex-grow min-w-0">${task.text}</span>
+                                            <a href="${googleCalendarUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" title="Adicionar ao Google Calendar">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                </svg>
+                                            </a>
+                                            <span class="text-xs text-gray-600 dark:text-gray-400 flex-shrink-0 whitespace-nowrap">(${statusName})</span>
                                         </div>
                                     `;
                                 }).join('')}
@@ -1122,11 +1154,61 @@
 
             app.tutorial.skipBtn.addEventListener('click', endTutorial);
 
+            // Função para exportar eventos para Google Calendar
+            function exportAllToGoogleCalendar() {
+                const scheduledTasks = tasks.filter(t => t.dueDate);
+                
+                if (scheduledTasks.length === 0) {
+                    alert('Não há eventos agendados para exportar.');
+                    return;
+                }
+                
+                // Abre uma nova janela com instruções
+                let message = `Encontrados ${scheduledTasks.length} evento(s) agendado(s).\n\n`;
+                message += 'Clique em cada link abaixo para adicionar ao Google Calendar:\n\n';
+                
+                scheduledTasks.forEach((task, index) => {
+                    const startDateTime = task.dueTime 
+                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
+                        : `${task.dueDate.replace(/-/g, '')}`;
+                    
+                    const endDateTime = task.dueTime
+                        ? `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`
+                        : `${task.dueDate.replace(/-/g, '')}`;
+                    
+                    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
+                    
+                    // Abre cada evento em uma nova aba
+                    setTimeout(() => {
+                        window.open(googleCalendarUrl, '_blank');
+                    }, index * 500); // Delay de 500ms entre cada abertura
+                });
+                
+                alert(`Abrindo ${scheduledTasks.length} aba(s) para adicionar eventos ao Google Calendar...`);
+            }
+
             function startTutorial() {
                 if (localStorage.getItem('gtd_tutorial_completed') !== 'true' && tasks.some(t => t.text === 'Marcar dentista')) {
                     tutorialStep = 0;
                     executeTutorialStep();
                 }
+            }
+
+            function restartTutorial() {
+                // Remove a flag de tutorial completado
+                localStorage.removeItem('gtd_tutorial_completed');
+                
+                // Adiciona a tarefa de exemplo se não existir
+                if (!tasks.some(t => t.text === 'Marcar dentista')) {
+                    tasks.unshift({ id: Date.now().toString(), text: 'Marcar dentista', status: 'inbox', context: null });
+                    saveTasks();
+                }
+                
+                // Vai para a inbox e reinicia o tutorial
+                currentView = 'inbox-view';
+                render();
+                tutorialStep = 0;
+                executeTutorialStep();
             }
 
 
@@ -1476,7 +1558,11 @@
 
             app.settings.restartTutorialBtn.addEventListener('click', () => {
                 app.settings.modal.classList.add('hidden');
-                startTutorial();
+                restartTutorial();
+            });
+
+            app.settings.exportCalendarBtn.addEventListener('click', () => {
+                exportAllToGoogleCalendar();
             });
 
             // --- INICIALIZAÇÃO ---
