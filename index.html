@@ -355,7 +355,7 @@
                         <span class="text-2xl">📱</span>
                         <div class="flex-grow">
                             <p class="font-semibold text-gray-900 dark:text-white mb-1">Instalar App</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Adicione o EVOMYND à tela inicial do seu dispositivo</p>
+                            <p id="install-app-description" class="text-sm text-gray-600 dark:text-gray-400 mb-3">Adicione o EVOMYND à tela inicial do seu dispositivo</p>
                             <button id="install-app-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
                                 Instalar Aplicativo
                             </button>
@@ -512,8 +512,23 @@
             
             // --- PWA: INSTALAÇÃO DO APP ---
             let deferredPrompt;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             
-            // Capturar o evento beforeinstallprompt
+            // Detectar se está no iOS e não está instalado
+            if (isIOS && !isInStandaloneMode) {
+                // Mostrar instruções para iOS
+                app.settings.installAppContainer.classList.remove('hidden');
+                const description = document.getElementById('install-app-description');
+                const installBtn = app.settings.installAppBtn;
+                
+                description.textContent = 'Para instalar: toque no botão Compartilhar ⬆️ e depois em "Adicionar à Tela de Início"';
+                installBtn.textContent = 'Ver Instruções';
+                installBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                installBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+            
+            // Capturar o evento beforeinstallprompt (Android/Chrome/Edge)
             window.addEventListener('beforeinstallprompt', (e) => {
                 // Prevenir que o navegador mostre o prompt automaticamente
                 e.preventDefault();
@@ -526,6 +541,36 @@
             // Event listener para o botão de instalação
             if (app.settings.installAppBtn) {
                 app.settings.installAppBtn.addEventListener('click', async () => {
+                    // Se for iOS, mostrar modal com instruções
+                    if (isIOS && !deferredPrompt) {
+                        const instructionsModal = document.createElement('div');
+                        instructionsModal.className = 'modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-[100]';
+                        instructionsModal.innerHTML = `
+                            <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Como Instalar no iOS</h3>
+                                <ol class="text-left text-gray-700 dark:text-gray-300 space-y-3 mb-6">
+                                    <li class="flex gap-3">
+                                        <span class="font-bold">1.</span>
+                                        <span>Toque no botão <strong>Compartilhar</strong> ⬆️ na barra inferior do Safari</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span class="font-bold">2.</span>
+                                        <span>Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong> ➕</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span class="font-bold">3.</span>
+                                        <span>Toque em <strong>"Adicionar"</strong> no canto superior direito</span>
+                                    </li>
+                                </ol>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md w-full transition shadow-md hover:shadow-lg" onclick="this.closest('.modal-overlay').remove()">
+                                    Entendi
+                                </button>
+                            </div>
+                        `;
+                        document.body.appendChild(instructionsModal);
+                        return;
+                    }
+                    
                     if (!deferredPrompt) {
                         alert('O aplicativo já está instalado ou não pode ser instalado neste dispositivo.');
                         return;
