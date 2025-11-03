@@ -50,6 +50,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
+        // Logs de diagnóstico
+        console.log('🔥 Firebase inicializado com sucesso!');
+        console.log('📍 Projeto:', firebaseConfig.projectId);
+        console.log('🌐 Domínio atual:', window.location.hostname);
+        console.log('⚠️ Se houver erro de login, adicione este domínio em:');
+        console.log('   Firebase Console > Authentication > Settings > Authorized domains');
+        
         // Disponibilizar globalmente
         window.firebaseAuth = auth;
         window.firebaseDb = db;
@@ -714,14 +721,35 @@
                 try {
                     const { GoogleAuthProvider, signInWithPopup } = window.firebaseAuthMethods;
                     const provider = new GoogleAuthProvider();
+                    
+                    console.log('Iniciando login com Google...');
                     const result = await signInWithPopup(window.firebaseAuth, provider);
                     currentUser = result.user;
                     console.log('Login realizado:', currentUser.email);
                     updateUserUI(currentUser);
                     await loadFromFirestore();
                 } catch (error) {
-                    console.error('Erro no login:', error);
-                    alert('Erro ao fazer login. Tente novamente.');
+                    console.error('Erro completo no login:', error);
+                    
+                    // Mensagens de erro específicas
+                    let errorMessage = 'Erro ao fazer login. ';
+                    
+                    if (error.code === 'auth/popup-closed-by-user') {
+                        errorMessage += 'Você fechou a janela de login. Tente novamente.';
+                    } else if (error.code === 'auth/popup-blocked') {
+                        errorMessage += 'O popup foi bloqueado pelo navegador. Permita popups para este site.';
+                    } else if (error.code === 'auth/unauthorized-domain') {
+                        errorMessage += 'Este domínio não está autorizado. Configure o domínio no Firebase Console em:\n\nAuthentication > Settings > Authorized domains\n\nAdicione: ' + window.location.hostname;
+                    } else if (error.code === 'auth/operation-not-allowed') {
+                        errorMessage += 'Login com Google não está habilitado. Ative em:\n\nFirebase Console > Authentication > Sign-in method > Google';
+                    } else if (error.code === 'auth/network-request-failed') {
+                        errorMessage += 'Erro de rede. Verifique sua conexão com a internet.';
+                    } else {
+                        errorMessage += error.message || 'Erro desconhecido.';
+                    }
+                    
+                    alert(errorMessage);
+                    console.log('Código do erro:', error.code);
                 }
             }
             
@@ -865,67 +893,6 @@
                 app.settings.installAppContainer.classList.add('hidden');
                 deferredPrompt = null;
             });
-            
-            // --- FIREBASE: AUTENTICAÇÃO E SINCRONIZAÇÃO ---
-            
-            // Função para fazer login com Google
-            async function loginWithGoogle() {
-                if (!auth) {
-                    alert('Firebase não está configurado. Consulte as instruções no console.');
-                    return;
-                }
-                
-                const provider = new firebase.auth.GoogleAuthProvider();
-                try {
-                    await auth.signInWithPopup(provider);
-                } catch (error) {
-                    console.error('Erro ao fazer login:', error);
-                    alert('Erro ao fazer login: ' + error.message);
-                }
-            }
-            
-            // Função para fazer logout
-            async function logout() {
-                if (!auth) return;
-                try {
-                    await auth.signOut();
-                } catch (error) {
-                    console.error('Erro ao fazer logout:', error);
-                }
-            }
-            
-            // Monitorar estado de autenticação
-            if (auth) {
-                auth.onAuthStateChanged(async (user) => {
-                    currentUser = user;
-                    updateUserUI();
-                    
-                    if (user) {
-                        // Usuário logado - carregar dados do Firestore
-                        await loadFromFirestore();
-                        
-                        // Sincronizar tarefas locais para nuvem (apenas na primeira vez ou se houver tarefas)
-                        if (tasks.length > 0) {
-                            await syncToFirestore();
-                        }
-                    } else {
-                        // Usuário não logado
-                        if (unsubscribeFirestore) {
-                            unsubscribeFirestore();
-                            unsubscribeFirestore = null;
-                        }
-                    }
-                });
-            }
-            
-            // Event listeners para botões de autenticação
-            if (app.settings.googleLoginBtn) {
-                app.settings.googleLoginBtn.addEventListener('click', loginWithGoogle);
-            }
-            
-            if (app.settings.googleLogoutBtn) {
-                app.settings.googleLogoutBtn.addEventListener('click', logoutFromGoogle);
-            }
             
             // --- TEMPLATES DE FORMULÁRIO ---
             const formTemplates = {
