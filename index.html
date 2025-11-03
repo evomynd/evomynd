@@ -59,11 +59,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -899,82 +894,22 @@
                 }
             }
             
-            // Função para sincronizar tarefas com Firestore
-            async function syncTasksToFirestore() {
-                if (!currentUser || !db) return;
-                
-                try {
-                    const userDocRef = db.collection('users').doc(currentUser.uid);
-                    await userDocRef.set({
-                        tasks: tasks,
-                        lastSync: firebase.firestore.FieldValue.serverTimestamp(),
-                        email: currentUser.email
-                    });
-                    updateSyncStatus('✅ Sincronizado', 'text-green-600 dark:text-green-400');
-                } catch (error) {
-                    console.error('Erro ao sincronizar:', error);
-                    updateSyncStatus('❌ Erro na sincronização', 'text-red-600 dark:text-red-400');
-                }
-            }
-            
-            // Função para carregar tarefas do Firestore
-            function subscribeToFirestore() {
-                if (!currentUser || !db) return;
-                
-                const userDocRef = db.collection('users').doc(currentUser.uid);
-                
-                // Escutar mudanças em tempo real
-                unsubscribeFirestore = userDocRef.onSnapshot((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        if (data.tasks) {
-                            tasks = data.tasks;
-                            localStorage.setItem('gtd_tasks_v2', JSON.stringify(tasks));
-                            render();
-                            updateSyncStatus('✅ Sincronizado', 'text-green-600 dark:text-green-400');
-                        }
-                    }
-                }, (error) => {
-                    console.error('Erro ao escutar mudanças:', error);
-                    updateSyncStatus('❌ Erro na sincronização', 'text-red-600 dark:text-red-400');
-                });
-            }
-            
-            // Função para atualizar status de sincronização
-            function updateSyncStatus(message, colorClass) {
-                if (app.settings.syncStatus) {
-                    app.settings.syncStatus.textContent = message;
-                    app.settings.syncStatus.className = `text-sm mb-3 ${colorClass}`;
-                }
-            }
-            
             // Monitorar estado de autenticação
             if (auth) {
-                auth.onAuthStateChanged((user) => {
+                auth.onAuthStateChanged(async (user) => {
                     currentUser = user;
+                    updateUserUI();
                     
                     if (user) {
-                        // Usuário logado
-                        console.log('Usuário logado:', user.email);
-                        app.settings.googleLoginBtn.classList.add('hidden');
-                        app.settings.googleLogoutBtn.classList.remove('hidden');
-                        updateSyncStatus(`👤 Conectado como ${user.email}`, 'text-blue-600 dark:text-blue-400');
+                        // Usuário logado - carregar dados do Firestore
+                        await loadFromFirestore();
                         
-                        // Inscrever-se para mudanças em tempo real
-                        subscribeToFirestore();
-                        
-                        // Sincronizar tarefas locais para nuvem (apenas na primeira vez)
+                        // Sincronizar tarefas locais para nuvem (apenas na primeira vez ou se houver tarefas)
                         if (tasks.length > 0) {
-                            syncTasksToFirestore();
+                            await syncToFirestore();
                         }
                     } else {
                         // Usuário não logado
-                        console.log('Usuário não logado');
-                        app.settings.googleLoginBtn.classList.remove('hidden');
-                        app.settings.googleLogoutBtn.classList.add('hidden');
-                        updateSyncStatus('Faça login para sincronizar seus dados entre dispositivos', 'text-gray-600 dark:text-gray-400');
-                        
-                        // Cancelar escuta de mudanças
                         if (unsubscribeFirestore) {
                             unsubscribeFirestore();
                             unsubscribeFirestore = null;
@@ -989,7 +924,7 @@
             }
             
             if (app.settings.googleLogoutBtn) {
-                app.settings.googleLogoutBtn.addEventListener('click', logout);
+                app.settings.googleLogoutBtn.addEventListener('click', logoutFromGoogle);
             }
             
             // --- TEMPLATES DE FORMULÁRIO ---
