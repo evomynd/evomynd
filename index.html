@@ -656,6 +656,9 @@
                 updateSyncStatus('Sincronizando...', 'text-yellow-600');
                 
                 try {
+                    console.log('🔄 Iniciando sincronização...');
+                    console.log('📊 Total de tarefas:', tasks.length);
+                    
                     const { doc, setDoc } = window.firebaseDbMethods;
                     const userDoc = doc(window.firebaseDb, 'users', currentUser.uid);
                     
@@ -666,10 +669,21 @@
                     });
                     
                     updateSyncStatus('✓ Sincronizado', 'text-green-600');
-                    console.log('Tarefas sincronizadas com sucesso');
+                    console.log('✅ Tarefas sincronizadas com sucesso');
                 } catch (error) {
-                    console.error('Erro ao sincronizar:', error);
-                    updateSyncStatus('⚠ Erro ao sincronizar', 'text-red-600');
+                    console.error('❌ Erro ao sincronizar:', error);
+                    console.error('Código do erro:', error.code);
+                    console.error('Mensagem:', error.message);
+                    
+                    // Mensagem de erro específica
+                    if (error.code === 'permission-denied') {
+                        updateSyncStatus('⚠ Sem permissão', 'text-red-600');
+                        console.error('⚠️ Configure as regras do Firestore!');
+                    } else if (error.code === 'unavailable') {
+                        updateSyncStatus('⚠ Firestore offline', 'text-red-600');
+                    } else {
+                        updateSyncStatus('⚠ Erro ao sincronizar', 'text-red-600');
+                    }
                 } finally {
                     isSyncing = false;
                 }
@@ -688,6 +702,8 @@
                 if (!currentUser) return;
                 
                 try {
+                    console.log('📥 Carregando dados do Firestore...');
+                    
                     const { doc, onSnapshot } = window.firebaseDbMethods;
                     const userDoc = doc(window.firebaseDb, 'users', currentUser.uid);
                     
@@ -695,23 +711,50 @@
                     unsubscribeFirestore = onSnapshot(userDoc, (docSnap) => {
                         if (docSnap.exists()) {
                             const data = docSnap.data();
+                            console.log('📦 Documento encontrado:', data);
+                            
                             if (data.tasks && data.tasks.length > 0) {
                                 tasks = data.tasks;
                                 saveTasks(); // Salvar localmente também
                                 render();
                                 updateSyncStatus('✓ Sincronizado', 'text-green-600');
-                                console.log('Tarefas carregadas do Firestore');
+                                console.log('✅ Tarefas carregadas do Firestore');
+                            } else {
+                                console.log('📝 Documento vazio, enviando tarefas locais...');
+                                syncToFirestore();
                             }
                         } else {
                             // Primeira vez do usuário, fazer upload das tarefas locais
+                            console.log('🆕 Primeira sincronização, criando documento...');
                             syncToFirestore();
                         }
                     }, (error) => {
-                        console.error('Erro no listener:', error);
-                        updateSyncStatus('⚠ Erro na sincronização', 'text-red-600');
+                        console.error('❌ Erro no listener:', error);
+                        console.error('Código do erro:', error.code);
+                        console.error('Mensagem:', error.message);
+                        
+                        // Mensagem de erro específica
+                        if (error.code === 'permission-denied') {
+                            updateSyncStatus('⚠ Sem permissão - Configure Firestore', 'text-red-600');
+                            console.error('⚠️ ERRO: Regras do Firestore não configuradas!');
+                            console.log('📋 Acesse: https://console.firebase.google.com/project/evomynd/firestore/rules');
+                            console.log('📋 Cole estas regras:');
+                            console.log(`
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+                            `);
+                        } else {
+                            updateSyncStatus('⚠ Erro na sincronização', 'text-red-600');
+                        }
                     });
                 } catch (error) {
-                    console.error('Erro ao carregar do Firestore:', error);
+                    console.error('❌ Erro ao carregar do Firestore:', error);
                     updateSyncStatus('⚠ Erro ao carregar', 'text-red-600');
                 }
             }
