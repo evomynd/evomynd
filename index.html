@@ -1057,8 +1057,9 @@ service cloud.firestore {
                 document.getElementById('login-required-btn')?.addEventListener('click', loginWithGoogle);
                 document.getElementById('logout-expired-btn')?.addEventListener('click', logoutFromGoogle);
                 document.getElementById('renew-subscription-btn')?.addEventListener('click', () => {
-                    // URL do seu checkout (Stripe, Mercado Pago, etc)
-                    const checkoutUrl = 'https://seusite.com/checkout'; // ALTERE AQUI
+                    // URL do checkout do Mercado Pago com identificação do usuário
+                    const userId = currentUser?.uid || '';
+                    const checkoutUrl = `https://mpago.la/2174QUB?external_reference=${userId}`;
                     window.open(checkoutUrl, '_blank');
                 });
             });
