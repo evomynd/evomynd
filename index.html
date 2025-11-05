@@ -506,9 +506,48 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Informações de Assinatura -->
+                <div id="subscription-info-container" class="p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border border-yellow-200 dark:border-yellow-800 hidden">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">👤</span>
+                        <div class="flex-grow">
+                            <p class="font-semibold text-gray-900 dark:text-white mb-3">Minha Assinatura</p>
+                            
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Status:</span>
+                                    <span id="sub-status" class="font-semibold text-gray-900 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Plano:</span>
+                                    <span id="sub-plan" class="font-semibold text-gray-900 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Expira em:</span>
+                                    <span id="sub-expires" class="font-semibold text-gray-900 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Dias restantes:</span>
+                                    <span id="sub-days" class="font-semibold text-gray-900 dark:text-white"></span>
+                                </div>
+                                <div class="pt-2 border-t border-yellow-200 dark:border-yellow-700">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 break-all">
+                                        <strong>User ID:</strong><br>
+                                        <code id="sub-userid" class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded"></code>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <button id="renew-subscription-settings-btn" class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 hidden">
+                                💳 Renovar Assinatura
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-200">
+            <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <button id="settings-done-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
                     Concluir
                 </button>
@@ -733,7 +772,8 @@
                             active: true,
                             status: 'trial',
                             expiresAt: trialEnds.toISOString(),
-                            daysRemaining: TRIAL_DAYS
+                            daysRemaining: TRIAL_DAYS,
+                            isNewUser: true  // Flag para mostrar popup de boas-vindas
                         };
                     }
                     
@@ -751,7 +791,8 @@
                             active: true,
                             status: subscription.status,
                             expiresAt: subscription.expiresAt,
-                            daysRemaining: daysRemaining
+                            daysRemaining: daysRemaining,
+                            isNewUser: false
                         };
                     } else {
                         console.log('❌ Assinatura expirada');
@@ -759,7 +800,8 @@
                             active: false,
                             status: 'expired',
                             expiresAt: subscription.expiresAt,
-                            daysRemaining: 0
+                            daysRemaining: 0,
+                            isNewUser: false
                         };
                     }
                 } catch (error) {
@@ -768,7 +810,8 @@
                     return {
                         active: true,
                         status: 'error',
-                        error: error.message
+                        error: error.message,
+                        isNewUser: false
                     };
                 }
             }
@@ -834,10 +877,39 @@
                 console.log('✅ Acesso liberado');
                 showApp();
                 
-                // Avisar se está em período de teste
-                if (subscription.status === 'trial' && subscription.daysRemaining <= 3) {
+                // Mostrar popup de boas-vindas para novos usuários
+                if (subscription.isNewUser) {
                     setTimeout(() => {
-                        alert(`⏰ Seu período de teste termina em ${subscription.daysRemaining} dia(s).\n\nRenove sua assinatura para continuar usando o EVOMYND.`);
+                        showConfirm(
+                            `🎉 Bem-vindo ao EVOMYND!\n\n` +
+                            `Você ganhou ${TRIAL_DAYS} dias de teste GRÁTIS para experimentar todas as funcionalidades.\n\n` +
+                            `📅 Seu período de teste expira em: ${new Date(subscription.expiresAt).toLocaleDateString('pt-BR')}\n\n` +
+                            `Aproveite para organizar suas tarefas e aumentar sua produtividade!`,
+                            () => {
+                                // Usuário clicou em OK
+                                console.log('Usuário viu popup de boas-vindas');
+                            },
+                            'Começar a usar',
+                            null // Sem botão de cancelar
+                        );
+                    }, 1000);
+                }
+                // Avisar se está em período de teste e faltam poucos dias
+                else if (subscription.status === 'trial' && subscription.daysRemaining <= 3) {
+                    setTimeout(() => {
+                        showConfirm(
+                            `⏰ Atenção!\n\n` +
+                            `Seu período de teste termina em ${subscription.daysRemaining} dia(s).\n\n` +
+                            `Renove sua assinatura para continuar usando o EVOMYND sem interrupções.`,
+                            () => {
+                                // Redirecionar para renovação
+                                const userId = currentUser?.uid || '';
+                                const checkoutUrl = `https://mpago.la/2174QUB?external_reference=${userId}`;
+                                window.open(checkoutUrl, '_blank');
+                            },
+                            'Renovar Agora',
+                            'Depois'
+                        );
                     }, 2000);
                 }
                 
@@ -2535,9 +2607,88 @@ service cloud.firestore {
             app.weeklyReview.nextBtn.addEventListener('click', nextWeeklyReviewStep);
             app.weeklyReview.completeCloseBtn.addEventListener('click', closeWeeklyReviewComplete);
 
+            // Função para atualizar informações de assinatura no modal
+            async function updateSubscriptionInfo() {
+                const container = document.getElementById('subscription-info-container');
+                const renewBtn = document.getElementById('renew-subscription-settings-btn');
+                
+                if (!currentUser) {
+                    container.classList.add('hidden');
+                    return;
+                }
+                
+                try {
+                    const subscription = await checkSubscription(currentUser.uid);
+                    
+                    // Mostrar container
+                    container.classList.remove('hidden');
+                    
+                    // Status
+                    const statusElement = document.getElementById('sub-status');
+                    const statusText = {
+                        'trial': '🎁 Teste Grátis',
+                        'active': '✅ Ativa',
+                        'expired': '❌ Expirada',
+                        'error': '⚠️ Erro'
+                    };
+                    statusElement.textContent = statusText[subscription.status] || subscription.status;
+                    statusElement.className = subscription.active ? 'font-semibold text-green-600 dark:text-green-400' : 'font-semibold text-red-600 dark:text-red-400';
+                    
+                    // Plano
+                    const planElement = document.getElementById('sub-plan');
+                    const planText = {
+                        'trial': 'Teste Gratuito',
+                        'premium_monthly': 'Premium Mensal',
+                        'premium_annual': 'Premium Anual',
+                        'premium': 'Premium'
+                    };
+                    planElement.textContent = planText[subscription.status] || 'Gratuito';
+                    
+                    // Data de expiração
+                    const expiresElement = document.getElementById('sub-expires');
+                    if (subscription.expiresAt) {
+                        const date = new Date(subscription.expiresAt);
+                        expiresElement.textContent = date.toLocaleDateString('pt-BR', { 
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    } else {
+                        expiresElement.textContent = 'N/A';
+                    }
+                    
+                    // Dias restantes
+                    const daysElement = document.getElementById('sub-days');
+                    if (subscription.daysRemaining !== undefined) {
+                        daysElement.textContent = `${subscription.daysRemaining} dia(s)`;
+                        daysElement.className = subscription.daysRemaining <= 3 ? 'font-semibold text-red-600 dark:text-red-400' : 'font-semibold text-green-600 dark:text-green-400';
+                    } else {
+                        daysElement.textContent = 'N/A';
+                    }
+                    
+                    // User ID
+                    document.getElementById('sub-userid').textContent = currentUser.uid;
+                    
+                    // Mostrar botão de renovar apenas se for trial ou estiver perto de expirar
+                    if (subscription.status === 'trial' || (subscription.active && subscription.daysRemaining <= 7)) {
+                        renewBtn.classList.remove('hidden');
+                    } else {
+                        renewBtn.classList.add('hidden');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar informações de assinatura:', error);
+                    container.classList.add('hidden');
+                }
+            }
+
             // Event Listeners do Modal de Configurações
-            app.settings.openBtn.addEventListener('click', () => {
+            app.settings.openBtn.addEventListener('click', async () => {
                 app.settings.modal.classList.remove('hidden');
+                // Atualizar informações de assinatura ao abrir o modal
+                await updateSubscriptionInfo();
             });
 
             app.settings.closeBtn.addEventListener('click', () => {
@@ -2553,6 +2704,13 @@ service cloud.firestore {
             app.settings.restartTutorialBtn.addEventListener('click', () => {
                 app.settings.modal.classList.add('hidden');
                 restartTutorial();
+            });
+
+            // Botão de renovar assinatura no modal de configurações
+            document.getElementById('renew-subscription-settings-btn')?.addEventListener('click', () => {
+                const userId = currentUser?.uid || '';
+                const checkoutUrl = `https://mpago.la/2174QUB?external_reference=${userId}`;
+                window.open(checkoutUrl, '_blank');
             });
 
             // --- INICIALIZAÇÃO ---
