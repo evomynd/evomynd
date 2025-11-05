@@ -948,6 +948,23 @@ service cloud.firestore {
                         <label for="context-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Contexto</label>
                         <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
+                    </div>
+                    <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-3">📅 Data e Horário (obrigatório)</label>
+                        <div class="mb-3">
+                            <label for="due-date-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Data</label>
+                            <input type="date" id="due-date-input" min="${today}" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="due-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Início</label>
+                                <input type="time" id="due-time-input" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="end-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Fim</label>
+                                <input type="time" id="end-time-input" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
                     </div>`,
                 'next-action-edit': `
                     <div class="mb-4">
@@ -969,15 +986,6 @@ service cloud.firestore {
                                 <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
                                 <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                        </div>
-                    </div>
-                     <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="two-min-rule-checkbox" class="h-5 w-5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600">
-                            <span class="text-gray-700 dark:text-gray-300">É uma ação de 2 minutos?</span>
-                        </label>
-                        <div id="timer-starter" class="hidden text-center mt-4">
-                            <button type="button" id="start-timer-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-md transition w-full">Iniciar Timer de 2 Minutos</button>
                         </div>
                     </div>`,
                 'project': `<div class="mb-4">
@@ -1025,16 +1033,20 @@ service cloud.firestore {
 
             const saveTasks = () => {
                 localStorage.setItem('gtd_tasks_v2', JSON.stringify(tasks));
-                // Sincronizar com Firebase se usuário estiver logado
-                if (currentUser) {
-                    syncToFirestore();
+                // Sincronizar com Firebase se usuário estiver logado (com debounce)
+                if (currentUser && !isSyncing) {
+                    // Usar debounce para evitar sincronizações excessivas
+                    clearTimeout(window.syncTimeout);
+                    window.syncTimeout = setTimeout(() => {
+                        syncToFirestore();
+                    }, 1000); // Aguarda 1 segundo de inatividade antes de sincronizar
                 }
             };
 
             const findTask = (id) => tasks.find(t => t.id === id);
 
             const render = () => {
-                saveTasks();
+                // Não precisa chamar saveTasks aqui - já é chamado quando necessário
                 const renderMap = {
                     'inbox-view': renderInbox,
                     'next-actions-view': renderNextActions,
@@ -1097,19 +1109,13 @@ service cloud.firestore {
                 const isProject = task.status === 'project';
                 
                 const inboxActionsHTML = `
-                    <div class="relative inline-block text-left">
-                        <button data-id="${task.id}" class="toggle-process-dropdown-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
-                            Processar <svg class="ml-2 -mr-1 h-4 w-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    <div class="flex gap-2">
+                        <button data-id="${task.id}" class="process-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
+                            Processar
                         </button>
-                        <div id="process-dropdown-${task.id}" class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10 border border-gray-200 dark:border-gray-600">
-                            <div class="py-1">
-                                <a href="#" class="process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}">➡️ Próxima Ação...</a>
-                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="project">📂 Mover p/ Projetos</a>
-                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="waiting">⏳ Mover p/ Aguardando</a>
-                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="someday">💡 Mover p/ Algum Dia</a>
-                                <a href="#" class="direct-process-btn text-gray-700 dark:text-gray-300 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" data-id="${task.id}" data-destination="reference">📋 Mover p/ Referência</a>
-                            </div>
-                        </div>
+                        <button data-id="${task.id}" class="do-now-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Fazer agora (menos de 2 minutos)">
+                            ⚡ Fazer agora
+                        </button>
                     </div>`;
 
                 const mainItemHTML = `
@@ -1305,15 +1311,20 @@ service cloud.firestore {
                 } 
             };
             
-            const showConfirm = (message, onConfirm) => { 
+            const showConfirm = (message, onConfirm, okText = 'OK', cancelText = 'Cancelar') => { 
                 app.confirmModal.text.textContent = message; 
+                app.confirmModal.okBtn.textContent = okText;
+                app.confirmModal.cancelBtn.textContent = cancelText;
                 app.confirmModal.element.classList.remove('hidden'); 
                 const okListener = () => { onConfirm(); hideConfirm(); }; 
                 const cancelListener = () => { hideConfirm(); }; 
                 const hideConfirm = () => { 
                     app.confirmModal.element.classList.add('hidden'); 
                     app.confirmModal.okBtn.removeEventListener('click', okListener); 
-                    app.confirmModal.cancelBtn.removeEventListener('click', cancelListener); 
+                    app.confirmModal.cancelBtn.removeEventListener('click', cancelListener);
+                    // Resetar textos padrão
+                    app.confirmModal.okBtn.textContent = 'OK';
+                    app.confirmModal.cancelBtn.textContent = 'Cancelar';
                 }; 
                 app.confirmModal.okBtn.addEventListener('click', okListener, { once: true }); 
                 app.confirmModal.cancelBtn.addEventListener('click', cancelListener, { once: true }); 
@@ -1327,6 +1338,7 @@ service cloud.firestore {
                         task.subTasks = [];
                     }
                     task.context = null;
+                    saveTasks();
                     render();
                 }
             };
@@ -1366,24 +1378,15 @@ service cloud.firestore {
                 if (destination === 'next-action' || destination === 'waiting' || destination === 'project') {
                     const dueDateInput = document.getElementById('due-date-input');
                     const dueTimeInput = document.getElementById('due-time-input');
+                    const endTimeInput = document.getElementById('end-time-input');
                     if(dueDateInput) dueDateInput.value = task.dueDate || '';
                     if(dueTimeInput) dueTimeInput.value = task.dueTime || '';
+                    if(endTimeInput) endTimeInput.value = task.endTime || '';
                 }
                 if (destination === 'next-action') {
                     const contextInput = document.getElementById('context-input');
                     contextInput.value = task.context || '';
                     document.getElementById('context-list').innerHTML = getExistingContexts().map(c => `<option value="${c}"></option>`).join('');
-                    
-                    const twoMinCheckbox = document.getElementById('two-min-rule-checkbox');
-                    if(twoMinCheckbox){
-                        app.modal.saveBtn.classList.remove('hidden');
-                        document.getElementById('timer-starter').classList.add('hidden');
-                        twoMinCheckbox.checked = false;
-                        twoMinCheckbox.addEventListener('change', (e) => {
-                            document.getElementById('timer-starter').classList.toggle('hidden', !e.target.checked);
-                            app.modal.saveBtn.classList.toggle('hidden', e.target.checked);
-                        });
-                    }
                 }
             };
 
@@ -1406,28 +1409,55 @@ service cloud.firestore {
                 
                 const dueDateInput = document.getElementById('due-date-input');
                 const dueTimeInput = document.getElementById('due-time-input');
-                
-                if (dueDateInput && dueDateInput.value && dueDateInput.value < today) {
-                    app.modal.formError.textContent = 'Não é possível agendar para uma data passada.';
-                    return;
+                const endTimeInput = document.getElementById('end-time-input');
+
+                // Validar campos obrigatórios para processar inbox (modo process)
+                if (destination === 'next-action' && mode === 'process') {
+                    if (!dueDateInput?.value) {
+                        app.modal.formError.textContent = 'Data é obrigatória ao processar item.';
+                        return;
+                    }
+                    if (!dueTimeInput?.value) {
+                        app.modal.formError.textContent = 'Hora de início é obrigatória ao processar item.';
+                        return;
+                    }
+                    if (!endTimeInput?.value) {
+                        app.modal.formError.textContent = 'Hora de fim é obrigatória ao processar item.';
+                        return;
+                    }
+                    
+                    // Validar que data/hora não é no passado
+                    const now = new Date();
+                    const selectedDateTime = new Date(`${dueDateInput.value}T${dueTimeInput.value}`);
+                    
+                    if (selectedDateTime < now) {
+                        app.modal.formError.textContent = 'Não é possível agendar para data/hora passada. Escolha horário futuro.';
+                        return;
+                    }
+                    
+                    // Validar que hora de fim é depois da hora de início
+                    if (dueTimeInput.value && endTimeInput.value && endTimeInput.value <= dueTimeInput.value) {
+                        app.modal.formError.textContent = 'Hora de fim deve ser depois da hora de início.';
+                        return;
+                    }
+                } else {
+                    // Para modo edit ou outras destinações, validar apenas data se fornecida
+                    if (dueDateInput && dueDateInput.value && dueDateInput.value < today) {
+                        app.modal.formError.textContent = 'Não é possível agendar para uma data passada.';
+                        return;
+                    }
                 }
 
                 task.dueDate = dueDateInput ? dueDateInput.value : null;
                 task.dueTime = dueTimeInput ? dueTimeInput.value : null;
+                task.endTime = endTimeInput ? endTimeInput.value : null;
 
                 switch (destination) { 
-                    case 'next-action': 
-                        const twoMinCheckbox = document.getElementById('two-min-rule-checkbox');
-                        const isTwoMinAction = twoMinCheckbox && twoMinCheckbox.checked;
-
-                        if (!isTwoMinAction) {
-                            context = document.getElementById('context-input').value.trim(); 
-                            if (!context) isValid = false; 
-                            if (context && !context.startsWith('@')) context = '@' + context; 
-                            task.context = context; 
-                        } else {
-                            task.context = null;
-                        }
+                    case 'next-action':
+                        context = document.getElementById('context-input').value.trim(); 
+                        if (!context) isValid = false; 
+                        if (context && !context.startsWith('@')) context = '@' + context; 
+                        task.context = context;
                         break; 
                     default: 
                         task.context = null; 
@@ -1439,19 +1469,61 @@ service cloud.firestore {
                     if (destination === 'project' && !task.subTasks) { 
                         task.subTasks = []; 
                     }
+                    saveTasks();
                     closeModal(); 
-                    render(); 
-                    if (destination === 'next-action' && mode === 'process') {
-                        openQuickActionPrompt(task.id);
+                    render();
+                    
+                    // Perguntar se quer adicionar ao calendário (apenas modo process com data/hora)
+                    if (mode === 'process' && destination === 'next-action' && task.dueDate && task.dueTime && task.endTime) {
+                        showCalendarPrompt(task);
                     }
                 } else { 
                     app.modal.formError.textContent = 'Por favor, preencha todos os campos necessários.'; 
                 } 
             };
+            
+            // Função para perguntar se quer adicionar ao calendário
+            const showCalendarPrompt = (task) => {
+                const message = `✅ Tarefa processada com sucesso!\n\n📅 Deseja adicionar "${task.text}" ao seu calendário pessoal?\n\nData: ${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}\nInício: ${task.dueTime}\nFim: ${task.endTime}`;
+                
+                showConfirm(message, () => {
+                    // Usuário clicou em "OK" - exportar para calendário
+                    exportTaskToGoogleCalendar(task);
+                }, 'Adicionar ao Calendário', 'Não, obrigado');
+            };
+            
+            // Função para exportar tarefa para Google Calendar
+            const exportTaskToGoogleCalendar = (task) => {
+                if (!task.dueDate) return;
+                
+                let startDateTime, endDateTime;
+                
+                if (task.dueTime) {
+                    startDateTime = `${task.dueDate.replace(/-/g, '')}T${task.dueTime.replace(':', '')}00`;
+                } else {
+                    startDateTime = `${task.dueDate.replace(/-/g, '')}`;
+                }
+                
+                if (task.endTime) {
+                    endDateTime = `${task.dueDate.replace(/-/g, '')}T${task.endTime.replace(':', '')}00`;
+                } else if (task.dueTime) {
+                    // Adicionar 1 hora ao horário de início se não tiver hora de fim
+                    const [hours, minutes] = task.dueTime.split(':');
+                    const endHour = (parseInt(hours) + 1).toString().padStart(2, '0');
+                    endDateTime = `${task.dueDate.replace(/-/g, '')}T${endHour}${minutes}00`;
+                } else {
+                    endDateTime = `${task.dueDate.replace(/-/g, '')}`;
+                }
+                
+                const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND' + (task.context ? ' - ' + task.context : ''))}`;
+                
+                window.open(googleCalendarUrl, '_blank', 'noopener,noreferrer');
+            };
 
             const deleteTask = (id) => { 
                 showConfirm('Tem certeza que deseja apagar este item?', () => { 
-                    tasks = tasks.filter(t => t.id !== id); 
+                    tasks = tasks.filter(t => t.id !== id);
+                    saveTasks();
                     render(); 
                 }); 
             };
@@ -1463,11 +1535,22 @@ service cloud.firestore {
                 app.timer.pauseBtn.textContent = 'Pausar';
                 timerSeconds = 120;
                 
-                const taskId = pendingActionTaskId || app.modal.taskId.value;
-                currentTimerTask = findTask(taskId);
+                // Se currentTimerTask já foi setado (botão "Fazer agora"), usar ele
+                // Caso contrário, buscar pela taskId (modal ou pendingActionTaskId)
+                if (!currentTimerTask) {
+                    const taskId = pendingActionTaskId || app.modal.taskId.value;
+                    currentTimerTask = findTask(taskId);
+                }
                 
-                if (tasks.some(t => t.id === taskId)) {
-                     tasks = tasks.filter(t => t.id !== taskId);
+                if (!currentTimerTask) {
+                    console.error('Tarefa não encontrada para iniciar timer');
+                    return;
+                }
+                
+                // Remover a tarefa da lista apenas se ela ainda existir
+                if (tasks.some(t => t.id === currentTimerTask.id)) {
+                     tasks = tasks.filter(t => t.id !== currentTimerTask.id);
+                     saveTasks();
                 }
                 render();
 
@@ -1507,11 +1590,6 @@ service cloud.firestore {
             };
             
             // --- Novas Funções de Fluxo ---
-            function openQuickActionPrompt(taskId) {
-                pendingActionTaskId = taskId;
-                app.quickActionModal.element.classList.remove('hidden');
-            }
-
             function openSchedulePrompt(taskId) {
                 pendingActionTaskId = taskId;
                 const task = findTask(taskId);
@@ -1535,11 +1613,6 @@ service cloud.firestore {
                 },
                 {
                     content: `<p class="text-gray-600">Clique no botão <strong class="text-gray-900">Processar</strong> para decidir o que fazer com este item.</p>`,
-                    target: () => document.querySelector('.toggle-process-dropdown-btn'),
-                    action: 'click_target',
-                },
-                {
-                    content: `<p class="text-gray-600">Como esta é uma tarefa que você precisa fazer, clique em <strong class="text-gray-900">Próxima Ação...</strong></p>`,
                     target: () => document.querySelector('.process-btn'),
                     action: 'click_target',
                 },
@@ -1793,47 +1866,30 @@ service cloud.firestore {
             
             
             document.body.addEventListener('click', (e) => {
-                const isInsideDropdown = e.target.closest('.relative');
-                if (!isInsideDropdown) {
-                    document.querySelectorAll('[id^="process-dropdown-"]').forEach(d => d.classList.add('hidden'));
-                }
-
                 const button = e.target.closest('button, a');
                 if (!button) return;
 
                 const id = button.dataset.id;
                 
-                if (button.classList.contains('toggle-process-dropdown-btn')) {
-                    const targetDropdown = document.getElementById(`process-dropdown-${id}`);
-                    const isCurrentlyHidden = targetDropdown.classList.contains('hidden');
-                    
-                    document.querySelectorAll('[id^="process-dropdown-"]').forEach(d => d.classList.add('hidden'));
-
-                    if (isCurrentlyHidden) {
-                        targetDropdown.classList.remove('hidden');
-                    }
-                    return;
-                }
-                
-                if (button.classList.contains('direct-process-btn') || button.classList.contains('process-btn')) {
+                // Botão "Processar" - abre direto modal de Próximas Ações
+                if (button.classList.contains('process-btn')) {
                     e.preventDefault();
-                    const dropdown = button.closest('[id^="process-dropdown-"]');
-                    if (dropdown) {
-                        dropdown.classList.add('hidden');
-                    }
-
-                    if (button.classList.contains('direct-process-btn')) {
-                        directProcessTask(id, button.dataset.destination);
-                    } else {
-                        openTaskModal(findTask(id), 'process');
-                    }
+                    openTaskModal(findTask(id), 'process');
                     return;
                 }
                 
-                 if (button.id === 'start-timer-btn') {
-                    pendingActionTaskId = app.modal.taskId.value;
-                    closeModal();
-                    startTimer();
+                // Botão "Fazer agora" - inicia timer de 2 minutos
+                if (button.classList.contains('do-now-btn')) {
+                    e.preventDefault();
+                    const task = findTask(id);
+                    if (task) {
+                        console.log('Iniciando timer para tarefa:', task.text);
+                        currentTimerTask = task;
+                        pendingActionTaskId = null; // Limpar para evitar conflito
+                        startTimer();
+                    } else {
+                        console.error('Tarefa não encontrada:', id);
+                    }
                     return;
                 }
 
