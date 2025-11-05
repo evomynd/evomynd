@@ -113,6 +113,58 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans antialiased">
 
+    <!-- Tela de Login Obrigatório -->
+    <div id="login-required-screen" class="hidden fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 z-[9999] flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center">
+            <div class="mb-6">
+                <svg class="w-20 h-20 mx-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Login Necessário</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-8">Para usar o EVOMYND, você precisa fazer login com sua conta Google.</p>
+            <button id="login-required-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+                </svg>
+                Fazer Login com Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Tela de Assinatura Expirada -->
+    <div id="subscription-expired-screen" class="hidden fixed inset-0 bg-gradient-to-br from-red-50 to-orange-100 dark:from-gray-900 dark:to-gray-800 z-[9999] flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center">
+            <div class="mb-6">
+                <svg class="w-20 h-20 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Assinatura Expirada</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-2">Sua assinatura do EVOMYND expirou.</p>
+            <p id="subscription-expire-date" class="text-sm text-gray-500 dark:text-gray-400 mb-8"></p>
+            <div class="space-y-3">
+                <button id="renew-subscription-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    </svg>
+                    Renovar Assinatura
+                </button>
+                <button id="logout-expired-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Carregamento -->
+    <div id="loading-screen" class="fixed inset-0 bg-gray-50 dark:bg-gray-900 z-[9998] flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mb-4"></div>
+            <p class="text-gray-600 dark:text-gray-400 text-lg">Verificando assinatura...</p>
+        </div>
+    </div>
+
     <div id="app" class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
 
         <header class="text-center mb-8">
@@ -133,14 +185,14 @@
                         </div>
                     </div>
                 </div>
-                <button id="settings-btn" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-2 px-4 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">⚙️</button>
+                <button id="settings-btn" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-bold py-2 px-4 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">⚙️</button>
             </div>
             <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">EVOMYND</h1>
             <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
         </header>
 
         <div class="mb-8 text-center flex gap-4 justify-center">
-            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
             </button>
@@ -158,12 +210,12 @@
 
         <!-- Navegação Principal -->
         <nav class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Caixa de Entrada</button>
-            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Próximas Ações</button>
-            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Projetos</button>
-            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Aguardando</button>
-            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Algum Dia/Talvez</button>
-            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Referência</button>
+            <button data-view="inbox-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Caixa de Entrada</button>
+            <button data-view="next-actions-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Próximas Ações</button>
+            <button data-view="projects-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Projetos</button>
+            <button data-view="waiting-for-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Aguardando</button>
+            <button data-view="someday-maybe-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Algum Dia/Talvez</button>
+            <button data-view="reference-view" class="nav-tab p-4 rounded-lg text-center transition font-medium bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">Referência</button>
         </nav>
 
         <main>
@@ -261,15 +313,18 @@
             <form id="task-form">
                 <input type="hidden" id="modal-task-id">
                 <input type="hidden" id="modal-mode">
+                <input type="hidden" id="original-due-date">
+                <input type="hidden" id="original-due-time">
+                <input type="hidden" id="original-end-time">
                 
                 <div id="destination-container" class="mb-4">
                     <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Mover para:</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition has-[:checked]:bg-blue-600 has-[:checked]:text-white dark:text-gray-300"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
+                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
                     </div>
                 </div>
 
@@ -648,6 +703,147 @@
                 }
             }
             
+            // --- SISTEMA DE ASSINATURA ---
+            const REQUIRE_LOGIN = true; // Ativar login obrigatório
+            const TRIAL_DAYS = 7; // Dias de teste gratuito
+            
+            // Verificar status da assinatura
+            async function checkSubscription(userId) {
+                try {
+                    const { doc, getDoc, setDoc } = window.firebaseDbMethods;
+                    const subDoc = doc(window.firebaseDb, 'subscriptions', userId);
+                    const subSnapshot = await getDoc(subDoc);
+                    
+                    if (!subSnapshot.exists()) {
+                        // Primeira vez do usuário - criar período de teste
+                        console.log('🆕 Novo usuário - criando período de teste');
+                        const trialEnds = new Date();
+                        trialEnds.setDate(trialEnds.getDate() + TRIAL_DAYS);
+                        
+                        await setDoc(subDoc, {
+                            userId: userId,
+                            status: 'trial',
+                            plan: 'trial',
+                            createdAt: new Date().toISOString(),
+                            trialEndsAt: trialEnds.toISOString(),
+                            expiresAt: trialEnds.toISOString()
+                        });
+                        
+                        return {
+                            active: true,
+                            status: 'trial',
+                            expiresAt: trialEnds.toISOString(),
+                            daysRemaining: TRIAL_DAYS
+                        };
+                    }
+                    
+                    const subscription = subSnapshot.data();
+                    const expiresAt = new Date(subscription.expiresAt);
+                    const now = new Date();
+                    const isActive = expiresAt > now;
+                    
+                    if (isActive) {
+                        // Calcular dias restantes
+                        const daysRemaining = Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24));
+                        console.log(`✅ Assinatura ativa - ${daysRemaining} dias restantes`);
+                        
+                        return {
+                            active: true,
+                            status: subscription.status,
+                            expiresAt: subscription.expiresAt,
+                            daysRemaining: daysRemaining
+                        };
+                    } else {
+                        console.log('❌ Assinatura expirada');
+                        return {
+                            active: false,
+                            status: 'expired',
+                            expiresAt: subscription.expiresAt,
+                            daysRemaining: 0
+                        };
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar assinatura:', error);
+                    // Em caso de erro, permitir acesso (fail-safe)
+                    return {
+                        active: true,
+                        status: 'error',
+                        error: error.message
+                    };
+                }
+            }
+            
+            // Mostrar tela de login obrigatório
+            function showLoginRequired() {
+                document.getElementById('login-required-screen').classList.remove('hidden');
+                document.getElementById('app').style.display = 'none';
+                document.getElementById('loading-screen').classList.add('hidden');
+            }
+            
+            // Mostrar tela de assinatura expirada
+            function showSubscriptionExpired(subscription) {
+                const expiredScreen = document.getElementById('subscription-expired-screen');
+                const expireDate = document.getElementById('subscription-expire-date');
+                
+                if (subscription.expiresAt) {
+                    const date = new Date(subscription.expiresAt);
+                    expireDate.textContent = `Expirou em: ${date.toLocaleDateString('pt-BR')}`;
+                }
+                
+                expiredScreen.classList.remove('hidden');
+                document.getElementById('app').style.display = 'none';
+                document.getElementById('loading-screen').classList.add('hidden');
+            }
+            
+            // Esconder telas de bloqueio e mostrar app
+            function showApp() {
+                document.getElementById('login-required-screen').classList.add('hidden');
+                document.getElementById('subscription-expired-screen').classList.add('hidden');
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('app').style.display = 'block';
+            }
+            
+            // Verificar acesso ao app
+            async function verifyAccess() {
+                console.log('🔐 Verificando acesso...');
+                
+                // Se login obrigatório estiver desativado, liberar
+                if (!REQUIRE_LOGIN) {
+                    console.log('✅ Login não obrigatório - acesso liberado');
+                    showApp();
+                    return true;
+                }
+                
+                // Verificar se está logado
+                if (!currentUser) {
+                    console.log('⚠️ Usuário não logado - bloqueando acesso');
+                    showLoginRequired();
+                    return false;
+                }
+                
+                // Verificar assinatura
+                const subscription = await checkSubscription(currentUser.uid);
+                
+                if (!subscription.active) {
+                    console.log('⚠️ Assinatura inativa - bloqueando acesso');
+                    showSubscriptionExpired(subscription);
+                    return false;
+                }
+                
+                // Tudo OK - liberar acesso
+                console.log('✅ Acesso liberado');
+                showApp();
+                
+                // Avisar se está em período de teste
+                if (subscription.status === 'trial' && subscription.daysRemaining <= 3) {
+                    setTimeout(() => {
+                        alert(`⏰ Seu período de teste termina em ${subscription.daysRemaining} dia(s).\n\nRenove sua assinatura para continuar usando o EVOMYND.`);
+                    }, 2000);
+                }
+                
+                return true;
+            }
+            
             // Função para sincronizar tarefas com Firestore
             async function syncToFirestore() {
                 if (!currentUser || isSyncing) return;
@@ -822,19 +1018,32 @@ service cloud.firestore {
                 const { onAuthStateChanged } = window.firebaseAuthMethods;
                 
                 // Monitorar estado de autenticação
-                onAuthStateChanged(window.firebaseAuth, (user) => {
+                onAuthStateChanged(window.firebaseAuth, async (user) => {
                     currentUser = user;
                     updateUserUI(user);
                     
                     if (user) {
                         console.log('Usuário autenticado:', user.email);
-                        loadFromFirestore();
+                        
+                        // Verificar acesso (assinatura)
+                        const hasAccess = await verifyAccess();
+                        
+                        if (hasAccess) {
+                            loadFromFirestore();
+                        }
                     } else {
                         console.log('Usuário não autenticado');
                         // Desinscrever listener se existir
                         if (unsubscribeFirestore) {
                             unsubscribeFirestore();
                             unsubscribeFirestore = null;
+                        }
+                        
+                        // Verificar se precisa mostrar tela de login
+                        if (REQUIRE_LOGIN) {
+                            showLoginRequired();
+                        } else {
+                            showApp();
                         }
                     }
                 });
@@ -843,6 +1052,15 @@ service cloud.firestore {
                 app.auth.loginBtn?.addEventListener('click', loginWithGoogle);
                 app.settings.googleLoginBtn?.addEventListener('click', loginWithGoogle);
                 app.settings.googleLogoutBtn?.addEventListener('click', logoutFromGoogle);
+                
+                // Botões das telas de bloqueio
+                document.getElementById('login-required-btn')?.addEventListener('click', loginWithGoogle);
+                document.getElementById('logout-expired-btn')?.addEventListener('click', logoutFromGoogle);
+                document.getElementById('renew-subscription-btn')?.addEventListener('click', () => {
+                    // URL do seu checkout (Stripe, Mercado Pago, etc)
+                    const checkoutUrl = 'https://seusite.com/checkout'; // ALTERE AQUI
+                    window.open(checkoutUrl, '_blank');
+                });
             });
             
             // --- PWA: INSTALAÇÃO DO APP ---
@@ -976,15 +1194,20 @@ service cloud.firestore {
                         <input type="text" id="context-input" list="context-list" placeholder="Digite ou selecione um contexto (@...)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <datalist id="context-list"></datalist>
                     </div>
-                     <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
-                         <div class="grid grid-cols-2 gap-4">
+                    <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-3">📅 Data e Horário</label>
+                        <div class="mb-3">
+                            <label for="due-date-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Data</label>
+                            <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data</label>
-                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="due-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Início</label>
+                                <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
-                                <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
-                                <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="end-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Fim</label>
+                                <input type="time" id="end-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                     </div>`,
@@ -992,15 +1215,9 @@ service cloud.firestore {
                                 <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Nome do Projeto</label>
                                 <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <div class="grid grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Conclusão</label>
-                                    <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div>
-                                    <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Hora</label>
-                                    <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                </div>
+                            <div class="mt-4">
+                                <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Conclusão</label>
+                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>`,
                 'waiting': `<div class="mb-4">
                                 <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Aguardando por</label>
@@ -1125,12 +1342,19 @@ service cloud.firestore {
                            <div class="flex-grow min-w-0">
                                 <span class="text-gray-900 dark:text-gray-300 break-words">${task.text}</span>
                                 ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1 break-words">${task.context}</p>` : ''}
-                                ${task.dueDate ? `
-                                <p class="text-xs text-cyan-600 dark:text-cyan-400 mt-1 flex items-center gap-1 flex-wrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
-                                    <span class="break-words">${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
-                                </p>
-                            ` : ''}
+                                ${task.dueDate ? (() => {
+                                    const taskDateTime = new Date(`${task.dueDate}T${task.dueTime || '23:59'}`);
+                                    const now = new Date();
+                                    const isOverdue = taskDateTime < now;
+                                    const dateColor = isOverdue ? 'text-red-600 dark:text-red-400' : 'text-cyan-600 dark:text-cyan-400';
+                                    const dateDecoration = isOverdue ? 'line-through' : '';
+                                    return `
+                                    <p class="text-xs ${dateColor} mt-1 flex items-center gap-1 flex-wrap">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
+                                        <span class="break-words ${dateDecoration}">${new Date(task.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${task.dueTime || ''}</span>
+                                        ${isOverdue ? '<span class="font-bold ml-1">⚠️ VENCIDA</span>' : ''}
+                                    </p>`;
+                                })() : ''}
                            </div>
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end flex-shrink-0">
@@ -1154,23 +1378,97 @@ service cloud.firestore {
                 const project = findTask(projectId); 
                 const container = document.getElementById(`subtasks-container-${projectId}`); 
                 if (!project || !container) return; 
-                project.subTasks.sort((a, b) => a.completed - b.completed); 
-                const subTasksHTML = project.subTasks.map(subtask => `
-                    <div class="subtask-item flex items-start gap-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50 min-w-0">
-                        <input type="checkbox" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
+                
+                // Ordenar: não concluídas primeiro (por data crescente), depois concluídas
+                project.subTasks.sort((a, b) => {
+                    // Primeiro, separar por status de conclusão
+                    if (a.completed !== b.completed) {
+                        return a.completed - b.completed;
+                    }
+                    
+                    // Se ambas não concluídas ou ambas concluídas, ordenar por data
+                    if (!a.dueDate && !b.dueDate) return 0;
+                    if (!a.dueDate) return 1; // Sem data vai para o final
+                    if (!b.dueDate) return -1;
+                    
+                    // Comparar datas e horários
+                    const dateA = new Date(`${a.dueDate}T${a.dueTime || '00:00'}`);
+                    const dateB = new Date(`${b.dueDate}T${b.dueTime || '00:00'}`);
+                    return dateA - dateB;
+                });
+                
+                const subTasksHTML = project.subTasks.map(subtask => {
+                    // Verificar se está vencida
+                    const isOverdue = subtask.dueDate && subtask.dueTime && subtask.endTime && 
+                                      new Date(`${subtask.dueDate}T${subtask.endTime}`) < new Date();
+                    const dateClass = isOverdue ? 'text-red-600 dark:text-red-400 line-through' : 'text-gray-700 dark:text-white';
+                    
+                    return `
+                    <div class="subtask-item flex items-start gap-3 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50 min-w-0 border border-gray-200 dark:border-gray-700">
+                        <input type="checkbox" ${subtask.completed ? 'checked' : ''} data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
                         <div class="flex-grow min-w-0">
                             <span class="text-gray-700 dark:text-gray-400 break-words ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
-                            <input type="date" value="${subtask.dueDate || ''}" min="${today}" data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-date bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm rounded px-2 py-1 w-full sm:w-32 mt-2 text-gray-700 dark:text-white">
+                            ${subtask.dueDate ? `
+                                <div class="text-xs ${dateClass} mt-1">
+                                    📅 ${new Date(subtask.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} 
+                                    ${subtask.dueTime || ''} 
+                                    ${subtask.endTime ? ` - ${subtask.endTime}` : ''}
+                                    ${isOverdue ? ' ⚠️ VENCIDA' : ''}
+                                </div>
+                            ` : ''}
                         </div>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
                     </div>
-                `).join(''); 
-                const formHTML = `<div class="add-subtask-form flex gap-3 mt-4 pt-4 border-t border-gray-300 dark:border-gray-700/50"><input type="text" data-project-id="${projectId}" class="new-subtask-input flex-grow bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nova ação para este projeto..."><button data-project-id="${projectId}" class="add-subtask-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Adicionar</button></div>`; 
+                `;
+                }).join(''); 
+                
+                const formHTML = `
+                    <div class="add-subtask-form mt-4 pt-4 border-t border-gray-300 dark:border-gray-700/50 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-md">
+                        <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">➕ Nova Ação do Projeto</h5>
+                        <input type="text" data-project-id="${projectId}" class="new-subtask-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3" placeholder="Descreva a ação...">
+                        
+                        <div class="mb-3">
+                            <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data *</label>
+                            <input type="date" data-project-id="${projectId}" class="subtask-due-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Início *</label>
+                                <input type="time" data-project-id="${projectId}" class="subtask-start-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Fim *</label>
+                                <input type="time" data-project-id="${projectId}" class="subtask-end-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                        </div>
+                        
+                        <button data-project-id="${projectId}" class="add-subtask-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Adicionar Ação</button>
+                    </div>
+                `; 
+                
                 container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 dark:text-gray-400 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
             };
             
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
-                const filteredTasks = tasks.filter(t => t.status === status); 
+                let filteredTasks = tasks.filter(t => t.status === status);
+                
+                // Ordenar projetos por data de conclusão crescente
+                if (status === 'project') {
+                    filteredTasks.sort((a, b) => {
+                        // Se nenhum tem data, manter ordem original
+                        if (!a.dueDate && !b.dueDate) return 0;
+                        // Se 'a' não tem data, vai para o final
+                        if (!a.dueDate) return 1;
+                        // Se 'b' não tem data, 'a' vem primeiro
+                        if (!b.dueDate) return -1;
+                        // Ambos têm data, ordenar por data crescente
+                        const dateA = new Date(a.dueDate + 'T00:00:00');
+                        const dateB = new Date(b.dueDate + 'T00:00:00');
+                        return dateA - dateB;
+                    });
+                }
+                
                 if (filteredTasks.length === 0) { 
                     element.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-gray-600 dark:text-gray-400">${emptyMessage}</p></div>`; 
                 } else { 
@@ -1184,7 +1482,22 @@ service cloud.firestore {
                 let nextActionsTasks = tasks.filter(t => t.status === 'next-action'); 
                 if (currentFilter !== 'all') { 
                     nextActionsTasks = nextActionsTasks.filter(t => t.context === currentFilter); 
-                } 
+                }
+                
+                // Ordenar: sem data primeiro, depois por data crescente
+                nextActionsTasks.sort((a, b) => {
+                    // Se nenhum tem data, manter ordem original
+                    if (!a.dueDate && !b.dueDate) return 0;
+                    // Se 'a' não tem data, vem primeiro
+                    if (!a.dueDate) return -1;
+                    // Se 'b' não tem data, 'a' vem depois
+                    if (!b.dueDate) return 1;
+                    // Ambos têm data, ordenar por data/hora
+                    const dateA = new Date(`${a.dueDate}T${a.dueTime || '00:00'}`);
+                    const dateB = new Date(`${b.dueDate}T${b.dueTime || '00:00'}`);
+                    return dateA - dateB;
+                });
+                
                 if (nextActionsTasks.length === 0) { 
                     app.nextActionsList.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-gray-600 dark:text-gray-400">${currentFilter === 'all' ? 'Nenhuma próxima ação definida.' : `Nenhuma ação com o contexto ${currentFilter}.`}</p></div>`; 
                 } else { 
@@ -1281,12 +1594,31 @@ service cloud.firestore {
             };
 
             const renderContextFilters = () => { 
-                const contexts = getExistingContexts(); 
-                let filtersHTML = `<button class="context-filter ${currentFilter === 'all' ? 'active-filter bg-blue-600' : 'bg-gray-100 border border-gray-300'} text-gray-900 font-semibold py-2 px-4 rounded-full text-sm transition hover:bg-gray-200" data-context="all">Todos</button>`; 
-                contexts.forEach(context => { 
-                    filtersHTML += `<button class="context-filter ${currentFilter === context ? 'active-filter bg-blue-600 text-white' : 'bg-gray-100 border border-gray-300 text-gray-900'} font-semibold py-2 px-4 rounded-full text-sm transition hover:bg-gray-200" data-context="${context}">${context}</button>`; 
-                }); 
-                app.contextFilters.innerHTML = filtersHTML; 
+                const contexts = getExistingContexts();
+                
+                // Criar dropdown ao invés de botões
+                let filtersHTML = `
+                    <div class="relative inline-block w-full sm:w-64">
+                        <label for="context-filter-select" class="block text-gray-700 dark:text-gray-300 text-xs font-semibold mb-1">Filtrar por contexto:</label>
+                        <select id="context-filter-select" class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg py-2 px-4 text-gray-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <option value="all" ${currentFilter === 'all' ? 'selected' : ''}>📋 Todos os contextos</option>
+                            ${contexts.map(context => 
+                                `<option value="${context}" ${currentFilter === context ? 'selected' : ''}>${context}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `; 
+                
+                app.contextFilters.innerHTML = filtersHTML;
+                
+                // Adicionar event listener ao select
+                const selectElement = document.getElementById('context-filter-select');
+                if (selectElement) {
+                    selectElement.addEventListener('change', (e) => {
+                        currentFilter = e.target.value;
+                        render();
+                    });
+                }
             };
             
             const updateActiveView = () => {
@@ -1348,6 +1680,11 @@ service cloud.firestore {
                 app.modal.taskId.value = task.id;
                 app.modal.mode.value = mode;
                 
+                // Salvar valores originais para comparação posterior
+                document.getElementById('original-due-date').value = task.dueDate || '';
+                document.getElementById('original-due-time').value = task.dueTime || '';
+                document.getElementById('original-end-time').value = task.endTime || '';
+                
                 app.modal.destinationContainer.style.display = 'block';
 
                 if (mode === 'process') {
@@ -1361,6 +1698,19 @@ service cloud.firestore {
                     app.modal.form.elements.destination.value = destination;
                     updateModalForm(destination, task, mode);
                 }
+                
+                // Atualizar estilos dos botões do modal
+                app.modal.destinationRadios.forEach(r => {
+                    const label = r.parentElement;
+                    if (r.checked) {
+                        label.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-white');
+                        label.classList.add('bg-blue-600', 'text-white');
+                    } else {
+                        label.classList.remove('bg-blue-600', 'text-white');
+                        label.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-white');
+                    }
+                });
+                
                 app.modal.element.classList.remove('hidden');
             };
             
@@ -1440,12 +1790,24 @@ service cloud.firestore {
                         app.modal.formError.textContent = 'Hora de fim deve ser depois da hora de início.';
                         return;
                     }
-                } else {
-                    // Para modo edit ou outras destinações, validar apenas data se fornecida
-                    if (dueDateInput && dueDateInput.value && dueDateInput.value < today) {
-                        app.modal.formError.textContent = 'Não é possível agendar para uma data passada.';
+                }
+                
+                // Validar data de conclusão obrigatória para projetos no modo process
+                if (destination === 'project' && mode === 'process') {
+                    if (!dueDateInput?.value) {
+                        app.modal.formError.textContent = 'Data de conclusão é obrigatória ao criar um projeto.';
                         return;
                     }
+                    if (dueDateInput.value < today) {
+                        app.modal.formError.textContent = 'Data de conclusão não pode ser no passado.';
+                        return;
+                    }
+                }
+                
+                // Para modo edit ou outras destinações, validar apenas data se fornecida
+                if (mode === 'edit' && dueDateInput && dueDateInput.value && dueDateInput.value < today) {
+                    app.modal.formError.textContent = 'Não é possível agendar para uma data passada.';
+                    return;
                 }
 
                 task.dueDate = dueDateInput ? dueDateInput.value : null;
@@ -1473,8 +1835,19 @@ service cloud.firestore {
                     closeModal(); 
                     render();
                     
-                    // Perguntar se quer adicionar ao calendário (apenas modo process com data/hora)
-                    if (mode === 'process' && destination === 'next-action' && task.dueDate && task.dueTime && task.endTime) {
+                    // Perguntar se quer adicionar ao calendário
+                    // - Modo process: sempre perguntar se tiver data/hora/endTime
+                    // - Modo edit: perguntar se editou a data/hora e tem todos os campos preenchidos
+                    const originalDate = document.getElementById('original-due-date').value;
+                    const originalTime = document.getElementById('original-due-time').value;
+                    const originalEndTime = document.getElementById('original-end-time').value;
+                    
+                    const dateChanged = task.dueDate !== originalDate || task.dueTime !== originalTime || task.endTime !== originalEndTime;
+                    const hasAllFields = task.dueDate && task.dueTime && task.endTime;
+                    
+                    const shouldAskCalendar = destination === 'next-action' && hasAllFields && (mode === 'process' || dateChanged);
+                    
+                    if (shouldAskCalendar) {
                         showCalendarPrompt(task);
                     }
                 } else { 
@@ -1896,7 +2269,6 @@ service cloud.firestore {
                 if (button.classList.contains('edit-btn')) openTaskModal(findTask(id), 'edit');
                 if (button.classList.contains('delete-btn')) deleteTask(id);
                 if (button.classList.contains('done-btn')) deleteTask(id);
-                if (button.classList.contains('context-filter')) { currentFilter = button.dataset.context; render(); }
                 if (button.classList.contains('toggle-subtasks-btn')) {
                     const container = document.getElementById(`subtasks-container-${id}`);
                     if (container) {
@@ -1908,14 +2280,88 @@ service cloud.firestore {
                 if (button.classList.contains('add-subtask-btn')) {
                     const projectId = button.dataset.projectId;
                     const project = findTask(projectId);
-                    const input = document.querySelector(`.new-subtask-input[data-project-id="${projectId}"]`);
-                    const text = input.value.trim();
-                    if (text && project) {
+                    const textInput = document.querySelector(`.new-subtask-input[data-project-id="${projectId}"]`);
+                    const dateInput = document.querySelector(`.subtask-due-date[data-project-id="${projectId}"]`);
+                    const startTimeInput = document.querySelector(`.subtask-start-time[data-project-id="${projectId}"]`);
+                    const endTimeInput = document.querySelector(`.subtask-end-time[data-project-id="${projectId}"]`);
+                    
+                    const text = textInput.value.trim();
+                    const dueDate = dateInput.value;
+                    const dueTime = startTimeInput.value;
+                    const endTime = endTimeInput.value;
+                    
+                    // Validações
+                    if (!text) {
+                        alert('Por favor, descreva a ação.');
+                        return;
+                    }
+                    if (!dueDate) {
+                        alert('Por favor, informe a data.');
+                        return;
+                    }
+                    if (!dueTime) {
+                        alert('Por favor, informe a hora de início.');
+                        return;
+                    }
+                    if (!endTime) {
+                        alert('Por favor, informe a hora de término.');
+                        return;
+                    }
+                    
+                    // Validar que hora fim > hora início
+                    if (endTime <= dueTime) {
+                        alert('A hora de término deve ser posterior à hora de início.');
+                        return;
+                    }
+                    
+                    // Validar data/hora não está no passado
+                    const taskDateTime = new Date(`${dueDate}T${endTime}`);
+                    const now = new Date();
+                    if (taskDateTime < now) {
+                        alert('Não é possível definir uma data/hora no passado.');
+                        return;
+                    }
+                    
+                    // Validar que a data da ação não é posterior à data de conclusão do projeto
+                    if (project && project.dueDate) {
+                        const projectDueDate = new Date(project.dueDate + 'T23:59:59');
+                        const actionEndDateTime = new Date(`${dueDate}T${endTime}`);
+                        
+                        if (actionEndDateTime > projectDueDate) {
+                            alert(`A ação não pode ter data/hora posterior à data de conclusão do projeto (${new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}).`);
+                            return;
+                        }
+                    }
+                    
+                    if (project) {
                         if(!project.subTasks) project.subTasks = [];
-                        project.subTasks.push({ id: Date.now().toString(), text, completed: false, dueDate: null });
-                        input.value = '';
+                        const newSubtask = { 
+                            id: Date.now().toString(), 
+                            text, 
+                            completed: false, 
+                            dueDate, 
+                            dueTime,
+                            endTime 
+                        };
+                        project.subTasks.push(newSubtask);
+                        
+                        // Limpar campos
+                        textInput.value = '';
+                        dateInput.value = '';
+                        startTimeInput.value = '';
+                        endTimeInput.value = '';
+                        
                         saveTasks();
                         renderSubTasks(projectId);
+                        
+                        // Perguntar se quer adicionar ao calendário
+                        showCalendarPrompt({
+                            text,
+                            dueDate,
+                            dueTime,
+                            endTime,
+                            project: project.text
+                        });
                     }
                 }
                 if (button.classList.contains('delete-subtask-btn')) {
@@ -1944,17 +2390,6 @@ service cloud.firestore {
                         }
                     }
                 }
-                if (target.classList.contains('subtask-date')) {
-                    const { projectId, subtaskId } = target.dataset;
-                    const project = findTask(projectId);
-                    if (project) {
-                        const subtask = project.subTasks.find(st => st.id === subtaskId);
-                        if (subtask) {
-                            subtask.dueDate = target.value;
-                            saveTasks();
-                        }
-                    }
-                }
             });
 
             document.body.addEventListener('keypress', (e) => {
@@ -1974,6 +2409,18 @@ service cloud.firestore {
                 const tempTask = { ...currentTask, text: currentText };
                 const mode = app.modal.mode.value;
                 updateModalForm(e.target.value, tempTask, mode);
+                
+                // Atualizar estilos dos botões do modal
+                app.modal.destinationRadios.forEach(r => {
+                    const label = r.parentElement;
+                    if (r.checked) {
+                        label.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-white');
+                        label.classList.add('bg-blue-600', 'text-white');
+                    } else {
+                        label.classList.remove('bg-blue-600', 'text-white');
+                        label.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-white');
+                    }
+                });
             }));
 
             // --- REVISÃO SEMANAL ---
