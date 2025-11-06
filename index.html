@@ -810,6 +810,8 @@
                     return {
                         active: true,
                         status: 'error',
+                        expiresAt: null,
+                        daysRemaining: null,
                         error: error.message,
                         isNewUser: false
                     };
@@ -2618,37 +2620,57 @@ service cloud.firestore {
                 }
                 
                 try {
-                    const subscription = await checkSubscription(currentUser.uid);
+                    // Buscar dados da assinatura diretamente do Firestore
+                    const { doc, getDoc } = window.firebaseDbMethods;
+                    const subDoc = doc(window.firebaseDb, 'subscriptions', currentUser.uid);
+                    const subSnapshot = await getDoc(subDoc);
                     
                     // Mostrar container
                     container.classList.remove('hidden');
+                    
+                    if (!subSnapshot.exists()) {
+                        // Usuário novo - ainda não tem documento de assinatura
+                        document.getElementById('sub-status').textContent = '🆕 Nova Conta';
+                        document.getElementById('sub-status').className = 'font-semibold text-blue-600 dark:text-blue-400';
+                        document.getElementById('sub-plan').textContent = 'Será criado no próximo login';
+                        document.getElementById('sub-expires').textContent = 'Aguardando criação';
+                        document.getElementById('sub-days').textContent = 'N/A';
+                        document.getElementById('sub-userid').textContent = currentUser.uid;
+                        renewBtn.classList.add('hidden');
+                        return;
+                    }
+                    
+                    const subscription = subSnapshot.data();
+                    const expiresAt = subscription.expiresAt ? new Date(subscription.expiresAt) : null;
+                    const now = new Date();
+                    const isActive = expiresAt && expiresAt > now;
+                    const daysRemaining = expiresAt ? Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)) : null;
                     
                     // Status
                     const statusElement = document.getElementById('sub-status');
                     const statusText = {
                         'trial': '🎁 Teste Grátis',
                         'active': '✅ Ativa',
-                        'expired': '❌ Expirada',
-                        'error': '⚠️ Erro'
+                        'expired': '❌ Expirada'
                     };
                     statusElement.textContent = statusText[subscription.status] || subscription.status;
-                    statusElement.className = subscription.active ? 'font-semibold text-green-600 dark:text-green-400' : 'font-semibold text-red-600 dark:text-red-400';
+                    statusElement.className = isActive ? 'font-semibold text-green-600 dark:text-green-400' : 'font-semibold text-red-600 dark:text-red-400';
                     
                     // Plano
                     const planElement = document.getElementById('sub-plan');
                     const planText = {
-                        'trial': 'Teste Gratuito',
+                        'trial': 'Teste Gratuito (7 dias)',
                         'premium_monthly': 'Premium Mensal',
                         'premium_annual': 'Premium Anual',
-                        'premium': 'Premium'
+                        'premium': 'Premium',
+                        'active': 'Premium'
                     };
-                    planElement.textContent = planText[subscription.status] || 'Gratuito';
+                    planElement.textContent = planText[subscription.plan] || planText[subscription.status] || subscription.plan || 'Gratuito';
                     
                     // Data de expiração
                     const expiresElement = document.getElementById('sub-expires');
-                    if (subscription.expiresAt) {
-                        const date = new Date(subscription.expiresAt);
-                        expiresElement.textContent = date.toLocaleDateString('pt-BR', { 
+                    if (expiresAt) {
+                        expiresElement.textContent = expiresAt.toLocaleDateString('pt-BR', { 
                             day: '2-digit', 
                             month: '2-digit', 
                             year: 'numeric',
@@ -2661,18 +2683,19 @@ service cloud.firestore {
                     
                     // Dias restantes
                     const daysElement = document.getElementById('sub-days');
-                    if (subscription.daysRemaining !== undefined) {
-                        daysElement.textContent = `${subscription.daysRemaining} dia(s)`;
-                        daysElement.className = subscription.daysRemaining <= 3 ? 'font-semibold text-red-600 dark:text-red-400' : 'font-semibold text-green-600 dark:text-green-400';
+                    if (daysRemaining !== null) {
+                        daysElement.textContent = `${Math.max(0, daysRemaining)} dia(s)`;
+                        daysElement.className = daysRemaining <= 3 ? 'font-semibold text-red-600 dark:text-red-400' : 'font-semibold text-green-600 dark:text-green-400';
                     } else {
                         daysElement.textContent = 'N/A';
+                        daysElement.className = 'font-semibold text-gray-600 dark:text-gray-400';
                     }
                     
                     // User ID
                     document.getElementById('sub-userid').textContent = currentUser.uid;
                     
                     // Mostrar botão de renovar apenas se for trial ou estiver perto de expirar
-                    if (subscription.status === 'trial' || (subscription.active && subscription.daysRemaining <= 7)) {
+                    if (subscription.status === 'trial' || subscription.status === 'expired' || (isActive && daysRemaining <= 7)) {
                         renewBtn.classList.remove('hidden');
                     } else {
                         renewBtn.classList.add('hidden');
@@ -2680,7 +2703,15 @@ service cloud.firestore {
                     
                 } catch (error) {
                     console.error('Erro ao carregar informações de assinatura:', error);
-                    container.classList.add('hidden');
+                    // Mostrar erro no container ao invés de esconder
+                    container.classList.remove('hidden');
+                    document.getElementById('sub-status').textContent = '⚠️ Erro ao Carregar';
+                    document.getElementById('sub-status').className = 'font-semibold text-red-600 dark:text-red-400';
+                    document.getElementById('sub-plan').textContent = 'Tente novamente';
+                    document.getElementById('sub-expires').textContent = error.message || 'Erro desconhecido';
+                    document.getElementById('sub-days').textContent = 'N/A';
+                    document.getElementById('sub-userid').textContent = currentUser.uid;
+                    renewBtn.classList.remove('hidden');
                 }
             }
 
