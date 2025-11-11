@@ -783,10 +783,15 @@
             
             // Verificar status da assinatura
             async function checkSubscription(userId) {
+                console.log('📋 checkSubscription iniciado para:', userId);
                 try {
+                    console.log('📋 Obtendo referências do Firestore...');
                     const { doc, getDoc, setDoc } = window.firebaseDbMethods;
                     const subDoc = doc(window.firebaseDb, 'subscriptions', userId);
+                    
+                    console.log('📋 Buscando documento de assinatura...');
                     const subSnapshot = await getDoc(subDoc);
+                    console.log('📋 Documento obtido. Existe?', subSnapshot.exists());
                     
                     if (!subSnapshot.exists()) {
                         // Primeira vez do usuário - criar período de teste
@@ -794,6 +799,7 @@
                         const trialEnds = new Date();
                         trialEnds.setDate(trialEnds.getDate() + TRIAL_DAYS);
                         
+                        console.log('📋 Salvando período de teste no Firestore...');
                         await setDoc(subDoc, {
                             userId: userId,
                             status: 'trial',
@@ -802,6 +808,7 @@
                             trialEndsAt: trialEnds.toISOString(),
                             expiresAt: trialEnds.toISOString()
                         });
+                        console.log('✅ Período de teste criado');
                         
                         return {
                             active: true,
@@ -812,10 +819,12 @@
                         };
                     }
                     
+                    console.log('📋 Analisando dados de assinatura...');
                     const subscription = subSnapshot.data();
                     const expiresAt = new Date(subscription.expiresAt);
                     const now = new Date();
                     const isActive = expiresAt > now;
+                    console.log('📋 Assinatura ativa?', isActive);
                     
                     if (isActive) {
                         // Calcular dias restantes
@@ -885,7 +894,7 @@
             
             // Verificar acesso ao app
             async function verifyAccess() {
-                console.log('🔐 Verificando acesso...');
+                console.log('🔐 ========== verifyAccess INICIADO ==========');
                 
                 try {
                     // Se login obrigatório estiver desativado, liberar
@@ -896,14 +905,18 @@
                     }
                     
                     // Verificar se está logado
+                    console.log('🔐 Verificando se usuário está logado...');
                     if (!currentUser) {
                         console.log('⚠️ Usuário não logado - bloqueando acesso');
                         showLoginRequired();
                         return false;
                     }
+                    console.log('🔐 Usuário logado:', currentUser.email);
                     
                     // Verificar assinatura
+                    console.log('🔐 Chamando checkSubscription...');
                     const subscription = await checkSubscription(currentUser.uid);
+                    console.log('🔐 checkSubscription retornou:', subscription);
                     
                     if (!subscription.active) {
                         console.log('⚠️ Assinatura inativa - bloqueando acesso');
@@ -912,11 +925,12 @@
                     }
                     
                     // Tudo OK - liberar acesso
-                    console.log('✅ Acesso liberado');
+                    console.log('✅ Acesso liberado - mostrando app');
                     showApp();
                     
                     // Mostrar popup de boas-vindas para novos usuários
                     if (subscription.isNewUser) {
+                        console.log('🎉 Novo usuário - mostrando popup de boas-vindas');
                         setTimeout(() => {
                             showConfirm(
                                 `🎉 Bem-vindo ao EVOMYND!\n\n` +
@@ -934,6 +948,7 @@
                     }
                     // Avisar se está em período de teste e faltam poucos dias
                     else if (subscription.status === 'trial' && subscription.daysRemaining <= 3) {
+                        console.log('⏰ Período de teste próximo do fim - mostrando aviso');
                         setTimeout(() => {
                             showConfirm(
                                 `⏰ Atenção!\n\n` +
@@ -951,9 +966,11 @@
                         }, 2000);
                     }
                     
+                    console.log('🔐 ========== verifyAccess CONCLUÍDO ==========');
                     return true;
                 } catch (error) {
-                    console.error('❌ Erro ao verificar acesso:', error);
+                    console.error('❌ ERRO em verifyAccess:', error);
+                    console.error('Stack:', error.stack);
                     // Em caso de erro, liberar acesso (fail-safe)
                     showApp();
                     return true;
@@ -1154,33 +1171,63 @@
             waitForFirebase().then(() => {
                 const { onAuthStateChanged } = window.firebaseAuthMethods;
                 
-                // Timeout de segurança: se demorar muito, liberar app
-                const safetyTimeout = setTimeout(() => {
-                    console.warn('⏰ Timeout na verificação de auth - liberando app');
-                    if (REQUIRE_LOGIN) {
-                        showLoginRequired();
-                    } else {
+                let isVerifying = false;
+                
+                // Timeout de segurança global: se demorar muito, liberar app
+                const globalSafetyTimeout = setTimeout(() => {
+                    console.warn('⏰ TIMEOUT GLOBAL - Forçando exibição do app');
+                    if (currentUser) {
+                        console.log('Usuário logado - liberando app');
                         showApp();
+                        if (!isVerifying) {
+                            loadFromFirestore();
+                        }
+                    } else {
+                        console.log('Usuário não logado - mostrando tela de login');
+                        if (REQUIRE_LOGIN) {
+                            showLoginRequired();
+                        } else {
+                            showApp();
+                        }
                     }
-                }, 10000); // 10 segundos
+                }, 5000); // 5 segundos
                 
                 // Monitorar estado de autenticação
                 onAuthStateChanged(window.firebaseAuth, async (user) => {
-                    clearTimeout(safetyTimeout); // Cancelar timeout
+                    console.log('🔄 onAuthStateChanged disparado:', user?.email || 'sem usuário');
+                    clearTimeout(globalSafetyTimeout); // Cancelar timeout global
                     currentUser = user;
                     updateUserUI(user);
                     
                     if (user) {
-                        console.log('Usuário autenticado:', user.email);
+                        console.log('✅ Usuário autenticado:', user.email);
+                        isVerifying = true;
                         
-                        // Verificar acesso (assinatura)
-                        const hasAccess = await verifyAccess();
-                        
-                        if (hasAccess) {
+                        // Timeout específico para verifyAccess
+                        const verifyTimeout = setTimeout(() => {
+                            console.warn('⏰ verifyAccess travou - liberando app');
+                            showApp();
                             loadFromFirestore();
+                        }, 3000); // 3 segundos
+                        
+                        try {
+                            // Verificar acesso (assinatura)
+                            const hasAccess = await verifyAccess();
+                            clearTimeout(verifyTimeout);
+                            
+                            if (hasAccess) {
+                                loadFromFirestore();
+                            }
+                        } catch (error) {
+                            console.error('❌ Erro ao verificar acesso:', error);
+                            clearTimeout(verifyTimeout);
+                            showApp();
+                            loadFromFirestore();
+                        } finally {
+                            isVerifying = false;
                         }
                     } else {
-                        console.log('Usuário não autenticado');
+                        console.log('❌ Usuário não autenticado');
                         // Desinscrever listener se existir
                         if (unsubscribeFirestore) {
                             unsubscribeFirestore();
