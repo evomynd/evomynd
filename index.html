@@ -387,7 +387,7 @@
             <p id="confirm-modal-text" class="text-gray-900 dark:text-white text-lg mb-6"></p>
             <div class="flex justify-center gap-4">
                 <button id="confirm-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
-                <button id="confirm-ok-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Confirmar</button>
+                <button id="confirm-ok-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Confirmar</button>
             </div>
         </div>
     </div>
@@ -937,14 +937,20 @@
                     const { doc, setDoc } = window.firebaseDbMethods;
                     const userDoc = doc(window.firebaseDb, 'users', currentUser.uid);
                     
+                    const timestamp = new Date().getTime();
+                    
                     await setDoc(userDoc, {
                         tasks: tasks,
                         lastSync: new Date().toISOString(),
+                        lastSyncTimestamp: timestamp,
                         email: currentUser.email
                     });
                     
+                    // Salvar timestamp local
+                    localStorage.setItem('lastSyncTimestamp', timestamp.toString());
+                    
                     updateSyncStatus('✓ Sincronizado', 'text-green-600');
-                    console.log('✅ Tarefas sincronizadas com sucesso');
+                    console.log('✅ Tarefas sincronizadas com sucesso - timestamp:', timestamp);
                 } catch (error) {
                     console.error('❌ Erro ao sincronizar:', error);
                     console.error('Código do erro:', error.code);
@@ -989,11 +995,27 @@
                             console.log('📦 Documento encontrado:', data);
                             
                             if (data.tasks && data.tasks.length > 0) {
-                                tasks = data.tasks;
-                                saveTasks(); // Salvar localmente também
-                                render();
-                                updateSyncStatus('✓ Sincronizado', 'text-green-600');
-                                console.log('✅ Tarefas carregadas do Firestore');
+                                // Verificar qual versão é mais recente
+                                const localTimestamp = parseInt(localStorage.getItem('lastSyncTimestamp') || '0');
+                                const remoteTimestamp = data.lastSyncTimestamp || 0;
+                                
+                                console.log('🕐 Timestamp local:', localTimestamp, new Date(localTimestamp).toLocaleString());
+                                console.log('🕐 Timestamp remoto:', remoteTimestamp, new Date(remoteTimestamp).toLocaleString());
+                                
+                                if (remoteTimestamp > localTimestamp) {
+                                    console.log('📥 Dados do servidor são mais recentes - atualizando...');
+                                    tasks = data.tasks;
+                                    saveTasks();
+                                    localStorage.setItem('lastSyncTimestamp', remoteTimestamp.toString());
+                                    render();
+                                    updateSyncStatus('✓ Sincronizado', 'text-green-600');
+                                } else if (localTimestamp > remoteTimestamp) {
+                                    console.log('📤 Dados locais são mais recentes - enviando para servidor...');
+                                    syncToFirestore();
+                                } else {
+                                    console.log('✅ Dados já sincronizados');
+                                    updateSyncStatus('✓ Sincronizado', 'text-green-600');
+                                }
                             } else {
                                 console.log('📝 Documento vazio, enviando tarefas locais...');
                                 syncToFirestore();
@@ -1317,6 +1339,31 @@
 
             const saveTasks = () => {
                 localStorage.setItem('gtd_tasks_v2', JSON.stringify(tasks));
+                
+                // Criar backup automático diário
+                const today = new Date().toISOString().split('T')[0];
+                const lastBackupDate = localStorage.getItem('lastBackupDate');
+                
+                if (lastBackupDate !== today) {
+                    // Fazer backup diário
+                    const backupKey = `gtd_backup_${today}`;
+                    localStorage.setItem(backupKey, JSON.stringify({
+                        date: new Date().toISOString(),
+                        tasks: tasks,
+                        count: tasks.length
+                    }));
+                    localStorage.setItem('lastBackupDate', today);
+                    console.log('💾 Backup automático criado:', backupKey);
+                    
+                    // Limpar backups antigos (manter apenas últimos 7 dias)
+                    const allKeys = Object.keys(localStorage);
+                    const backupKeys = allKeys.filter(k => k.startsWith('gtd_backup_')).sort().reverse();
+                    backupKeys.slice(7).forEach(oldKey => {
+                        localStorage.removeItem(oldKey);
+                        console.log('🗑️ Backup antigo removido:', oldKey);
+                    });
+                }
+                
                 // Sincronizar com Firebase se usuário estiver logado (com debounce)
                 if (currentUser && !isSyncing) {
                     // Usar debounce para evitar sincronizações excessivas
@@ -1328,6 +1375,43 @@
             };
 
             const findTask = (id) => tasks.find(t => t.id === id);
+            
+            // Função para listar backups disponíveis (usar no console: listBackups())
+            window.listBackups = () => {
+                const allKeys = Object.keys(localStorage);
+                const backupKeys = allKeys.filter(k => k.startsWith('gtd_backup_')).sort().reverse();
+                
+                if (backupKeys.length === 0) {
+                    console.log('❌ Nenhum backup encontrado');
+                    return;
+                }
+                
+                console.log('📦 Backups disponíveis:');
+                backupKeys.forEach(key => {
+                    const backup = JSON.parse(localStorage.getItem(key));
+                    console.log(`  ${key.replace('gtd_backup_', '')}: ${backup.count} tarefas - ${new Date(backup.date).toLocaleString()}`);
+                });
+                console.log('\n💡 Para restaurar, use: restoreBackup("YYYY-MM-DD")');
+            };
+            
+            // Função para restaurar um backup (usar no console: restoreBackup('2025-11-11'))
+            window.restoreBackup = (date) => {
+                const backupKey = `gtd_backup_${date}`;
+                const backupData = localStorage.getItem(backupKey);
+                
+                if (!backupData) {
+                    console.error('❌ Backup não encontrado para a data:', date);
+                    console.log('Use listBackups() para ver os disponíveis');
+                    return;
+                }
+                
+                const backup = JSON.parse(backupData);
+                tasks = backup.tasks;
+                saveTasks();
+                render();
+                console.log(`✅ Backup restaurado: ${backup.count} tarefas de ${new Date(backup.date).toLocaleString()}`);
+                console.log('🔄 Recarregue a página para sincronizar com o servidor');
+            };
 
             const render = () => {
                 // Não precisa chamar saveTasks aqui - já é chamado quando necessário
@@ -1609,11 +1693,11 @@
                                     // Mostrar horário de início e fim se disponível
                                     let timeDisplay = '';
                                     if (task.dueTime && task.endTime) {
-                                        timeDisplay = `<span class="font-semibold text-gray-700 dark:text-gray-300 w-auto text-right whitespace-nowrap">${task.dueTime} - ${task.endTime}</span>`;
+                                        timeDisplay = `${task.dueTime} - ${task.endTime}`;
                                     } else if (task.dueTime) {
-                                        timeDisplay = `<span class="font-semibold text-gray-700 dark:text-gray-300 w-16 text-right">${task.dueTime}</span>`;
+                                        timeDisplay = `${task.dueTime}`;
                                     } else {
-                                        timeDisplay = `<span class="w-16"></span>`;
+                                        timeDisplay = 'Sem horário';
                                     }
                                     
                                     const colorClass = (statusInfo[task.status]?.color || 'border-gray-500').replace('border-', 'bg-');
@@ -1640,16 +1724,23 @@
                                     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.text)}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent('Criado no EVOMYND')}`;
                                     
                                     return `
-                                        <div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 min-w-0">
-                                            ${timeDisplay}
-                                            <div class="w-1 h-8 ${colorClass} rounded-full flex-shrink-0"></div>
-                                            <span class="text-gray-700 dark:text-gray-300 break-words flex-grow min-w-0">${task.text}</span>
-                                            <a href="${googleCalendarUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" title="Adicionar ao Google Calendar">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                                                </svg>
-                                            </a>
-                                            <span class="text-xs text-gray-600 dark:text-gray-400 flex-shrink-0 whitespace-nowrap">(${statusName})</span>
+                                        <div class="flex gap-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                                            <div class="w-1 ${colorClass} rounded-full flex-shrink-0"></div>
+                                            <div class="flex-grow min-w-0">
+                                                <div class="flex items-start justify-between gap-2 mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300 break-words flex-grow">${task.text}</span>
+                                                    <a href="${googleCalendarUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" title="Adicionar ao Google Calendar">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-xs">
+                                                    <span class="font-semibold text-gray-600 dark:text-gray-400">${timeDisplay}</span>
+                                                    <span class="text-gray-400 dark:text-gray-500">•</span>
+                                                    <span class="text-gray-500 dark:text-gray-400">${statusName}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     `;
                                 }).join('')}
