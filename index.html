@@ -779,7 +779,7 @@
             
             // --- SISTEMA DE ASSINATURA ---
             const REQUIRE_LOGIN = true; // Ativar login obrigatório
-            const TRIAL_DAYS = 7; // Dias de teste gratuito
+            const TRIAL_DAYS = 30; // Dias de teste gratuito
             
             // Verificar status da assinatura
             async function checkSubscription(userId) {
@@ -3174,7 +3174,7 @@
                         
                         document.getElementById('sub-status').textContent = '� Teste Grátis';
                         document.getElementById('sub-status').className = 'font-semibold text-green-600 dark:text-green-400';
-                        document.getElementById('sub-plan').textContent = 'Teste Gratuito (7 dias)';
+                        document.getElementById('sub-plan').textContent = 'Teste Gratuito (30 dias)';
                         document.getElementById('sub-expires').textContent = trialEnds.toLocaleDateString('pt-BR', { 
                             day: '2-digit', 
                             month: '2-digit', 
@@ -3208,7 +3208,7 @@
                     // Plano
                     const planElement = document.getElementById('sub-plan');
                     const planText = {
-                        'trial': 'Teste Gratuito (7 dias)',
+                        'trial': 'Teste Gratuito (30 dias)',
                         'premium_monthly': 'Premium Mensal',
                         'premium_annual': 'Premium Anual',
                         'premium': 'Premium',
