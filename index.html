@@ -305,37 +305,41 @@
     </div>
 
     <!-- Modal para Processar / Editar Item -->
-    <div id="task-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-start justify-center overflow-y-auto hidden">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg transform transition-all my-8 mx-4">
-            <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Processar Item</h3>
-            <p id="modal-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6 hidden"></p>
+    <div id="task-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-start justify-center overflow-y-auto hidden z-50">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg transform transition-all my-8 mx-4 flex flex-col max-h-[calc(100vh-8rem)]">
+            <div class="p-8 pb-4">
+                <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Processar Item</h3>
+                <p id="modal-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6 hidden"></p>
+            </div>
             
-            <form id="task-form">
+            <form id="task-form" class="flex flex-col flex-grow overflow-hidden">
                 <input type="hidden" id="modal-task-id">
                 <input type="hidden" id="modal-mode">
                 <input type="hidden" id="original-due-date">
                 <input type="hidden" id="original-due-time">
                 <input type="hidden" id="original-end-time">
                 
-                <div id="destination-container" class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Mover para:</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
-                        <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
+                <div class="px-8 overflow-y-auto flex-grow">
+                    <div id="destination-container" class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Mover para:</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="next-action" class="sr-only">Próxima Ação</label>
+                            <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="project" class="sr-only">Projeto</label>
+                            <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="waiting" class="sr-only">Aguardando</label>
+                            <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="someday" class="sr-only">Algum Dia</label>
+                            <label class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition text-gray-700 dark:text-white"><input type="radio" name="destination" value="reference" class="sr-only">Referência</label>
+                        </div>
                     </div>
-                </div>
 
-                <div id="form-fields">
-                    <!-- Fields will be dynamically inserted here -->
-                </div>
+                    <div id="form-fields">
+                        <!-- Fields will be dynamically inserted here -->
+                    </div>
 
-                <div id="form-error" class="text-red-600 text-sm mt-4 mb-20"></div>
+                    <div id="form-error" class="text-red-600 text-sm mt-4 mb-4"></div>
+                </div>
                 
-                <div id="modal-actions" class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 p-4 z-[60]">
-                    <div class="flex justify-end gap-4 container mx-auto max-w-lg">
+                <div id="modal-actions" class="p-8 pt-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                    <div class="flex justify-end gap-4">
                         <button type="button" id="cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Cancelar</button>
                         <button type="submit" id="save-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Salvar</button>
                     </div>
@@ -2178,6 +2182,202 @@
                         <p class="text-gray-600">Você processou seu primeiro item! Agora você pode encontrar "Marcar dentista" na sua lista de "Próximas Ações".</p>
                     `,
                     action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Agora vamos criar um Projeto!</h3>
+                        <p class="text-gray-600">Um <strong class="text-gray-900">Projeto</strong> é tudo que tem começo, meio e fim, e pode ser dividido em várias ações. Precisa de uma data final para conclusão.</p>
+                        <p class="text-gray-700 mt-2">Vamos usar como exemplo: <strong class="text-gray-900">"Viagem para Paris"</strong></p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <p class="text-gray-600">Primeiro, adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Viagem para Paris"</strong> e clique em processar.</p>
+                    `,
+                    action: 'wait_for_project',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Escolha "Projeto"</h3>
+                        <p class="text-gray-600">Agora selecione a opção <strong class="text-gray-900">"Projeto"</strong> e defina uma data de conclusão para sua viagem. Depois salve.</p>
+                    `,
+                    target: () => document.getElementById('destination-container'),
+                    action: 'submit_form',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Adicionar uma Ação ao Projeto</h3>
+                        <p class="text-gray-600">Todo projeto precisa de ações! Vá até a aba <strong class="text-gray-900">"Projetos"</strong> e clique no projeto "Viagem para Paris" para adicionar uma ação.</p>
+                    `,
+                    action: 'wait_for_project_click',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Crie a primeira ação</h3>
+                        <p class="text-gray-600">Adicione uma sub-tarefa chamada <strong class="text-gray-900">"Pesquisar passagem aérea"</strong>, defina uma data e horário (início e fim), e salve.</p>
+                        <p class="text-gray-700 mt-2">Exemplo: Amanhã das 14:00 às 15:00</p>
+                    `,
+                    action: 'wait_for_action_created',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Muito bem! Agora vamos aprender sobre "Aguardando"</h3>
+                        <p class="text-gray-600">A lista <strong class="text-gray-900">"Aguardando"</strong> é para tudo que foi delegado para alguém ou que depende da execução de outra pessoa.</p>
+                        <p class="text-gray-700 mt-3">Use quando você não tem como interferir, mas precisa acompanhar.</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Exemplo de "Aguardando"</h3>
+                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Resposta do contador sobre IR"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 mt-2">Este é um bom exemplo: você solicitou algo ao contador e está aguardando a resposta dele.</p>
+                    `,
+                    action: 'wait_for_waiting_item',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Escolha "Aguardando"</h3>
+                        <p class="text-gray-600">Agora selecione a opção <strong class="text-gray-900">"Aguardando"</strong> e salve.</p>
+                        <p class="text-gray-700 mt-2">Você pode adicionar um contexto como <strong>@contador</strong> para identificar de quem está aguardando.</p>
+                    `,
+                    target: () => document.getElementById('destination-container'),
+                    action: 'submit_form',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Perfeito!</h3>
+                        <p class="text-gray-600">Agora você pode encontrar este item na lista <strong class="text-gray-900">"Aguardando"</strong>.</p>
+                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Revise esta lista regularmente para cobrar ou verificar o status das solicitações!</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Agora vamos para "Algum Dia/Talvez"</h3>
+                        <p class="text-gray-600">Esta lista é para tudo aquilo que está na sua mente, mas que você não quer ou não pode fazer agora.</p>
+                        <p class="text-gray-700 mt-3">São ideias, sonhos, possibilidades... Tudo que você quer lembrar depois, mas que não tem compromisso imediato.</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Exemplos de "Algum Dia/Talvez"</h3>
+                        <p class="text-gray-600">Algumas ideias que podem ir nesta lista:</p>
+                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                            <li>• Aprender a tocar violão</li>
+                            <li>• Visitar a Patagônia</li>
+                            <li>• Ler livros sobre filosofia</li>
+                            <li>• Fazer um curso de fotografia</li>
+                        </ul>
+                        <p class="text-gray-700 mt-3">Vamos criar um exemplo prático!</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Crie seu item "Algum Dia"</h3>
+                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Aprender italiano"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 mt-2">É algo que você gostaria de fazer, mas não há urgência ou compromisso definido.</p>
+                    `,
+                    action: 'wait_for_someday_item',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Escolha "Algum Dia/Talvez"</h3>
+                        <p class="text-gray-600">Selecione a opção <strong class="text-gray-900">"Algum Dia/Talvez"</strong> e salve.</p>
+                        <p class="text-gray-700 mt-2">Não precisa definir data, contexto ou nada. É apenas para tirar da mente e revisitar no futuro!</p>
+                    `,
+                    target: () => document.getElementById('destination-container'),
+                    action: 'submit_form',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Ótimo trabalho!</h3>
+                        <p class="text-gray-600">Esta lista é poderosa porque libera sua mente de ficar lembrando tudo.</p>
+                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Revise esta lista periodicamente (mensal ou trimestral). Algumas ideias podem virar projetos reais!</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Por último: Referência</h3>
+                        <p class="text-gray-600">A lista <strong class="text-gray-900">"Referência"</strong> é para tudo que você NÃO precisa fazer, mas quer guardar para consultar depois.</p>
+                        <p class="text-gray-700 mt-3">É informação útil que precisa sair da sua mente e ficar em lugar acessível.</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Exemplos de "Referência"</h3>
+                        <p class="text-gray-600">O que pode ir nesta lista:</p>
+                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                            <li>• Receita médica do oftalmologista</li>
+                            <li>• Senha do Wi-Fi de casa</li>
+                            <li>• Lista de vinhos que gostei</li>
+                            <li>• Código do portão do condomínio</li>
+                            <li>• Anotações de uma reunião importante</li>
+                        </ul>
+                        <p class="text-gray-700 mt-3">São informações para <strong>consultar</strong>, não para <strong>fazer</strong>.</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Crie um item de Referência</h3>
+                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Senha do Wi-Fi: Casa2024!"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 mt-2">É uma informação que você quer guardar para não esquecer, mas não é uma tarefa.</p>
+                    `,
+                    action: 'wait_for_reference_item',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Escolha "Referência"</h3>
+                        <p class="text-gray-600">Selecione a opção <strong class="text-gray-900">"Referência"</strong> e salve.</p>
+                        <p class="text-gray-700 mt-2">Agora essa informação está segura e você pode consultá-la sempre que precisar!</p>
+                    `,
+                    target: () => document.getElementById('destination-container'),
+                    action: 'submit_form',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Perfeito!</h3>
+                        <p class="text-gray-600">Material de referência arquivado! Você pode acessá-lo na lista <strong class="text-gray-900">"Referência"</strong> sempre que precisar.</p>
+                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Use esta lista como seu "arquivo digital pessoal" para informações importantes!</p>
+                    `,
+                    action: 'next',
+                },
+                {
+                    content: `
+                        <h3 class="text-xl font-bold text-white mb-4">Tutorial Completo! 🎉</h3>
+                        <p class="text-gray-600">Parabéns! Agora você domina TODOS os conceitos do GTD!</p>
+                        <p class="text-gray-700 mt-3"><strong>Sistema completo:</strong></p>
+                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                            <li>• <strong>Caixa de Entrada:</strong> Capture tudo que precisa processar</li>
+                            <li>• <strong>Próximas Ações:</strong> Tarefas únicas com contexto</li>
+                            <li>• <strong>Projetos:</strong> Objetivos com múltiplas ações</li>
+                            <li>• <strong>Aguardando:</strong> Delegações e dependências</li>
+                            <li>• <strong>Algum Dia/Talvez:</strong> Ideias e possibilidades futuras</li>
+                            <li>• <strong>Referência:</strong> Informações para consultar</li>
+                            <li>• <strong>Calendário:</strong> Visualize ações agendadas</li>
+                        </ul>
+                        <p class="text-gray-700 mt-4 font-semibold">Você está pronto para ter uma mente livre, organizada e produtiva! 🚀</p>
+                    `,
+                    action: 'next',
+                }
+            ];
+                        </ul>
+                        <p class="text-gray-700 mt-4 font-semibold">Agora você está pronto para ter uma mente livre e produtiva! 🚀</p>
+                    `,
+                    action: 'next',
+                }
+            ];
+                            <li>• <strong>Aguardando:</strong> Delegações e dependências</li>
+                            <li>• <strong>Calendário:</strong> Visualize ações agendadas</li>
+                        </ul>
+                    `,
+                    action: 'next',
                 }
             ];
 
@@ -2209,8 +2409,130 @@
                 if (step.action === 'next') {
                     app.tutorial.nextBtn.textContent = (tutorialStep === tutorialSteps.length - 1) ? 'Concluir' : 'Próximo';
                     app.tutorial.nextBtn.onclick = advanceTutorial;
+                } else if (step.action === 'wait_for_project') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda o usuário criar e processar "Viagem para Paris"
+                    const checkInterval = setInterval(() => {
+                        const projectTask = tasks.find(t => t.text.toLowerCase().includes('viagem') && t.text.toLowerCase().includes('paris'));
+                        if (projectTask && projectTask.status === 'inbox') {
+                            // Quando encontrar o item sendo processado
+                            const processBtn = document.querySelector(`[data-id="${projectTask.id}"] .process-btn`);
+                            if (processBtn) {
+                                clearInterval(checkInterval);
+                                app.tutorial.modal.classList.add('hidden');
+                                processBtn.classList.add('tutorial-highlight');
+                                processBtn.addEventListener('click', function handler() {
+                                    setTimeout(advanceTutorial, 300);
+                                }, { once: true });
+                            }
+                        }
+                    }, 500);
+                } else if (step.action === 'wait_for_project_click') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda o usuário ir para Projetos e clicar no projeto
+                    const checkInterval = setInterval(() => {
+                        if (currentView === 'projects-view') {
+                            const projectTask = tasks.find(t => t.text.toLowerCase().includes('viagem') && t.text.toLowerCase().includes('paris') && t.status === 'project');
+                            if (projectTask) {
+                                clearInterval(checkInterval);
+                                app.tutorial.modal.classList.add('hidden');
+                                
+                                // Aguarda o clique no projeto para adicionar subtarefa
+                                const projectElement = document.querySelector(`[data-id="${projectTask.id}"]`);
+                                if (projectElement) {
+                                    projectElement.classList.add('tutorial-highlight');
+                                    projectElement.addEventListener('click', function handler() {
+                                        setTimeout(advanceTutorial, 300);
+                                    }, { once: true });
+                                }
+                            }
+                        }
+                    }, 500);
+                } else if (step.action === 'wait_for_action_created') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda a criação da ação no projeto
+                    const initialSubTaskCount = tasks.filter(t => t.text.toLowerCase().includes('viagem') && t.text.toLowerCase().includes('paris') && t.subTasks).reduce((acc, t) => acc + t.subTasks.length, 0);
+                    
+                    const checkInterval = setInterval(() => {
+                        const currentSubTaskCount = tasks.filter(t => t.text.toLowerCase().includes('viagem') && t.text.toLowerCase().includes('paris') && t.subTasks).reduce((acc, t) => acc + t.subTasks.length, 0);
+                        
+                        if (currentSubTaskCount > initialSubTaskCount) {
+                            clearInterval(checkInterval);
+                            app.tutorial.modal.classList.remove('hidden');
+                            app.tutorial.nextBtn.disabled = false;
+                            app.tutorial.nextBtn.textContent = 'Próximo';
+                            app.tutorial.nextBtn.onclick = advanceTutorial;
+                        }
+                    }, 500);
+                } else if (step.action === 'wait_for_waiting_item') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda o usuário criar e processar "Resposta do contador sobre IR"
+                    const checkInterval = setInterval(() => {
+                        const waitingTask = tasks.find(t => t.text.toLowerCase().includes('contador') || t.text.toLowerCase().includes('resposta'));
+                        if (waitingTask && waitingTask.status === 'inbox') {
+                            // Quando encontrar o item sendo processado
+                            const processBtn = document.querySelector(`[data-id="${waitingTask.id}"] .process-btn`);
+                            if (processBtn) {
+                                clearInterval(checkInterval);
+                                app.tutorial.modal.classList.add('hidden');
+                                processBtn.classList.add('tutorial-highlight');
+                                processBtn.addEventListener('click', function handler() {
+                                    setTimeout(advanceTutorial, 300);
+                                }, { once: true });
+                            }
+                        }
+                    }, 500);
+                } else if (step.action === 'wait_for_someday_item') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda o usuário criar e processar "Aprender italiano"
+                    const checkInterval = setInterval(() => {
+                        const somedayTask = tasks.find(t => t.text.toLowerCase().includes('italiano') || t.text.toLowerCase().includes('aprender'));
+                        if (somedayTask && somedayTask.status === 'inbox') {
+                            // Quando encontrar o item sendo processado
+                            const processBtn = document.querySelector(`[data-id="${somedayTask.id}"] .process-btn`);
+                            if (processBtn) {
+                                clearInterval(checkInterval);
+                                app.tutorial.modal.classList.add('hidden');
+                                processBtn.classList.add('tutorial-highlight');
+                                processBtn.addEventListener('click', function handler() {
+                                    setTimeout(advanceTutorial, 300);
+                                }, { once: true });
+                            }
+                        }
+                    }, 500);
+                } else if (step.action === 'wait_for_reference_item') {
+                    app.tutorial.nextBtn.textContent = 'Aguardando...';
+                    app.tutorial.nextBtn.disabled = true;
+                    
+                    // Aguarda o usuário criar e processar "Senha do Wi-Fi"
+                    const checkInterval = setInterval(() => {
+                        const referenceTask = tasks.find(t => t.text.toLowerCase().includes('senha') || t.text.toLowerCase().includes('wi-fi') || t.text.toLowerCase().includes('wifi'));
+                        if (referenceTask && referenceTask.status === 'inbox') {
+                            // Quando encontrar o item sendo processado
+                            const processBtn = document.querySelector(`[data-id="${referenceTask.id}"] .process-btn`);
+                            if (processBtn) {
+                                clearInterval(checkInterval);
+                                app.tutorial.modal.classList.add('hidden');
+                                processBtn.classList.add('tutorial-highlight');
+                                processBtn.addEventListener('click', function handler() {
+                                    setTimeout(advanceTutorial, 300);
+                                }, { once: true });
+                            }
+                        }
+                    }, 500);
                 } else {
                     app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.disabled = false;
                     app.tutorial.nextBtn.onclick = () => {
                         app.tutorial.modal.classList.add('hidden');
                         if (targetElement) {
