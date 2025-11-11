@@ -1875,15 +1875,6 @@
                 `; 
                 
                 app.contextFilters.innerHTML = filtersHTML;
-                
-                // Adicionar event listener ao select
-                const selectElement = document.getElementById('context-filter-select');
-                if (selectElement) {
-                    selectElement.addEventListener('change', (e) => {
-                        currentFilter = e.target.value;
-                        render();
-                    });
-                }
             };
             
             const updateActiveView = () => {
@@ -1901,11 +1892,26 @@
             
             const addTask = () => { 
                 const text = app.newTaskInput.value.trim(); 
+                console.log('🔵 addTask chamado. Texto:', text);
                 if (text) { 
-                    tasks.unshift({ id: Date.now().toString(), text: text, status: 'inbox', context: null, dueDate: null, dueTime: null }); 
+                    const newTask = { 
+                        id: Date.now().toString(), 
+                        text: text, 
+                        status: 'inbox', 
+                        context: null, 
+                        dueDate: null, 
+                        dueTime: null 
+                    };
+                    tasks.unshift(newTask); 
+                    console.log('✅ Nova tarefa criada:', newTask);
+                    console.log('📋 Total de tarefas:', tasks.length);
                     app.newTaskInput.value = ''; 
+                    saveTasks();
                     render(); 
-                } 
+                    console.log('🔄 Render concluído');
+                } else {
+                    console.log('⚠️ Texto vazio, não adicionado');
+                }
             };
             
             const showConfirm = (message, onConfirm, okText = 'OK', cancelText = 'Cancelar') => { 
@@ -2012,11 +2018,17 @@
 
             const saveTask = (e) => { 
                 e.preventDefault(); 
+                console.log('💾 saveTask iniciado');
                 const id = app.modal.taskId.value; 
                 const mode = app.modal.mode.value;
                 const task = findTask(id); 
-                if (!task) return; 
+                console.log('📝 Tarefa encontrada:', task);
+                if (!task) {
+                    console.error('❌ Tarefa não encontrada com id:', id);
+                    return; 
+                }
                 const destination = app.modal.form.elements.destination.value; 
+                console.log('🎯 Destino selecionado:', destination);
                 let text, context, isValid = true; 
                 app.modal.formError.textContent = ''; 
                 text = document.getElementById('task-text-input')?.value.trim(); 
@@ -2091,14 +2103,19 @@
                         break; 
                 } 
                 if (isValid) { 
+                    console.log('✅ Validação passou. Salvando tarefa...');
                     task.text = text; 
                     task.status = destination; 
+                    console.log('📌 Status atualizado para:', destination);
                     if (destination === 'project' && !task.subTasks) { 
                         task.subTasks = []; 
                     }
                     saveTasks();
+                    console.log('💾 saveTasks() executado');
                     closeModal(); 
+                    console.log('🔄 Chamando render()...');
                     render();
+                    console.log('✅ Tarefa processada com sucesso!');
                     
                     // Perguntar se quer adicionar ao calendário
                     // - Modo process: sempre perguntar se tiver data/hora/endTime
@@ -2116,6 +2133,7 @@
                         showCalendarPrompt(task);
                     }
                 } else { 
+                    console.log('❌ Validação falhou. isValid:', isValid);
                     app.modal.formError.textContent = 'Por favor, preencha todos os campos necessários.'; 
                 } 
             };
@@ -2685,6 +2703,14 @@
                 currentView = tab.dataset.view; 
                 render(); 
             }));
+            
+            // Event listener para dropdown de contextos (usando event delegation)
+            app.contextFilters.addEventListener('change', (e) => {
+                if (e.target.id === 'context-filter-select') {
+                    currentFilter = e.target.value;
+                    renderNextActions(); // Apenas atualizar lista, não todo render
+                }
+            });
             
             // Listeners do Timer
             app.timer.earlyCompleteBtn.addEventListener('click', () => {
