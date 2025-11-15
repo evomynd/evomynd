@@ -425,44 +425,6 @@
     </div>
 
 
-    <!-- Modal de Edição de Ação do Projeto -->
-    <div id="edit-subtask-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Editar Ação</h3>
-                <button id="edit-subtask-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
-            </div>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descrição</label>
-                    <input type="text" id="edit-subtask-text" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Início</label>
-                        <input type="date" id="edit-subtask-start-date" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Fim</label>
-                        <input type="date" id="edit-subtask-end-date" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-                
-                <div class="flex gap-3 mt-6">
-                    <button id="edit-subtask-cancel-btn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
-                        Cancelar
-                    </button>
-                    <button id="edit-subtask-save-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
-                        Salvar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Timer Overlay -->
     <div id="timer-overlay" class="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-95 dark:bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 dark:text-white hidden z-50">
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
@@ -858,15 +820,6 @@
                     somedayBtn: document.getElementById('tutorial-someday-btn'),
                     referenceBtn: document.getElementById('tutorial-reference-btn'),
                     cancelBtn: document.getElementById('tutorial-selection-cancel-btn'),
-                },
-                editSubtask: {
-                    modal: document.getElementById('edit-subtask-modal'),
-                    text: document.getElementById('edit-subtask-text'),
-                    startDate: document.getElementById('edit-subtask-start-date'),
-                    endDate: document.getElementById('edit-subtask-end-date'),
-                    saveBtn: document.getElementById('edit-subtask-save-btn'),
-                    cancelBtn: document.getElementById('edit-subtask-cancel-btn'),
-                    closeBtn: document.getElementById('edit-subtask-close-btn'),
                 },
                 settings: {
                     modal: document.getElementById('settings-modal'),
@@ -1336,40 +1289,62 @@
             
             // Inicializar Firebase e Auth
             waitForFirebase().then(() => {
-                console.log('🔥 Firebase carregado');
                 const { onAuthStateChanged } = window.firebaseAuthMethods;
                 
-                let authCallbackExecuted = false;
+                let isVerifying = false;
                 
-                // Timeout de segurança CURTO: liberar app rapidamente
+                // Timeout de segurança global: se demorar muito, liberar app
                 const globalSafetyTimeout = setTimeout(() => {
-                    console.warn('⏰ TIMEOUT GLOBAL (1s) - Forçando exibição do app');
-                    if (!authCallbackExecuted) {
-                        console.log('⚠️ Auth demorou - liberando app agora');
-                        showApp(); // Sempre mostrar app
+                    console.warn('⏰ TIMEOUT GLOBAL - Forçando exibição do app');
+                    if (currentUser) {
+                        console.log('Usuário logado - liberando app');
+                        showApp();
+                        if (!isVerifying) {
+                            loadFromFirestore();
+                        }
+                    } else {
+                        console.log('Usuário não logado - mostrando tela de login');
+                        if (REQUIRE_LOGIN) {
+                            showLoginRequired();
+                        } else {
+                            showApp();
+                        }
                     }
-                }, 1000); // APENAS 1 SEGUNDO
+                }, 5000); // 5 segundos
                 
                 // Monitorar estado de autenticação
                 onAuthStateChanged(window.firebaseAuth, async (user) => {
                     console.log('🔄 onAuthStateChanged disparado:', user?.email || 'sem usuário');
-                    authCallbackExecuted = true;
                     clearTimeout(globalSafetyTimeout); // Cancelar timeout global
                     currentUser = user;
                     updateUserUI(user);
                     
                     if (user) {
                         console.log('✅ Usuário autenticado:', user.email);
+                        isVerifying = true;
                         
-                        // MOSTRAR APP IMEDIATAMENTE - sem verificações que travam
-                        showApp();
+                        // Timeout específico para verifyAccess
+                        const verifyTimeout = setTimeout(() => {
+                            console.warn('⏰ verifyAccess travou - liberando app');
+                            showApp();
+                            loadFromFirestore();
+                        }, 3000); // 3 segundos
                         
-                        // Carregar dados em background (não bloqueia)
                         try {
-                            await loadFromFirestore();
-                            console.log('✅ Dados carregados');
+                            // Verificar acesso (assinatura)
+                            const hasAccess = await verifyAccess();
+                            clearTimeout(verifyTimeout);
+                            
+                            if (hasAccess) {
+                                loadFromFirestore();
+                            }
                         } catch (error) {
-                            console.error('❌ Erro ao carregar dados:', error);
+                            console.error('❌ Erro ao verificar acesso:', error);
+                            clearTimeout(verifyTimeout);
+                            showApp();
+                            loadFromFirestore();
+                        } finally {
+                            isVerifying = false;
                         }
                     } else {
                         console.log('❌ Usuário não autenticado');
@@ -1402,15 +1377,6 @@
                     const checkoutUrl = `https://mpago.la/2174QUB?external_reference=${userId}`;
                     window.open(checkoutUrl, '_blank');
                 });
-                
-                console.log('🔐 Monitoramento de autenticação ativado');
-            }).catch(error => {
-                console.error('❌ ERRO CRÍTICO ao carregar Firebase:', error);
-                // Se Firebase falhar completamente, mostrar app em 1 segundo
-                setTimeout(() => {
-                    console.log('🆘 EMERGÊNCIA: Forçando exibição do app após erro no Firebase');
-                    showApp();
-                }, 1000);
             });
             
             // --- PWA: INSTALAÇÃO DO APP ---
@@ -1776,9 +1742,7 @@
                            </div>
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end flex-shrink-0">
-                             ${isProject ? `
-                                <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
-                             ` : ''}
+                             ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
                             ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Editar</button>` : ''}
                             ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
@@ -1818,24 +1782,25 @@
                 });
                 
                 const subTasksHTML = project.subTasks.map(subtask => {
-                    // Verificar se está vencida (baseado na data fim)
-                    const isOverdue = subtask.endDate && new Date(subtask.endDate + 'T23:59:59') < new Date();
-                    const dateClass = isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-white';
+                    // Verificar se está vencida
+                    const isOverdue = subtask.dueDate && subtask.dueTime && subtask.endTime && 
+                                      new Date(`${subtask.dueDate}T${subtask.endTime}`) < new Date();
+                    const dateClass = isOverdue ? 'text-red-600 dark:text-red-400 line-through' : 'text-gray-700 dark:text-white';
                     
                     return `
                     <div class="subtask-item flex items-start gap-3 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50 min-w-0 border border-gray-200 dark:border-gray-700">
                         <input type="checkbox" ${subtask.completed ? 'checked' : ''} data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
                         <div class="flex-grow min-w-0">
                             <span class="text-gray-700 dark:text-gray-400 break-words ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
-                            ${subtask.dueDate || subtask.endDate ? `
+                            ${subtask.dueDate ? `
                                 <div class="text-xs ${dateClass} mt-1">
-                                    📅 ${subtask.dueDate ? new Date(subtask.dueDate + 'T00:00:00').toLocaleDateString('pt-BR') : ''} 
-                                    ${subtask.endDate && subtask.endDate !== subtask.dueDate ? ` até ${new Date(subtask.endDate + 'T00:00:00').toLocaleDateString('pt-BR')}` : ''}
+                                    📅 ${new Date(subtask.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} 
+                                    ${subtask.dueTime || ''} 
+                                    ${subtask.endTime ? ` - ${subtask.endTime}` : ''}
                                     ${isOverdue ? ' ⚠️ VENCIDA' : ''}
                                 </div>
                             ` : ''}
                         </div>
-                        <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="edit-subtask-btn text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-lg flex-shrink-0" title="Editar ação">✏️</button>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
                     </div>
                 `;
@@ -1846,36 +1811,27 @@
                         <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">➕ Nova Ação do Projeto</h5>
                         <input type="text" data-project-id="${projectId}" class="new-subtask-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3" placeholder="Descreva a ação...">
                         
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div>
-                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data Início *</label>
-                                <input type="date" data-project-id="${projectId}" class="subtask-start-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data Fim *</label>
-                                <input type="date" data-project-id="${projectId}" class="subtask-end-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
-                            </div>
+                        <div class="mb-3">
+                            <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data *</label>
+                            <input type="date" data-project-id="${projectId}" class="subtask-due-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
                         </div>
                         
-                        <div class="flex gap-2 items-center mb-3">
-                            <input type="checkbox" id="add-to-calendar-${projectId}" class="add-to-calendar-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer">
-                            <label for="add-to-calendar-${projectId}" class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">📅 Adicionar ao Google Calendar</label>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Início *</label>
+                                <input type="time" data-project-id="${projectId}" class="subtask-start-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Fim *</label>
+                                <input type="time" data-project-id="${projectId}" class="subtask-end-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
                         </div>
                         
                         <button data-project-id="${projectId}" class="add-subtask-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Adicionar Ação</button>
                     </div>
                 `; 
                 
-                container.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <h4 class="text-sm font-bold text-gray-700 dark:text-gray-400">Ações do Projeto</h4>
-                        <button data-id="${projectId}" class="gantt-btn bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center gap-2" title="Ver cronograma">
-                            📊 Cronograma
-                        </button>
-                    </div>
-                    <div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>
-                    ${formHTML}
-                `; 
+                container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 dark:text-gray-400 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
             };
             
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
@@ -3107,293 +3063,6 @@
                 }
             }
 
-            // --- EVENT LISTENERS ---
-            app.addTaskBtn.addEventListener('click', addTask);
-            app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
-            
-            // Event listeners para botões de adicionar diretamente em cada lista
-            document.getElementById('add-next-action-btn')?.addEventListener('click', addDirectNextAction);
-            document.getElementById('add-project-btn')?.addEventListener('click', addDirectProject);
-            document.getElementById('add-waiting-btn')?.addEventListener('click', addDirectWaiting);
-            document.getElementById('add-someday-btn')?.addEventListener('click', addDirectSomeday);
-            document.getElementById('add-reference-btn')?.addEventListener('click', addDirectReference);
-            
-            app.newTaskInput.addEventListener('focus', () => {
-                setTimeout(() => {
-                    app.newTaskInput.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                    });
-                }, 300);
-            });
-            
-            app.navTabs.forEach(tab => tab.addEventListener('click', () => { 
-                currentView = tab.dataset.view; 
-                render(); 
-            }));
-            
-            // Event listener para dropdown de contextos (usando event delegation)
-                    <div class="flex flex-col sm:flex-row gap-4 text-sm">
-                        <div class="flex-1">
-                            <span class="font-semibold text-gray-700 dark:text-gray-300">Data de Início:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">${project.startDate ? new Date(project.startDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'Não definida'}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="font-semibold text-gray-700 dark:text-gray-300">Data de Conclusão:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">${project.dueDate ? new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'Não definida'}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="font-semibold text-gray-700 dark:text-gray-300">Total de Ações:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">${project.subTasks.length}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="font-semibold text-gray-700 dark:text-gray-300">Concluídas:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">${project.subTasks.filter(st => st.completed).length}</span>
-                        </div>
-                    </div>
-                `;
-                app.gantt.projectInfo.innerHTML = projectInfoHTML;
-
-                // Filtrar apenas ações com data
-                const actionsWithDate = project.subTasks.filter(st => st.dueDate);
-                
-                if (actionsWithDate.length === 0) {
-                    app.gantt.chart.innerHTML = '<p class="text-gray-600 dark:text-gray-400 text-center py-8">Nenhuma ação possui data definida para exibir no cronograma.</p>';
-                    app.gantt.modal.classList.remove('hidden');
-                    return;
-                }
-
-                // Ordenar por data de início
-                actionsWithDate.sort((a, b) => {
-                    const dateA = new Date(a.dueDate + 'T00:00:00');
-                    const dateB = new Date(b.dueDate + 'T00:00:00');
-                    return dateA - dateB;
-                });
-
-                // Encontrar data mínima e máxima (considerando data início e fim)
-                const dates = actionsWithDate.flatMap(a => [
-                    new Date(a.dueDate + 'T00:00:00'),
-                    a.endDate ? new Date(a.endDate + 'T00:00:00') : new Date(a.dueDate + 'T00:00:00')
-                ]);
-                const firstDate = new Date(Math.min(...dates));
-                const lastDate = new Date(Math.max(...dates));
-                
-                // Adicionar margem de 1 dia antes e depois
-                const minDate = new Date(firstDate);
-                minDate.setDate(minDate.getDate() - 1);
-                const maxDate = new Date(lastDate);
-                maxDate.setDate(maxDate.getDate() + 1);
-                
-                const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24));
-                const dayWidth = Math.max(40, 800 / totalDays); // Mínimo 40px por dia
-
-                // Gerar cabeçalho do calendário
-                let headerHTML = '<div class="flex border-b-2 border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/50 sticky top-0 z-10">';
-                headerHTML += '<div class="w-64 flex-shrink-0 p-3 font-bold text-gray-900 dark:text-white border-r border-gray-300 dark:border-gray-600">Ação</div>';
-                headerHTML += '<div class="flex-grow flex">';
-                
-                for (let i = 0; i < totalDays; i++) {
-                    const currentDate = new Date(minDate);
-                    currentDate.setDate(currentDate.getDate() + i);
-                    const dayStr = currentDate.getDate();
-                    const monthStr = currentDate.toLocaleDateString('pt-BR', { month: 'short' });
-                    const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
-                    
-                    headerHTML += `
-                        <div class="flex-shrink-0 text-center p-2 border-r border-gray-200 dark:border-gray-600 ${isWeekend ? 'bg-gray-200 dark:bg-gray-600/30' : ''}" style="width: ${dayWidth}px;">
-                            <div class="text-xs font-semibold text-gray-900 dark:text-white">${dayStr}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-400">${monthStr}</div>
-                        </div>
-                    `;
-                }
-                
-                headerHTML += '</div></div>';
-
-                // Gerar barras das ações
-                let barsHTML = '';
-                const now = new Date();
-                
-                actionsWithDate.forEach((action, index) => {
-                    const actionStartDate = new Date(action.dueDate + 'T00:00:00');
-                    const actionEndDate = action.endDate ? new Date(action.endDate + 'T00:00:00') : actionStartDate;
-                    
-                    const daysFromStart = Math.floor((actionStartDate - minDate) / (1000 * 60 * 60 * 24));
-                    const leftPosition = daysFromStart * dayWidth;
-                    
-                    // Determinar duração da barra (baseado nas datas início e fim)
-                    const durationDays = Math.ceil((actionEndDate - actionStartDate) / (1000 * 60 * 60 * 24)) + 1;
-                    const barWidth = durationDays * dayWidth;
-                    
-                    const isOverdue = actionEndDate < now && !action.completed;
-                    const barColor = action.completed ? 'bg-green-500' : isOverdue ? 'bg-red-500' : 'bg-blue-500';
-                    const textColor = action.completed ? 'text-green-700 dark:text-green-300 line-through' : isOverdue ? 'text-red-700 dark:text-red-300' : 'text-gray-900 dark:text-white';
-                    
-                    const dateRangeText = action.endDate && action.endDate !== action.dueDate 
-                        ? `${new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} - ${new Date(action.endDate + 'T00:00:00').toLocaleDateString('pt-BR')}`
-                        : new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR');
-                    
-                    barsHTML += `
-                        <div class="flex border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition" style="min-height: 50px;">
-                            <div class="w-64 flex-shrink-0 p-3 border-r border-gray-200 dark:border-gray-700">
-                                <div class="text-sm ${textColor} font-medium">${action.text}</div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    ${dateRangeText}
-                                    ${action.completed ? ' ✓' : ''}
-                                    ${isOverdue ? ' ⚠️' : ''}
-                                </div>
-                            </div>
-                            <div class="flex-grow relative" style="min-width: ${totalDays * dayWidth}px;">
-                                <div class="absolute ${barColor} rounded-md shadow-md hover:shadow-lg transition h-8 top-2 cursor-pointer" 
-                                     style="left: ${leftPosition}px; width: ${barWidth}px;"
-                                     title="${action.text} - ${dateRangeText}">
-                                    <div class="text-white text-xs px-2 py-1 truncate font-semibold">${action.text.substring(0, 20)}${action.text.length > 20 ? '...' : ''}</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                app.gantt.chart.innerHTML = headerHTML + '<div class="relative">' + barsHTML + '</div>';
-                app.gantt.modal.classList.remove('hidden');
-            }
-
-            // --- EXPORTAR CRONOGRAMA PARA PDF ---
-            function exportGanttToPDF() {
-                const projectTitle = app.gantt.projectTitle.textContent;
-                
-                // Criar uma nova janela com o conteúdo do cronograma
-                const printWindow = window.open('', '', 'width=1200,height=800');
-                
-                const projectInfoContent = app.gantt.projectInfo.innerHTML;
-                const chartContent = app.gantt.chart.innerHTML;
-                
-                const htmlContent = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>Cronograma - ${projectTitle}</title>
-                        <style>
-                            * { margin: 0; padding: 0; box-sizing: border-box; }
-                            body { 
-                                font-family: system-ui, -apple-system, sans-serif; 
-                                padding: 20px; 
-                                background: white; 
-                                color: #1f2937;
-                            }
-                            h1 { 
-                                font-size: 24px; 
-                                font-weight: bold; 
-                                margin-bottom: 20px; 
-                                color: #111827;
-                                text-align: center;
-                            }
-                            .project-info { 
-                                background: #eff6ff; 
-                                padding: 15px; 
-                                border-radius: 8px; 
-                                margin-bottom: 20px;
-                            }
-                            .project-info > div { 
-                                display: flex; 
-                                gap: 20px; 
-                                font-size: 14px; 
-                                flex-wrap: wrap;
-                            }
-                            .project-info > div > div { 
-                                flex: 1; 
-                                min-width: 200px;
-                            }
-                            .project-info .font-semibold { 
-                                font-weight: 600; 
-                                color: #374151;
-                            }
-                            .project-info .ml-2 { 
-                                margin-left: 8px; 
-                                color: #111827;
-                            }
-                            #gantt-chart { 
-                                border: 1px solid #e5e7eb; 
-                                border-radius: 8px; 
-                                overflow: hidden;
-                            }
-                            .flex { display: flex; }
-                            .flex-grow { flex-grow: 1; }
-                            .flex-shrink-0 { flex-shrink: 0; }
-                            .items-start { align-items: flex-start; }
-                            .justify-between { justify-content: space-between; }
-                            .border-b { border-bottom: 1px solid #e5e7eb; }
-                            .border-b-2 { border-bottom: 2px solid #d1d5db; }
-                            .border-r { border-right: 1px solid #e5e7eb; }
-                            .border-gray-300 { border-color: #d1d5db; }
-                            .border-gray-200 { border-color: #e5e7eb; }
-                            .border-gray-700 { border-color: #374151; }
-                            .bg-gray-100 { background-color: #f3f4f6; }
-                            .bg-gray-200 { background-color: #e5e7eb; }
-                            .bg-blue-500 { background-color: #3b82f6; }
-                            .bg-green-500 { background-color: #10b981; }
-                            .bg-red-500 { background-color: #ef4444; }
-                            .text-gray-900 { color: #111827; }
-                            .text-gray-700 { color: #374151; }
-                            .text-gray-600 { color: #4b5563; }
-                            .text-gray-500 { color: #6b7280; }
-                            .text-gray-400 { color: #9ca3af; }
-                            .text-white { color: white; }
-                            .text-green-700 { color: #15803d; }
-                            .text-red-700 { color: #b91c1c; }
-                            .font-bold { font-weight: bold; }
-                            .font-semibold { font-weight: 600; }
-                            .font-medium { font-medium: 500; }
-                            .text-xs { font-size: 0.75rem; }
-                            .text-sm { font-size: 0.875rem; }
-                            .text-center { text-align: center; }
-                            .line-through { text-decoration: line-through; }
-                            .p-2 { padding: 0.5rem; }
-                            .p-3 { padding: 0.75rem; }
-                            .mt-1 { margin-top: 0.25rem; }
-                            .w-64 { width: 16rem; }
-                            .sticky { position: sticky; }
-                            .top-0 { top: 0; }
-                            .z-10 { z-index: 10; }
-                            .relative { position: relative; }
-                            .absolute { position: absolute; }
-                            .rounded-md { border-radius: 0.375rem; }
-                            .shadow-md { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-                            .truncate { 
-                                overflow: hidden; 
-                                text-overflow: ellipsis; 
-                                white-space: nowrap; 
-                            }
-                            .min-w-full { min-width: 100%; }
-                            @media print {
-                                body { padding: 10px; }
-                                h1 { font-size: 20px; margin-bottom: 15px; }
-                                .project-info { padding: 10px; margin-bottom: 15px; }
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>Cronograma do Projeto: ${projectTitle}</h1>
-                        <div class="project-info">${projectInfoContent}</div>
-                        <div id="gantt-chart">${chartContent}</div>
-                        <script>
-                            window.onload = function() {
-                                setTimeout(function() {
-                                    window.print();
-                                    window.onafterprint = function() {
-                                        window.close();
-                                    };
-                                }, 500);
-                            };
-                        </script>
-                    </body>
-                    </html>
-                `;
-                
-                printWindow.document.write(htmlContent);
-                printWindow.document.close();
-            }
-
 
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
@@ -3581,9 +3250,6 @@
                 if (button.classList.contains('edit-btn')) openTaskModal(findTask(id), 'edit');
                 if (button.classList.contains('delete-btn')) deleteTask(id);
                 if (button.classList.contains('done-btn')) deleteTask(id);
-                if (button.classList.contains('gantt-btn')) {
-                    showGanttChart(id);
-                }
                 if (button.classList.contains('toggle-subtasks-btn')) {
                     const container = document.getElementById(`subtasks-container-${id}`);
                     if (container) {
@@ -3596,51 +3262,54 @@
                     const projectId = button.dataset.projectId;
                     const project = findTask(projectId);
                     const textInput = document.querySelector(`.new-subtask-input[data-project-id="${projectId}"]`);
-                    const startDateInput = document.querySelector(`.subtask-start-date[data-project-id="${projectId}"]`);
-                    const endDateInput = document.querySelector(`.subtask-end-date[data-project-id="${projectId}"]`);
-                    const addToCalendarCheckbox = document.getElementById(`add-to-calendar-${projectId}`);
+                    const dateInput = document.querySelector(`.subtask-due-date[data-project-id="${projectId}"]`);
+                    const startTimeInput = document.querySelector(`.subtask-start-time[data-project-id="${projectId}"]`);
+                    const endTimeInput = document.querySelector(`.subtask-end-time[data-project-id="${projectId}"]`);
                     
                     const text = textInput.value.trim();
-                    const startDate = startDateInput.value;
-                    const endDate = endDateInput.value;
-                    const addToCalendar = addToCalendarCheckbox?.checked || false;
+                    const dueDate = dateInput.value;
+                    const dueTime = startTimeInput.value;
+                    const endTime = endTimeInput.value;
                     
                     // Validações
                     if (!text) {
                         alert('Por favor, descreva a ação.');
                         return;
                     }
-                    if (!startDate) {
-                        alert('Por favor, informe a data de início.');
+                    if (!dueDate) {
+                        alert('Por favor, informe a data.');
                         return;
                     }
-                    if (!endDate) {
-                        alert('Por favor, informe a data de término.');
+                    if (!dueTime) {
+                        alert('Por favor, informe a hora de início.');
+                        return;
+                    }
+                    if (!endTime) {
+                        alert('Por favor, informe a hora de término.');
                         return;
                     }
                     
-                    // Validar que data fim >= data início
-                    if (new Date(endDate) < new Date(startDate)) {
-                        alert('A data de término deve ser igual ou posterior à data de início.');
+                    // Validar que hora fim > hora início
+                    if (endTime <= dueTime) {
+                        alert('A hora de término deve ser posterior à hora de início.');
                         return;
                     }
                     
-                    // Validar data de início não está no passado
-                    const startDateTime = new Date(startDate + 'T00:00:00');
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    if (startDateTime < today) {
-                        alert('Não é possível definir uma data de início no passado.');
+                    // Validar data/hora não está no passado
+                    const taskDateTime = new Date(`${dueDate}T${endTime}`);
+                    const now = new Date();
+                    if (taskDateTime < now) {
+                        alert('Não é possível definir uma data/hora no passado.');
                         return;
                     }
                     
                     // Validar que a data da ação não é posterior à data de conclusão do projeto
                     if (project && project.dueDate) {
-                        const projectDueDate = new Date(project.dueDate + 'T00:00:00');
-                        const actionEndDate = new Date(endDate + 'T00:00:00');
+                        const projectDueDate = new Date(project.dueDate + 'T23:59:59');
+                        const actionEndDateTime = new Date(`${dueDate}T${endTime}`);
                         
-                        if (actionEndDate > projectDueDate) {
-                            alert(`A ação não pode ter data de término posterior à data de conclusão do projeto (${new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}).`);
+                        if (actionEndDateTime > projectDueDate) {
+                            alert(`A ação não pode ter data/hora posterior à data de conclusão do projeto (${new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}).`);
                             return;
                         }
                     }
@@ -3651,53 +3320,31 @@
                             id: Date.now().toString(), 
                             text, 
                             completed: false, 
-                            dueDate: startDate,  // Data de início
-                            endDate: endDate      // Data de fim
+                            dueDate, 
+                            dueTime,
+                            endTime 
                         };
                         project.subTasks.push(newSubtask);
                         
                         // Limpar campos
                         textInput.value = '';
-                        startDateInput.value = '';
-                        endDateInput.value = '';
-                        if (addToCalendarCheckbox) addToCalendarCheckbox.checked = false;
+                        dateInput.value = '';
+                        startTimeInput.value = '';
+                        endTimeInput.value = '';
                         
                         saveTasks();
                         renderSubTasks(projectId);
                         
-                        // Se marcou para adicionar ao calendário, abrir Google Calendar
-                        if (addToCalendar) {
-                            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${startDate.replace(/-/g, '')}/${endDate.replace(/-/g, '')}`;
-                            window.open(calendarUrl, '_blank');
-                        }
+                        // Perguntar se quer adicionar ao calendário - COMENTADO para evitar bug de fechar
+                        // showCalendarPrompt({
+                        //     text,
+                        //     dueDate,
+                        //     dueTime,
+                        //     endTime,
+                        //     project: project.text
+                        // });
                     }
-                    return;
                 }
-                
-                if (button.classList.contains('edit-subtask-btn')) {
-                    const projectId = button.dataset.projectId;
-                    const subtaskId = button.dataset.subtaskId;
-                    const project = findTask(projectId);
-                    
-                    if (project) {
-                        const subtask = project.subTasks.find(st => st.id === subtaskId);
-                        if (subtask) {
-                            // Preencher modal com dados da sub-tarefa
-                            app.editSubtask.text.value = subtask.text;
-                            app.editSubtask.startDate.value = subtask.dueDate || '';
-                            app.editSubtask.endDate.value = subtask.endDate || '';
-                            
-                            // Armazenar IDs para salvar depois
-                            app.editSubtask.modal.dataset.projectId = projectId;
-                            app.editSubtask.modal.dataset.subtaskId = subtaskId;
-                            
-                            // Abrir modal
-                            app.editSubtask.modal.classList.remove('hidden');
-                        }
-                    }
-                    return;
-                }
-                
                 if (button.classList.contains('delete-subtask-btn')) {
                     const projectId = button.dataset.projectId;
                     const subtaskId = button.dataset.subtaskId;
@@ -4071,59 +3718,6 @@
                 app.tutorialSelection.modal.classList.add('hidden');
             });
 
-            // Event listener para fechar o modal de Gantt
-            app.gantt.closeBtn.addEventListener('click', () => {
-                app.gantt.modal.classList.add('hidden');
-            });
-
-            // Event listener para exportar cronograma em PDF
-            app.gantt.exportPdfBtn.addEventListener('click', () => {
-                exportGanttToPDF();
-            });
-
-            // Event listeners para o modal de edição de sub-tarefa
-            app.editSubtask.saveBtn.addEventListener('click', () => {
-                const projectId = app.editSubtask.modal.dataset.projectId;
-                const subtaskId = app.editSubtask.modal.dataset.subtaskId;
-                const project = findTask(projectId);
-                
-                if (project) {
-                    const subtask = project.subTasks.find(st => st.id === subtaskId);
-                    if (subtask) {
-                        const newText = app.editSubtask.text.value.trim();
-                        const newStartDate = app.editSubtask.startDate.value;
-                        const newEndDate = app.editSubtask.endDate.value;
-                        
-                        // Validações
-                        if (!newText) {
-                            alert('Por favor, descreva a ação.');
-                            return;
-                        }
-                        if (newStartDate && newEndDate && new Date(newEndDate) < new Date(newStartDate)) {
-                            alert('A data de término deve ser igual ou posterior à data de início.');
-                            return;
-                        }
-                        
-                        // Atualizar sub-tarefa
-                        subtask.text = newText;
-                        subtask.dueDate = newStartDate;
-                        subtask.endDate = newEndDate;
-                        
-                        saveTasks();
-                        renderSubTasks(projectId);
-                        app.editSubtask.modal.classList.add('hidden');
-                    }
-                }
-            });
-
-            app.editSubtask.cancelBtn.addEventListener('click', () => {
-                app.editSubtask.modal.classList.add('hidden');
-            });
-
-            app.editSubtask.closeBtn.addEventListener('click', () => {
-                app.editSubtask.modal.classList.add('hidden');
-            });
-
             // Botão de renovar assinatura no modal de configurações
             document.getElementById('renew-subscription-settings-btn')?.addEventListener('click', () => {
                 const userId = currentUser?.uid || '';
@@ -4132,33 +3726,10 @@
             });
 
             // --- INICIALIZAÇÃO ---
-            console.log('📱 Iniciando aplicação...');
             applyTheme(currentTheme); // Aplica o tema salvo
             render();
-            
-            // Tentar iniciar tutorial com proteção
-            try {
-                if (typeof startTutorial === 'function') {
-                    startTutorial();
-                } else {
-                    console.warn('⚠️ Função startTutorial não encontrada');
-                }
-            } catch (error) {
-                console.error('❌ Erro ao iniciar tutorial:', error);
-            }
-            
-            // Tentar mostrar próxima data de revisão com proteção
-            try {
-                if (typeof showNextReviewDate === 'function') {
-                    showNextReviewDate();
-                } else {
-                    console.warn('⚠️ Função showNextReviewDate não encontrada');
-                }
-            } catch (error) {
-                console.error('❌ Erro ao mostrar próxima revisão:', error);
-            }
-            
-            console.log('✅ Aplicação iniciada com sucesso');
+            startTutorial();
+            showNextReviewDate();
         });
     </script>
 </body>
