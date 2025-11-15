@@ -279,6 +279,12 @@
         <main>
             <!-- Visualização: Caixa de Entrada -->
             <div id="inbox-view" class="view">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-3 px-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 flex-shrink-0">Adicionar</button>
+                    </div>
+                </div>
                 <div id="inbox-list" class="mt-8"></div>
             </div>
 
@@ -386,7 +392,6 @@
         <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg transform transition-all my-8 mx-4 flex flex-col max-h-[calc(100vh-8rem)]">
             <div class="p-8 pb-4">
                 <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Processar Item</h3>
-                <p id="modal-task-text" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md text-gray-700 dark:text-gray-300 mb-6 hidden"></p>
             </div>
             
             <form id="task-form" class="flex flex-col flex-grow overflow-hidden">
@@ -674,8 +679,8 @@
             const app = {
                 navTabs: document.querySelectorAll('.nav-tab'),
                 views: document.querySelectorAll('.view'),
-                // newTaskInput: document.getElementById('new-task-input'), // Removido
-                // addTaskBtn: document.getElementById('add-task-btn'), // Removido
+                newTaskInput: document.getElementById('new-task-input'),
+                addTaskBtn: document.getElementById('add-task-btn'),
                 inboxList: document.getElementById('inbox-list'),
                 nextActionsList: document.getElementById('next-actions-list'),
                 projectsList: document.getElementById('projects-list'),
@@ -709,7 +714,7 @@
                 modal: {
                     element: document.getElementById('task-modal'),
                     title: document.getElementById('modal-title'),
-                    taskText: document.getElementById('modal-task-text'),
+                    // taskText: document.getElementById('modal-task-text'), // Removido
                     taskId: document.getElementById('modal-task-id'),
                     mode: document.getElementById('modal-mode'),
                     form: document.getElementById('task-form'),
@@ -1407,7 +1412,7 @@
                 'next-action-process': `
                     <div class="mb-4">
                         <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <textarea id="task-text-input" rows="3" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <div class="mb-4" id="context-wrapper">
                         <label for="context-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Contexto</label>
@@ -1434,7 +1439,7 @@
                 'next-action-edit': `
                     <div class="mb-4">
                         <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Próxima Ação</label>
-                        <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <textarea id="task-text-input" rows="3" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                     <div class="mb-4" id="context-wrapper">
                         <label for="context-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Contexto</label>
@@ -1941,30 +1946,29 @@
                 });
             };
             
-            // Função addTask removida - agora usamos botões diretos em cada lista
-            // const addTask = () => { 
-            //     const text = app.newTaskInput.value.trim(); 
-            //     console.log('🔵 addTask chamado. Texto:', text);
-            //     if (text) { 
-            //         const newTask = { 
-            //             id: Date.now().toString(), 
-            //             text: text, 
-            //             status: 'inbox', 
-            //             context: null, 
-            //             dueDate: null, 
-            //             dueTime: null 
-            //         };
-            //         tasks.unshift(newTask); 
-            //         console.log('✅ Nova tarefa criada:', newTask);
-            //         console.log('📋 Total de tarefas:', tasks.length);
-            //         app.newTaskInput.value = ''; 
-            //         saveTasks();
-            //         render(); 
-            //         console.log('🔄 Render concluído');
-            //     } else {
-            //         console.log('⚠️ Texto vazio, não adicionado');
-            //     }
-            // };
+            const addTask = () => { 
+                const text = app.newTaskInput.value.trim(); 
+                console.log('🔵 addTask chamado. Texto:', text);
+                if (text) { 
+                    const newTask = { 
+                        id: Date.now().toString(), 
+                        text: text, 
+                        status: 'inbox', 
+                        context: null, 
+                        dueDate: null, 
+                        dueTime: null 
+                    };
+                    tasks.unshift(newTask); 
+                    console.log('✅ Nova tarefa criada:', newTask);
+                    console.log('📋 Total de tarefas:', tasks.length);
+                    app.newTaskInput.value = ''; 
+                    saveTasks();
+                    render(); 
+                    console.log('🔄 Render concluído');
+                } else {
+                    console.log('⚠️ Texto vazio, não adicionado');
+                }
+            };
             
             const showConfirm = (message, onConfirm, okText = 'OK', cancelText = 'Cancelar') => { 
                 app.confirmModal.text.textContent = message; 
@@ -2088,12 +2092,12 @@
                 app.modal.destinationContainer.style.display = 'block';
 
                 if (mode === 'process') {
-                    app.modal.taskText.textContent = task.text;
-                    app.modal.taskText.classList.remove('hidden');
+                    // app.modal.taskText.textContent = task.text; // Removido - campo não existe mais
+                    // app.modal.taskText.classList.remove('hidden'); // Removido
                     app.modal.form.elements.destination.value = 'next-action';
                     updateModalForm('next-action', task, mode);
                 } else { // 'edit' mode
-                    app.modal.taskText.classList.add('hidden');
+                    // app.modal.taskText.classList.add('hidden'); // Removido
                     const destination = task.status;
                     app.modal.form.elements.destination.value = destination;
                     updateModalForm(destination, task, mode);
@@ -2960,8 +2964,8 @@
 
 
             // --- EVENT LISTENERS ---
-            // app.addTaskBtn.addEventListener('click', addTask); // Removido - campo de input removido
-            // app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask()); // Removido
+            app.addTaskBtn.addEventListener('click', addTask);
+            app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
             
             // Event listeners para botões de adicionar diretamente em cada lista
             document.getElementById('add-next-action-btn')?.addEventListener('click', addDirectNextAction);
@@ -2970,14 +2974,14 @@
             document.getElementById('add-someday-btn')?.addEventListener('click', addDirectSomeday);
             document.getElementById('add-reference-btn')?.addEventListener('click', addDirectReference);
             
-            // app.newTaskInput.addEventListener('focus', () => { // Removido
-            //     setTimeout(() => {
-            //         app.newTaskInput.scrollIntoView({
-            //             behavior: 'smooth',
-            //             block: 'center',
-            //         });
-            //     }, 300);
-            // });
+            app.newTaskInput.addEventListener('focus', () => {
+                setTimeout(() => {
+                    app.newTaskInput.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                    });
+                }, 300);
+            });
             
             app.navTabs.forEach(tab => tab.addEventListener('click', () => { 
                 currentView = tab.dataset.view; 
