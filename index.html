@@ -3680,42 +3680,42 @@
 
             app.settings.restartTutorialBtn.addEventListener('click', () => {
                 app.settings.modal.classList.add('hidden');
-                app.elements.tutorialSelection.modal.classList.remove('hidden');
+                app.tutorialSelection.modal.classList.remove('hidden');
             });
 
             // Event listeners para o modal de seleção de tutorial
-            app.elements.tutorialSelection.allBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.allBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 restartTutorial();
             });
 
-            app.elements.tutorialSelection.inboxBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.inboxBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 startTutorialSection('inbox');
             });
 
-            app.elements.tutorialSelection.projectsBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.projectsBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 startTutorialSection('projects');
             });
 
-            app.elements.tutorialSelection.waitingBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.waitingBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 startTutorialSection('waiting');
             });
 
-            app.elements.tutorialSelection.somedayBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.somedayBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 startTutorialSection('someday');
             });
 
-            app.elements.tutorialSelection.referenceBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.referenceBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
                 startTutorialSection('reference');
             });
 
-            app.elements.tutorialSelection.cancelBtn.addEventListener('click', () => {
-                app.elements.tutorialSelection.modal.classList.add('hidden');
+            app.tutorialSelection.cancelBtn.addEventListener('click', () => {
+                app.tutorialSelection.modal.classList.add('hidden');
             });
 
             // Botão de renovar assinatura no modal de configurações
