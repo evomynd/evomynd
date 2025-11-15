@@ -105,40 +105,18 @@
         .tutorial-highlight {
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.7);
             border-radius: 8px;
-            transition: box-shadow 0.3s ease-in-out;
+            animation: tutorial-pulse 0.6s ease-in-out 2;
             position: relative;
             z-index: 100;
         }
         
-        /* Setas do Tutorial */
-        .tutorial-arrow {
-            position: fixed;
-            z-index: 9999;
-            font-size: 48px;
-            color: #3b82f6;
-            animation: bounce-arrow 1s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        @keyframes bounce-arrow {
+        /* Animação de moldura piscante do tutorial */
+        @keyframes tutorial-pulse {
             0%, 100% {
-                transform: translateY(0);
+                box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.9);
             }
             50% {
-                transform: translateY(-10px);
-            }
-        }
-        
-        .tutorial-arrow-down {
-            animation: bounce-arrow-down 1s ease-in-out infinite;
-        }
-        
-        @keyframes bounce-arrow-down {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(10px);
+                box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3);
             }
         }
     </style>
@@ -1420,19 +1398,19 @@
                         <datalist id="context-list"></datalist>
                     </div>
                     <div class="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
-                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-3">📅 Data e Horário (obrigatório)</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-3">📅 Data e Horário</label>
                         <div class="mb-3">
                             <label for="due-date-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Data</label>
-                            <input type="date" id="due-date-input" min="${today}" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label for="due-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Início</label>
-                                <input type="time" id="due-time-input" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div>
                                 <label for="end-time-input" class="block text-gray-600 dark:text-gray-400 text-xs mb-1">Hora de Fim</label>
-                                <input type="time" id="end-time-input" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="time" id="end-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
                     </div>`,
@@ -1465,15 +1443,21 @@
                     </div>`,
                 'project': `<div class="mb-4">
                                 <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Nome do Projeto</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <textarea id="task-text-input" rows="3" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            <div class="mt-4">
-                                <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Conclusão</label>
-                                <input type="date" id="due-date-input" min="${today}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label for="due-time-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Início <span class="text-red-600">*</span></label>
+                                    <input type="date" id="due-time-input" min="${today}" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label for="due-date-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data de Conclusão <span class="text-red-600">*</span></label>
+                                    <input type="date" id="due-date-input" min="${today}" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
                             </div>`,
                 'waiting': `<div class="mb-4">
                                 <label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Aguardando por</label>
-                                <input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <textarea id="task-text-input" rows="3" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
@@ -1485,7 +1469,7 @@
                                     <input type="time" id="due-time-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>`,
-                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Ideia</label><input type="text" id="task-text-input" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></div>`,
+                'someday': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Ideia</label><textarea id="task-text-input" rows="3" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`,
                 'reference': `<div class="mb-4"><label for="task-text-input" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Referência</label><textarea id="task-text-input" rows="4" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>`
             };
 
@@ -2176,43 +2160,55 @@
 
                 // Validar campos obrigatórios para processar inbox (modo process)
                 if (destination === 'next-action' && mode === 'process') {
-                    if (!dueDateInput?.value) {
-                        app.modal.formError.textContent = 'Data é obrigatória ao processar item.';
-                        return;
-                    }
-                    if (!dueTimeInput?.value) {
-                        app.modal.formError.textContent = 'Hora de início é obrigatória ao processar item.';
-                        return;
-                    }
-                    if (!endTimeInput?.value) {
-                        app.modal.formError.textContent = 'Hora de fim é obrigatória ao processar item.';
-                        return;
+                    // Data não é mais obrigatória
+                    // if (!dueDateInput?.value) {
+                    //     app.modal.formError.textContent = 'Data é obrigatória ao processar item.';
+                    //     return;
+                    // }
+                    // Hora de início não é mais obrigatória
+                    // if (!dueTimeInput?.value) {
+                    //     app.modal.formError.textContent = 'Hora de início é obrigatória ao processar item.';
+                    //     return;
+                    // }
+                    // Hora de fim não é mais obrigatória
+                    // if (!endTimeInput?.value) {
+                    //     app.modal.formError.textContent = 'Hora de fim é obrigatória ao processar item.';
+                    //     return;
+                    // }
+                    
+                    // Validar que data/hora não é no passado (apenas se informado)
+                    if (dueDateInput?.value && dueTimeInput?.value) {
+                        const now = new Date();
+                        const selectedDateTime = new Date(`${dueDateInput.value}T${dueTimeInput.value}`);
+                        
+                        if (selectedDateTime < now) {
+                            app.modal.formError.textContent = 'Não é possível agendar para data/hora passada. Escolha horário futuro.';
+                            return;
+                        }
                     }
                     
-                    // Validar que data/hora não é no passado
-                    const now = new Date();
-                    const selectedDateTime = new Date(`${dueDateInput.value}T${dueTimeInput.value}`);
-                    
-                    if (selectedDateTime < now) {
-                        app.modal.formError.textContent = 'Não é possível agendar para data/hora passada. Escolha horário futuro.';
-                        return;
-                    }
-                    
-                    // Validar que hora de fim é depois da hora de início
-                    if (dueTimeInput.value && endTimeInput.value && endTimeInput.value <= dueTimeInput.value) {
+                    // Validar que hora de fim é depois da hora de início (apenas se ambos informados)
+                    if (dueTimeInput?.value && endTimeInput?.value && endTimeInput.value <= dueTimeInput.value) {
                         app.modal.formError.textContent = 'Hora de fim deve ser depois da hora de início.';
                         return;
                     }
                 }
                 
-                // Validar data de conclusão obrigatória para projetos no modo process
+                // Validar datas obrigatórias para projetos no modo process
                 if (destination === 'project' && mode === 'process') {
+                    // dueTimeInput é usado para data de início
+                    // dueDateInput é usado para data de conclusão
+                    if (!dueTimeInput?.value) {
+                        app.modal.formError.textContent = 'Data de início é obrigatória ao criar um projeto.';
+                        return;
+                    }
                     if (!dueDateInput?.value) {
                         app.modal.formError.textContent = 'Data de conclusão é obrigatória ao criar um projeto.';
                         return;
                     }
-                    if (dueDateInput.value < today) {
-                        app.modal.formError.textContent = 'Data de conclusão não pode ser no passado.';
+                    // Validar que data de conclusão é depois da data de início
+                    if (dueDateInput.value < dueTimeInput.value) {
+                        app.modal.formError.textContent = 'Data de conclusão deve ser depois da data de início.';
                         return;
                     }
                 }
@@ -2627,39 +2623,11 @@
             function endTutorial() {
                 app.tutorial.modal.classList.add('hidden');
                 document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
-                removeTutorialArrow();
                 localStorage.setItem('gtd_tutorial_completed', 'true');
-            }
-            
-            function createTutorialArrow(targetElement, direction = 'down') {
-                removeTutorialArrow();
-                
-                const arrow = document.createElement('div');
-                arrow.id = 'tutorial-arrow';
-                arrow.className = direction === 'down' ? 'tutorial-arrow tutorial-arrow-down' : 'tutorial-arrow';
-                arrow.innerHTML = direction === 'down' ? '⬇️' : '➡️';
-                document.body.appendChild(arrow);
-                
-                const rect = targetElement.getBoundingClientRect();
-                if (direction === 'down') {
-                    arrow.style.top = (rect.top - 60) + 'px';
-                    arrow.style.left = (rect.left + rect.width / 2 - 24) + 'px';
-                } else {
-                    arrow.style.top = (rect.top + rect.height / 2 - 24) + 'px';
-                    arrow.style.left = (rect.left - 60) + 'px';
-                }
-            }
-            
-            function removeTutorialArrow() {
-                const existingArrow = document.getElementById('tutorial-arrow');
-                if (existingArrow) {
-                    existingArrow.remove();
-                }
             }
 
             function executeTutorialStep() {
                 document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
-                removeTutorialArrow();
                 
                 if (tutorialStep >= tutorialSteps.length) {
                     endTutorial();
@@ -2681,12 +2649,10 @@
                     app.tutorial.nextBtn.onclick = () => {
                         app.tutorial.modal.classList.add('hidden');
                         if (targetElement) {
-                            createTutorialArrow(targetElement, 'down');
                             targetElement.classList.add('tutorial-highlight');
                             
                             targetElement.addEventListener('click', function handler() {
                                 setTimeout(() => {
-                                    removeTutorialArrow();
                                     document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
                                     advanceTutorial();
                                 }, 150);
@@ -2700,13 +2666,11 @@
                         app.tutorial.modal.classList.add('hidden');
                         const contextInput = document.getElementById('context-input');
                         if (contextInput) {
-                            createTutorialArrow(contextInput, 'down');
                             contextInput.classList.add('tutorial-highlight');
                             
                             // Monitora quando o usuário salva o formulário
                             app.modal.form.addEventListener('submit', function handler(e) {
                                 setTimeout(() => {
-                                    removeTutorialArrow();
                                     document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
                                     
                                     // Pular os pop-ups de "Fazer Agora" e "Agendar"
@@ -3234,14 +3198,14 @@
                         saveTasks();
                         renderSubTasks(projectId);
                         
-                        // Perguntar se quer adicionar ao calendário
-                        showCalendarPrompt({
-                            text,
-                            dueDate,
-                            dueTime,
-                            endTime,
-                            project: project.text
-                        });
+                        // Perguntar se quer adicionar ao calendário - COMENTADO para evitar bug de fechar
+                        // showCalendarPrompt({
+                        //     text,
+                        //     dueDate,
+                        //     dueTime,
+                        //     endTime,
+                        //     project: project.text
+                        // });
                     }
                 }
                 if (button.classList.contains('delete-subtask-btn')) {
