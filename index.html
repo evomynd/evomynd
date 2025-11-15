@@ -342,8 +342,84 @@
         <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg relative">
             <div id="tutorial-content"></div>
             <div class="flex justify-between mt-6">
-                <button id="tutorial-skip-btn" class="text-gray-500 hover:text-gray-900 transition">Pular</button>
+                <button id="tutorial-skip-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 transition">Pular</button>
                 <button id="tutorial-next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Tutoriais -->
+    <div id="tutorial-selection-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-2xl relative">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Escolha o Tutorial</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Selecione qual tutorial você deseja fazer:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button id="tutorial-all-btn" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🎯</span>
+                        <div>
+                            <div class="text-lg font-bold">Todos os Tutoriais</div>
+                            <div class="text-sm opacity-90">Aprenda tudo sobre o sistema GTD</div>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="tutorial-inbox-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">📥</span>
+                        <div>
+                            <div class="text-lg font-bold">Caixa de Entrada</div>
+                            <div class="text-sm opacity-90">Como processar itens</div>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="tutorial-projects-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">📋</span>
+                        <div>
+                            <div class="text-lg font-bold">Projetos</div>
+                            <div class="text-sm opacity-90">Gerenciar projetos e ações</div>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="tutorial-waiting-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">⏳</span>
+                        <div>
+                            <div class="text-lg font-bold">Aguardando</div>
+                            <div class="text-sm opacity-90">Delegações e dependências</div>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="tutorial-someday-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">💭</span>
+                        <div>
+                            <div class="text-lg font-bold">Algum Dia/Talvez</div>
+                            <div class="text-sm opacity-90">Ideias para o futuro</div>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="tutorial-reference-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-lg transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 text-left">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">📚</span>
+                        <div>
+                            <div class="text-lg font-bold">Referência</div>
+                            <div class="text-sm opacity-90">Armazenar informações</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="tutorial-selection-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-md transition shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0">
+                    Cancelar
+                </button>
             </div>
         </div>
     </div>
@@ -734,6 +810,16 @@
                     content: document.getElementById('tutorial-content'),
                     nextBtn: document.getElementById('tutorial-next-btn'),
                     skipBtn: document.getElementById('tutorial-skip-btn'),
+                },
+                tutorialSelection: {
+                    modal: document.getElementById('tutorial-selection-modal'),
+                    allBtn: document.getElementById('tutorial-all-btn'),
+                    inboxBtn: document.getElementById('tutorial-inbox-btn'),
+                    projectsBtn: document.getElementById('tutorial-projects-btn'),
+                    waitingBtn: document.getElementById('tutorial-waiting-btn'),
+                    somedayBtn: document.getElementById('tutorial-someday-btn'),
+                    referenceBtn: document.getElementById('tutorial-reference-btn'),
+                    cancelBtn: document.getElementById('tutorial-selection-cancel-btn'),
                 },
                 settings: {
                     modal: document.getElementById('settings-modal'),
@@ -2926,6 +3012,57 @@
                 executeTutorialStep();
             }
 
+            function startTutorialSection(section) {
+                // Remove a flag de tutorial completado
+                localStorage.removeItem('gtd_tutorial_completed');
+                
+                switch(section) {
+                    case 'inbox':
+                        // Adiciona tarefa de exemplo para inbox
+                        if (!tasks.some(t => t.text === 'Marcar dentista')) {
+                            tasks.unshift({ id: Date.now().toString(), text: 'Marcar dentista', status: 'inbox', context: null });
+                            saveTasks();
+                        }
+                        currentView = 'inbox-view';
+                        render();
+                        tutorialStep = 0;
+                        executeTutorialStep();
+                        break;
+                        
+                    case 'projects':
+                        // Inicia do tutorial de projetos
+                        currentView = 'inbox-view';
+                        render();
+                        tutorialStep = 4; // Começa no step de projetos
+                        executeTutorialStep();
+                        break;
+                        
+                    case 'waiting':
+                        // Inicia do tutorial de aguardando
+                        currentView = 'inbox-view';
+                        render();
+                        tutorialStep = 9; // Começa no step de aguardando
+                        executeTutorialStep();
+                        break;
+                        
+                    case 'someday':
+                        // Inicia do tutorial de algum dia
+                        currentView = 'inbox-view';
+                        render();
+                        tutorialStep = 12; // Começa no step de algum dia
+                        executeTutorialStep();
+                        break;
+                        
+                    case 'reference':
+                        // Inicia do tutorial de referência
+                        currentView = 'inbox-view';
+                        render();
+                        tutorialStep = 16; // Começa no step de referência
+                        executeTutorialStep();
+                        break;
+                }
+            }
+
 
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
@@ -3543,7 +3680,42 @@
 
             app.settings.restartTutorialBtn.addEventListener('click', () => {
                 app.settings.modal.classList.add('hidden');
+                app.elements.tutorialSelection.modal.classList.remove('hidden');
+            });
+
+            // Event listeners para o modal de seleção de tutorial
+            app.elements.tutorialSelection.allBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
                 restartTutorial();
+            });
+
+            app.elements.tutorialSelection.inboxBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
+                startTutorialSection('inbox');
+            });
+
+            app.elements.tutorialSelection.projectsBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
+                startTutorialSection('projects');
+            });
+
+            app.elements.tutorialSelection.waitingBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
+                startTutorialSection('waiting');
+            });
+
+            app.elements.tutorialSelection.somedayBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
+                startTutorialSection('someday');
+            });
+
+            app.elements.tutorialSelection.referenceBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
+                startTutorialSection('reference');
+            });
+
+            app.elements.tutorialSelection.cancelBtn.addEventListener('click', () => {
+                app.elements.tutorialSelection.modal.classList.add('hidden');
             });
 
             // Botão de renovar assinatura no modal de configurações
