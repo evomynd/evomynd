@@ -442,6 +442,44 @@
     </div>
 
 
+    <!-- Modal de Edição de Ação do Projeto -->
+    <div id="edit-subtask-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Editar Ação</h3>
+                <button id="edit-subtask-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descrição</label>
+                    <input type="text" id="edit-subtask-text" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Início</label>
+                        <input type="date" id="edit-subtask-start-date" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Fim</label>
+                        <input type="date" id="edit-subtask-end-date" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button id="edit-subtask-save-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
+                        Salvar
+                    </button>
+                    <button id="edit-subtask-cancel-btn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Timer Overlay -->
     <div id="timer-overlay" class="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-95 dark:bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 dark:text-white hidden z-50">
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
@@ -845,6 +883,15 @@
                     chartContainer: document.getElementById('gantt-chart-container'),
                     chart: document.getElementById('gantt-chart'),
                     closeBtn: document.getElementById('gantt-close-btn'),
+                },
+                editSubtask: {
+                    modal: document.getElementById('edit-subtask-modal'),
+                    text: document.getElementById('edit-subtask-text'),
+                    startDate: document.getElementById('edit-subtask-start-date'),
+                    endDate: document.getElementById('edit-subtask-end-date'),
+                    saveBtn: document.getElementById('edit-subtask-save-btn'),
+                    cancelBtn: document.getElementById('edit-subtask-cancel-btn'),
+                    closeBtn: document.getElementById('edit-subtask-close-btn'),
                 },
                 settings: {
                     modal: document.getElementById('settings-modal'),
@@ -1810,25 +1857,24 @@
                 });
                 
                 const subTasksHTML = project.subTasks.map(subtask => {
-                    // Verificar se está vencida
-                    const isOverdue = subtask.dueDate && subtask.dueTime && subtask.endTime && 
-                                      new Date(`${subtask.dueDate}T${subtask.endTime}`) < new Date();
-                    const dateClass = isOverdue ? 'text-red-600 dark:text-red-400 line-through' : 'text-gray-700 dark:text-white';
+                    // Verificar se está vencida (baseado na data fim)
+                    const isOverdue = subtask.endDate && new Date(subtask.endDate + 'T23:59:59') < new Date();
+                    const dateClass = isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-white';
                     
                     return `
                     <div class="subtask-item flex items-start gap-3 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700/50 min-w-0 border border-gray-200 dark:border-gray-700">
                         <input type="checkbox" ${subtask.completed ? 'checked' : ''} data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="subtask-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer flex-shrink-0 mt-1">
                         <div class="flex-grow min-w-0">
                             <span class="text-gray-700 dark:text-gray-400 break-words ${subtask.completed ? 'line-through text-gray-500' : ''}">${subtask.text}</span>
-                            ${subtask.dueDate ? `
+                            ${subtask.dueDate || subtask.endDate ? `
                                 <div class="text-xs ${dateClass} mt-1">
-                                    📅 ${new Date(subtask.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} 
-                                    ${subtask.dueTime || ''} 
-                                    ${subtask.endTime ? ` - ${subtask.endTime}` : ''}
+                                    📅 ${subtask.dueDate ? new Date(subtask.dueDate + 'T00:00:00').toLocaleDateString('pt-BR') : ''} 
+                                    ${subtask.endDate && subtask.endDate !== subtask.dueDate ? ` até ${new Date(subtask.endDate + 'T00:00:00').toLocaleDateString('pt-BR')}` : ''}
                                     ${isOverdue ? ' ⚠️ VENCIDA' : ''}
                                 </div>
                             ` : ''}
                         </div>
+                        <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="edit-subtask-btn text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-lg flex-shrink-0" title="Editar ação">✏️</button>
                         <button data-project-id="${projectId}" data-subtask-id="${subtask.id}" class="delete-subtask-btn text-gray-500 hover:text-red-500 text-xl flex-shrink-0">&times;</button>
                     </div>
                 `;
@@ -1839,20 +1885,20 @@
                         <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">➕ Nova Ação do Projeto</h5>
                         <input type="text" data-project-id="${projectId}" class="new-subtask-input w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3" placeholder="Descreva a ação...">
                         
-                        <div class="mb-3">
-                            <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data *</label>
-                            <input type="date" data-project-id="${projectId}" class="subtask-due-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
-                        </div>
-                        
                         <div class="grid grid-cols-2 gap-3 mb-3">
                             <div>
-                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Início *</label>
-                                <input type="time" data-project-id="${projectId}" class="subtask-start-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data Início *</label>
+                                <input type="date" data-project-id="${projectId}" class="subtask-start-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
                             </div>
                             <div>
-                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Hora Fim *</label>
-                                <input type="time" data-project-id="${projectId}" class="subtask-end-time w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Data Fim *</label>
+                                <input type="date" data-project-id="${projectId}" class="subtask-end-date w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" min="${today}" required>
                             </div>
+                        </div>
+                        
+                        <div class="flex gap-2 items-center mb-3">
+                            <input type="checkbox" id="add-to-calendar-${projectId}" class="add-to-calendar-checkbox h-5 w-5 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded text-blue-500 focus:ring-blue-600 cursor-pointer">
+                            <label for="add-to-calendar-${projectId}" class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">📅 Adicionar ao Google Calendar</label>
                         </div>
                         
                         <button data-project-id="${projectId}" class="add-subtask-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Adicionar Ação</button>
@@ -3133,16 +3179,20 @@
                     return;
                 }
 
-                // Ordenar por data
+                // Ordenar por data de início
                 actionsWithDate.sort((a, b) => {
-                    const dateA = new Date(`${a.dueDate}T${a.dueTime || '00:00'}`);
-                    const dateB = new Date(`${b.dueDate}T${b.dueTime || '00:00'}`);
+                    const dateA = new Date(a.dueDate + 'T00:00:00');
+                    const dateB = new Date(b.dueDate + 'T00:00:00');
                     return dateA - dateB;
                 });
 
-                // Encontrar data mínima e máxima
-                const firstDate = new Date(actionsWithDate[0].dueDate + 'T00:00:00');
-                const lastDate = new Date(actionsWithDate[actionsWithDate.length - 1].dueDate + 'T00:00:00');
+                // Encontrar data mínima e máxima (considerando data início e fim)
+                const dates = actionsWithDate.flatMap(a => [
+                    new Date(a.dueDate + 'T00:00:00'),
+                    a.endDate ? new Date(a.endDate + 'T00:00:00') : new Date(a.dueDate + 'T00:00:00')
+                ]);
+                const firstDate = new Date(Math.min(...dates));
+                const lastDate = new Date(Math.max(...dates));
                 
                 // Adicionar margem de 1 dia antes e depois
                 const minDate = new Date(firstDate);
@@ -3180,30 +3230,30 @@
                 const now = new Date();
                 
                 actionsWithDate.forEach((action, index) => {
-                    const actionDate = new Date(action.dueDate + 'T00:00:00');
-                    const daysFromStart = Math.floor((actionDate - minDate) / (1000 * 60 * 60 * 24));
+                    const actionStartDate = new Date(action.dueDate + 'T00:00:00');
+                    const actionEndDate = action.endDate ? new Date(action.endDate + 'T00:00:00') : actionStartDate;
+                    
+                    const daysFromStart = Math.floor((actionStartDate - minDate) / (1000 * 60 * 60 * 24));
                     const leftPosition = daysFromStart * dayWidth;
                     
-                    // Determinar duração da barra (baseado em horários se disponíveis)
-                    let barWidth = dayWidth;
-                    if (action.dueTime && action.endTime) {
-                        const startTime = new Date(`${action.dueDate}T${action.dueTime}`);
-                        const endTime = new Date(`${action.dueDate}T${action.endTime}`);
-                        const durationHours = (endTime - startTime) / (1000 * 60 * 60);
-                        // Barra proporcional ao tempo (máximo 1 dia)
-                        barWidth = Math.min(dayWidth, (dayWidth * durationHours) / 24);
-                    }
+                    // Determinar duração da barra (baseado nas datas início e fim)
+                    const durationDays = Math.ceil((actionEndDate - actionStartDate) / (1000 * 60 * 60 * 24)) + 1;
+                    const barWidth = durationDays * dayWidth;
                     
-                    const isOverdue = actionDate < now && !action.completed;
+                    const isOverdue = actionEndDate < now && !action.completed;
                     const barColor = action.completed ? 'bg-green-500' : isOverdue ? 'bg-red-500' : 'bg-blue-500';
                     const textColor = action.completed ? 'text-green-700 dark:text-green-300 line-through' : isOverdue ? 'text-red-700 dark:text-red-300' : 'text-gray-900 dark:text-white';
+                    
+                    const dateRangeText = action.endDate && action.endDate !== action.dueDate 
+                        ? `${new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} - ${new Date(action.endDate + 'T00:00:00').toLocaleDateString('pt-BR')}`
+                        : new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR');
                     
                     barsHTML += `
                         <div class="flex border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition" style="min-height: 50px;">
                             <div class="w-64 flex-shrink-0 p-3 border-r border-gray-200 dark:border-gray-700">
                                 <div class="text-sm ${textColor} font-medium">${action.text}</div>
                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    ${action.dueTime || ''} ${action.endTime ? `- ${action.endTime}` : ''}
+                                    ${dateRangeText}
                                     ${action.completed ? ' ✓' : ''}
                                     ${isOverdue ? ' ⚠️' : ''}
                                 </div>
@@ -3211,7 +3261,7 @@
                             <div class="flex-grow relative" style="min-width: ${totalDays * dayWidth}px;">
                                 <div class="absolute ${barColor} rounded-md shadow-md hover:shadow-lg transition h-8 top-2 cursor-pointer" 
                                      style="left: ${leftPosition}px; width: ${barWidth}px;"
-                                     title="${action.text} - ${new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${action.dueTime || ''} ${action.endTime ? `- ${action.endTime}` : ''}">
+                                     title="${action.text} - ${dateRangeText}">
                                     <div class="text-white text-xs px-2 py-1 truncate font-semibold">${action.text.substring(0, 20)}${action.text.length > 20 ? '...' : ''}</div>
                                 </div>
                             </div>
@@ -3425,54 +3475,51 @@
                     const projectId = button.dataset.projectId;
                     const project = findTask(projectId);
                     const textInput = document.querySelector(`.new-subtask-input[data-project-id="${projectId}"]`);
-                    const dateInput = document.querySelector(`.subtask-due-date[data-project-id="${projectId}"]`);
-                    const startTimeInput = document.querySelector(`.subtask-start-time[data-project-id="${projectId}"]`);
-                    const endTimeInput = document.querySelector(`.subtask-end-time[data-project-id="${projectId}"]`);
+                    const startDateInput = document.querySelector(`.subtask-start-date[data-project-id="${projectId}"]`);
+                    const endDateInput = document.querySelector(`.subtask-end-date[data-project-id="${projectId}"]`);
+                    const addToCalendarCheckbox = document.getElementById(`add-to-calendar-${projectId}`);
                     
                     const text = textInput.value.trim();
-                    const dueDate = dateInput.value;
-                    const dueTime = startTimeInput.value;
-                    const endTime = endTimeInput.value;
+                    const startDate = startDateInput.value;
+                    const endDate = endDateInput.value;
+                    const addToCalendar = addToCalendarCheckbox?.checked || false;
                     
                     // Validações
                     if (!text) {
                         alert('Por favor, descreva a ação.');
                         return;
                     }
-                    if (!dueDate) {
-                        alert('Por favor, informe a data.');
+                    if (!startDate) {
+                        alert('Por favor, informe a data de início.');
                         return;
                     }
-                    if (!dueTime) {
-                        alert('Por favor, informe a hora de início.');
-                        return;
-                    }
-                    if (!endTime) {
-                        alert('Por favor, informe a hora de término.');
+                    if (!endDate) {
+                        alert('Por favor, informe a data de término.');
                         return;
                     }
                     
-                    // Validar que hora fim > hora início
-                    if (endTime <= dueTime) {
-                        alert('A hora de término deve ser posterior à hora de início.');
+                    // Validar que data fim >= data início
+                    if (new Date(endDate) < new Date(startDate)) {
+                        alert('A data de término deve ser igual ou posterior à data de início.');
                         return;
                     }
                     
-                    // Validar data/hora não está no passado
-                    const taskDateTime = new Date(`${dueDate}T${endTime}`);
-                    const now = new Date();
-                    if (taskDateTime < now) {
-                        alert('Não é possível definir uma data/hora no passado.');
+                    // Validar data de início não está no passado
+                    const startDateTime = new Date(startDate + 'T00:00:00');
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (startDateTime < today) {
+                        alert('Não é possível definir uma data de início no passado.');
                         return;
                     }
                     
                     // Validar que a data da ação não é posterior à data de conclusão do projeto
                     if (project && project.dueDate) {
-                        const projectDueDate = new Date(project.dueDate + 'T23:59:59');
-                        const actionEndDateTime = new Date(`${dueDate}T${endTime}`);
+                        const projectDueDate = new Date(project.dueDate + 'T00:00:00');
+                        const actionEndDate = new Date(endDate + 'T00:00:00');
                         
-                        if (actionEndDateTime > projectDueDate) {
-                            alert(`A ação não pode ter data/hora posterior à data de conclusão do projeto (${new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}).`);
+                        if (actionEndDate > projectDueDate) {
+                            alert(`A ação não pode ter data de término posterior à data de conclusão do projeto (${new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}).`);
                             return;
                         }
                     }
@@ -3483,31 +3530,53 @@
                             id: Date.now().toString(), 
                             text, 
                             completed: false, 
-                            dueDate, 
-                            dueTime,
-                            endTime 
+                            dueDate: startDate,  // Data de início
+                            endDate: endDate      // Data de fim
                         };
                         project.subTasks.push(newSubtask);
                         
                         // Limpar campos
                         textInput.value = '';
-                        dateInput.value = '';
-                        startTimeInput.value = '';
-                        endTimeInput.value = '';
+                        startDateInput.value = '';
+                        endDateInput.value = '';
+                        if (addToCalendarCheckbox) addToCalendarCheckbox.checked = false;
                         
                         saveTasks();
                         renderSubTasks(projectId);
                         
-                        // Perguntar se quer adicionar ao calendário - COMENTADO para evitar bug de fechar
-                        // showCalendarPrompt({
-                        //     text,
-                        //     dueDate,
-                        //     dueTime,
-                        //     endTime,
-                        //     project: project.text
-                        // });
+                        // Se marcou para adicionar ao calendário, abrir Google Calendar
+                        if (addToCalendar) {
+                            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${startDate.replace(/-/g, '')}/${endDate.replace(/-/g, '')}`;
+                            window.open(calendarUrl, '_blank');
+                        }
                     }
+                    return;
                 }
+                
+                if (button.classList.contains('edit-subtask-btn')) {
+                    const projectId = button.dataset.projectId;
+                    const subtaskId = button.dataset.subtaskId;
+                    const project = findTask(projectId);
+                    
+                    if (project) {
+                        const subtask = project.subTasks.find(st => st.id === subtaskId);
+                        if (subtask) {
+                            // Preencher modal com dados da sub-tarefa
+                            app.editSubtask.text.value = subtask.text;
+                            app.editSubtask.startDate.value = subtask.dueDate || '';
+                            app.editSubtask.endDate.value = subtask.endDate || '';
+                            
+                            // Armazenar IDs para salvar depois
+                            app.editSubtask.modal.dataset.projectId = projectId;
+                            app.editSubtask.modal.dataset.subtaskId = subtaskId;
+                            
+                            // Abrir modal
+                            app.editSubtask.modal.classList.remove('hidden');
+                        }
+                    }
+                    return;
+                }
+                
                 if (button.classList.contains('delete-subtask-btn')) {
                     const projectId = button.dataset.projectId;
                     const subtaskId = button.dataset.subtaskId;
@@ -3884,6 +3953,49 @@
             // Event listener para fechar o modal de Gantt
             app.gantt.closeBtn.addEventListener('click', () => {
                 app.gantt.modal.classList.add('hidden');
+            });
+
+            // Event listeners para o modal de edição de sub-tarefa
+            app.editSubtask.saveBtn.addEventListener('click', () => {
+                const projectId = app.editSubtask.modal.dataset.projectId;
+                const subtaskId = app.editSubtask.modal.dataset.subtaskId;
+                const project = findTask(projectId);
+                
+                if (project) {
+                    const subtask = project.subTasks.find(st => st.id === subtaskId);
+                    if (subtask) {
+                        const newText = app.editSubtask.text.value.trim();
+                        const newStartDate = app.editSubtask.startDate.value;
+                        const newEndDate = app.editSubtask.endDate.value;
+                        
+                        // Validações
+                        if (!newText) {
+                            alert('Por favor, descreva a ação.');
+                            return;
+                        }
+                        if (newStartDate && newEndDate && new Date(newEndDate) < new Date(newStartDate)) {
+                            alert('A data de término deve ser igual ou posterior à data de início.');
+                            return;
+                        }
+                        
+                        // Atualizar sub-tarefa
+                        subtask.text = newText;
+                        subtask.dueDate = newStartDate;
+                        subtask.endDate = newEndDate;
+                        
+                        saveTasks();
+                        renderSubTasks(projectId);
+                        app.editSubtask.modal.classList.add('hidden');
+                    }
+                }
+            });
+
+            app.editSubtask.cancelBtn.addEventListener('click', () => {
+                app.editSubtask.modal.classList.add('hidden');
+            });
+
+            app.editSubtask.closeBtn.addEventListener('click', () => {
+                app.editSubtask.modal.classList.add('hidden');
             });
 
             // Botão de renovar assinatura no modal de configurações
