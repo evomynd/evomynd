@@ -109,6 +109,38 @@
             position: relative;
             z-index: 100;
         }
+        
+        /* Setas do Tutorial */
+        .tutorial-arrow {
+            position: fixed;
+            z-index: 9999;
+            font-size: 48px;
+            color: #3b82f6;
+            animation: bounce-arrow 1s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes bounce-arrow {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .tutorial-arrow-down {
+            animation: bounce-arrow-down 1s ease-in-out infinite;
+        }
+        
+        @keyframes bounce-arrow-down {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(10px);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans antialiased">
@@ -2368,65 +2400,59 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Bem-vindo ao EVOMYND!</h3>
-                        <p class="text-gray-600">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-gray-900">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Este é um guia rápido para começar. Usaremos a tarefa de exemplo <strong class="text-gray-900 dark:text-white">"Marcar dentista"</strong> para mostrar como tudo funciona. Vamos processá-la.</p>
                     `,
                     action: 'next',
                 },
                 {
-                    content: `<p class="text-gray-600">Clique no botão <strong class="text-gray-900">Processar</strong> para decidir o que fazer com este item.</p>`,
+                    content: `<p class="text-gray-600 dark:text-gray-100">Clique no botão <strong class="text-gray-900 dark:text-white">Processar</strong> para decidir o que fazer com este item.</p>`,
                     target: () => document.querySelector('.process-btn'),
-                    action: 'click_target',
+                    action: 'show_arrow_to_process',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">O que é um "Contexto"?</h3>
-                        <p class="text-gray-600">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
-                        <p class="text-gray-700 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-gray-900">@telefone</strong>. Tente adicionar um contexto, iniciando com @, e salvar.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Contexto é a ferramenta, lugar ou pessoa que você precisa para realizar a tarefa. Ajuda a filtrar suas ações.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Para "Marcar dentista", o contexto seria <strong class="text-gray-900 dark:text-white">@telefone</strong>. Tente adicionar um contexto, iniciando com @, e salvar.</p>
                     `,
                     target: () => document.getElementById('context-wrapper'),
-                    action: 'submit_form',
+                    action: 'show_arrow_to_context',
                 },
                 {
                     content: `
-                        <h3 class="text-xl font-bold text-white mb-4">Fazer agora?</h3>
-                        <p class="text-gray-600">Esta é uma ação para fazer em menos de 2 minutos? Se sim, você pode fazê-la agora com um timer de 2 minutos. Para continuar o guia, clique em <strong class="text-gray-900">"Não"</strong>.</p>
+                        <h3 class="text-xl font-bold text-white mb-4">Próximas Ações - Concluído! 🎉</h3>
+                        <p class="text-gray-600 dark:text-gray-100">Parabéns! Você processou seu primeiro item com sucesso!</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">Agora "Marcar dentista" está na sua lista de <strong class="text-gray-900 dark:text-white">"Próximas Ações"</strong>.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">Você deseja continuar aprendendo sobre <strong class="text-gray-900 dark:text-white">Projetos</strong>?</p>
+                        <div class="flex gap-4 mt-6">
+                            <button id="tutorial-finish-inbox" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition">
+                                Finalizar Tutorial
+                            </button>
+                            <button id="tutorial-continue-projects" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition">
+                                Aprender sobre Projetos
+                            </button>
+                        </div>
                     `,
-                    target: () => app.quickActionModal.noBtn,
-                    action: 'click_target_special'
-                },
-                {
-                    content: `
-                        <h3 class="text-xl font-bold text-white mb-4">Agendar?</h3>
-                        <p class="text-gray-600">Você pode programar esta ação para uma data e hora específicas, e ela aparecerá no Calendário aqui do EVOMYND. Por agora, vamos apenas adicioná-la à lista de Próximas Ações. Clique em <strong class="text-gray-900">"Agora não"</strong>.</p>
-                    `,
-                    target: () => app.scheduleModal.laterBtn,
-                    action: 'click_target_special'
-                },
-                {
-                    content: `
-                        <h3 class="text-xl font-bold text-white mb-4">Pronto!</h3>
-                        <p class="text-gray-600">Você processou seu primeiro item! Agora você pode encontrar "Marcar dentista" na sua lista de "Próximas Ações".</p>
-                    `,
-                    action: 'next',
+                    action: 'wait_for_choice',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Agora vamos criar um Projeto!</h3>
-                        <p class="text-gray-600">Um <strong class="text-gray-900">Projeto</strong> é tudo que tem começo, meio e fim, e pode ser dividido em várias ações. Precisa de uma data final para conclusão.</p>
-                        <p class="text-gray-700 mt-2">Vamos usar como exemplo: <strong class="text-gray-900">"Viagem para Paris"</strong></p>
+                        <p class="text-gray-600 dark:text-gray-100">Um <strong class="text-gray-900 dark:text-white">Projeto</strong> é tudo que tem começo, meio e fim, e pode ser dividido em várias ações. Precisa de uma data final para conclusão.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Vamos usar como exemplo: <strong class="text-gray-900 dark:text-white">"Viagem para Paris"</strong></p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
-                        <p class="text-gray-600">Primeiro, adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Viagem para Paris"</strong> e clique em processar.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Primeiro, adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900 dark:text-white">"Viagem para Paris"</strong> e clique em processar.</p>
                     `,
                     action: 'wait_for_project',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Escolha "Projeto"</h3>
-                        <p class="text-gray-600">Agora selecione a opção <strong class="text-gray-900">"Projeto"</strong> e defina uma data de conclusão para sua viagem. Depois salve.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Agora selecione a opção <strong class="text-gray-900 dark:text-white">"Projeto"</strong> e defina uma data de conclusão para sua viagem. Depois salve.</p>
                     `,
                     target: () => document.getElementById('destination-container'),
                     action: 'submit_form',
@@ -2434,39 +2460,39 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Adicionar uma Ação ao Projeto</h3>
-                        <p class="text-gray-600">Todo projeto precisa de ações! Vá até a aba <strong class="text-gray-900">"Projetos"</strong> e clique no projeto "Viagem para Paris" para adicionar uma ação.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Todo projeto precisa de ações! Vá até a aba <strong class="text-gray-900 dark:text-white">"Projetos"</strong> e clique no projeto "Viagem para Paris" para adicionar uma ação.</p>
                     `,
                     action: 'wait_for_project_click',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Crie a primeira ação</h3>
-                        <p class="text-gray-600">Adicione uma sub-tarefa chamada <strong class="text-gray-900">"Pesquisar passagem aérea"</strong>, defina uma data e horário (início e fim), e salve.</p>
-                        <p class="text-gray-700 mt-2">Exemplo: Amanhã das 14:00 às 15:00</p>
+                        <p class="text-gray-600 dark:text-gray-100">Adicione uma sub-tarefa chamada <strong class="text-gray-900 dark:text-white">"Pesquisar passagem aérea"</strong>, defina uma data e horário (início e fim), e salve.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Exemplo: Amanhã das 14:00 às 15:00</p>
                     `,
                     action: 'wait_for_action_created',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Muito bem! Agora vamos aprender sobre "Aguardando"</h3>
-                        <p class="text-gray-600">A lista <strong class="text-gray-900">"Aguardando"</strong> é para tudo que foi delegado para alguém ou que depende da execução de outra pessoa.</p>
-                        <p class="text-gray-700 mt-3">Use quando você não tem como interferir, mas precisa acompanhar.</p>
+                        <p class="text-gray-600 dark:text-gray-100">A lista <strong class="text-gray-900 dark:text-white">"Aguardando"</strong> é para tudo que foi delegado para alguém ou que depende da execução de outra pessoa.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">Use quando você não tem como interferir, mas precisa acompanhar.</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Exemplo de "Aguardando"</h3>
-                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Resposta do contador sobre IR"</strong> e clique em processar.</p>
-                        <p class="text-gray-700 mt-2">Este é um bom exemplo: você solicitou algo ao contador e está aguardando a resposta dele.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900 dark:text-white">"Resposta do contador sobre IR"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Este é um bom exemplo: você solicitou algo ao contador e está aguardando a resposta dele.</p>
                     `,
                     action: 'wait_for_waiting_item',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Escolha "Aguardando"</h3>
-                        <p class="text-gray-600">Agora selecione a opção <strong class="text-gray-900">"Aguardando"</strong> e salve.</p>
-                        <p class="text-gray-700 mt-2">Você pode adicionar um contexto como <strong>@contador</strong> para identificar de quem está aguardando.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Agora selecione a opção <strong class="text-gray-900 dark:text-white">"Aguardando"</strong> e salve.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Você pode adicionar um contexto como <strong class="text-gray-900 dark:text-white">@contador</strong> para identificar de quem está aguardando.</p>
                     `,
                     target: () => document.getElementById('destination-container'),
                     action: 'submit_form',
@@ -2474,46 +2500,46 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Perfeito!</h3>
-                        <p class="text-gray-600">Agora você pode encontrar este item na lista <strong class="text-gray-900">"Aguardando"</strong>.</p>
-                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Revise esta lista regularmente para cobrar ou verificar o status das solicitações!</p>
+                        <p class="text-gray-600 dark:text-gray-100">Agora você pode encontrar este item na lista <strong class="text-gray-900 dark:text-white">"Aguardando"</strong>.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3"><strong>Dica importante:</strong> Revise esta lista regularmente para cobrar ou verificar o status das solicitações!</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Agora vamos para "Algum Dia/Talvez"</h3>
-                        <p class="text-gray-600">Esta lista é para tudo aquilo que está na sua mente, mas que você não quer ou não pode fazer agora.</p>
-                        <p class="text-gray-700 mt-3">São ideias, sonhos, possibilidades... Tudo que você quer lembrar depois, mas que não tem compromisso imediato.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Esta lista é para tudo aquilo que está na sua mente, mas que você não quer ou não pode fazer agora.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">São ideias, sonhos, possibilidades... Tudo que você quer lembrar depois, mas que não tem compromisso imediato.</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Exemplos de "Algum Dia/Talvez"</h3>
-                        <p class="text-gray-600">Algumas ideias que podem ir nesta lista:</p>
-                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                        <p class="text-gray-600 dark:text-gray-100">Algumas ideias que podem ir nesta lista:</p>
+                        <ul class="text-left text-gray-600 dark:text-gray-100 mt-2 space-y-1">
                             <li>• Aprender a tocar violão</li>
                             <li>• Visitar a Patagônia</li>
                             <li>• Ler livros sobre filosofia</li>
                             <li>• Fazer um curso de fotografia</li>
                         </ul>
-                        <p class="text-gray-700 mt-3">Vamos criar um exemplo prático!</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">Vamos criar um exemplo prático!</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Crie seu item "Algum Dia"</h3>
-                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Aprender italiano"</strong> e clique em processar.</p>
-                        <p class="text-gray-700 mt-2">É algo que você gostaria de fazer, mas não há urgência ou compromisso definido.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900 dark:text-white">"Aprender italiano"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">É algo que você gostaria de fazer, mas não há urgência ou compromisso definido.</p>
                     `,
                     action: 'wait_for_someday_item',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Escolha "Algum Dia/Talvez"</h3>
-                        <p class="text-gray-600">Selecione a opção <strong class="text-gray-900">"Algum Dia/Talvez"</strong> e salve.</p>
-                        <p class="text-gray-700 mt-2">Não precisa definir data, contexto ou nada. É apenas para tirar da mente e revisitar no futuro!</p>
+                        <p class="text-gray-600 dark:text-gray-100">Selecione a opção <strong class="text-gray-900 dark:text-white">"Algum Dia/Talvez"</strong> e salve.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Não precisa definir data, contexto ou nada. É apenas para tirar da mente e revisitar no futuro!</p>
                     `,
                     target: () => document.getElementById('destination-container'),
                     action: 'submit_form',
@@ -2521,47 +2547,47 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Ótimo trabalho!</h3>
-                        <p class="text-gray-600">Esta lista é poderosa porque libera sua mente de ficar lembrando tudo.</p>
-                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Revise esta lista periodicamente (mensal ou trimestral). Algumas ideias podem virar projetos reais!</p>
+                        <p class="text-gray-600 dark:text-gray-100">Esta lista é poderosa porque libera sua mente de ficar lembrando tudo.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3"><strong>Dica importante:</strong> Revise esta lista periodicamente (mensal ou trimestral). Algumas ideias podem virar projetos reais!</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Por último: Referência</h3>
-                        <p class="text-gray-600">A lista <strong class="text-gray-900">"Referência"</strong> é para tudo que você NÃO precisa fazer, mas quer guardar para consultar depois.</p>
-                        <p class="text-gray-700 mt-3">É informação útil que precisa sair da sua mente e ficar em lugar acessível.</p>
+                        <p class="text-gray-600 dark:text-gray-100">A lista <strong class="text-gray-900 dark:text-white">"Referência"</strong> é para tudo que você NÃO precisa fazer, mas quer guardar para consultar depois.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">É informação útil que precisa sair da sua mente e ficar em lugar acessível.</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Exemplos de "Referência"</h3>
-                        <p class="text-gray-600">O que pode ir nesta lista:</p>
-                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                        <p class="text-gray-600 dark:text-gray-100">O que pode ir nesta lista:</p>
+                        <ul class="text-left text-gray-600 dark:text-gray-100 mt-2 space-y-1">
                             <li>• Receita médica do oftalmologista</li>
                             <li>• Senha do Wi-Fi de casa</li>
                             <li>• Lista de vinhos que gostei</li>
                             <li>• Código do portão do condomínio</li>
                             <li>• Anotações de uma reunião importante</li>
                         </ul>
-                        <p class="text-gray-700 mt-3">São informações para <strong>consultar</strong>, não para <strong>fazer</strong>.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3">São informações para <strong class="text-gray-900 dark:text-white">consultar</strong>, não para <strong class="text-gray-900 dark:text-white">fazer</strong>.</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Crie um item de Referência</h3>
-                        <p class="text-gray-600">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900">"Senha do Wi-Fi: Casa2024!"</strong> e clique em processar.</p>
-                        <p class="text-gray-700 mt-2">É uma informação que você quer guardar para não esquecer, mas não é uma tarefa.</p>
+                        <p class="text-gray-600 dark:text-gray-100">Adicione um novo item na Caixa de Entrada chamado <strong class="text-gray-900 dark:text-white">"Senha do Wi-Fi: Casa2024!"</strong> e clique em processar.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">É uma informação que você quer guardar para não esquecer, mas não é uma tarefa.</p>
                     `,
                     action: 'wait_for_reference_item',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Escolha "Referência"</h3>
-                        <p class="text-gray-600">Selecione a opção <strong class="text-gray-900">"Referência"</strong> e salve.</p>
-                        <p class="text-gray-700 mt-2">Agora essa informação está segura e você pode consultá-la sempre que precisar!</p>
+                        <p class="text-gray-600 dark:text-gray-100">Selecione a opção <strong class="text-gray-900 dark:text-white">"Referência"</strong> e salve.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-2">Agora essa informação está segura e você pode consultá-la sempre que precisar!</p>
                     `,
                     target: () => document.getElementById('destination-container'),
                     action: 'submit_form',
@@ -2569,17 +2595,17 @@
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Perfeito!</h3>
-                        <p class="text-gray-600">Material de referência arquivado! Você pode acessá-lo na lista <strong class="text-gray-900">"Referência"</strong> sempre que precisar.</p>
-                        <p class="text-gray-700 mt-3"><strong>Dica importante:</strong> Use esta lista como seu "arquivo digital pessoal" para informações importantes!</p>
+                        <p class="text-gray-600 dark:text-gray-100">Material de referência arquivado! Você pode acessá-lo na lista <strong class="text-gray-900 dark:text-white">"Referência"</strong> sempre que precisar.</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3"><strong>Dica importante:</strong> Use esta lista como seu "arquivo digital pessoal" para informações importantes!</p>
                     `,
                     action: 'next',
                 },
                 {
                     content: `
                         <h3 class="text-xl font-bold text-white mb-4">Tutorial Completo! 🎉</h3>
-                        <p class="text-gray-600">Parabéns! Agora você domina TODOS os conceitos do GTD!</p>
-                        <p class="text-gray-700 mt-3"><strong>Sistema completo:</strong></p>
-                        <ul class="text-left text-gray-600 mt-2 space-y-1">
+                        <p class="text-gray-600 dark:text-gray-100">Parabéns! Agora você domina TODOS os conceitos do GTD!</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-3"><strong>Sistema completo:</strong></p>
+                        <ul class="text-left text-gray-600 dark:text-gray-100 mt-2 space-y-1">
                             <li>• <strong>Caixa de Entrada:</strong> Capture tudo que precisa processar</li>
                             <li>• <strong>Próximas Ações:</strong> Tarefas únicas com contexto</li>
                             <li>• <strong>Projetos:</strong> Objetivos com múltiplas ações</li>
@@ -2588,7 +2614,7 @@
                             <li>• <strong>Referência:</strong> Informações para consultar</li>
                             <li>• <strong>Calendário:</strong> Visualize ações agendadas</li>
                         </ul>
-                        <p class="text-gray-700 mt-4 font-semibold">Você está pronto para ter uma mente livre, organizada e produtiva! 🚀</p>
+                        <p class="text-gray-700 dark:text-gray-100 mt-4 font-semibold">Você está pronto para ter uma mente livre, organizada e produtiva! 🚀</p>
                     `,
                     action: 'next',
                 }
@@ -2602,11 +2628,39 @@
             function endTutorial() {
                 app.tutorial.modal.classList.add('hidden');
                 document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                removeTutorialArrow();
                 localStorage.setItem('gtd_tutorial_completed', 'true');
+            }
+            
+            function createTutorialArrow(targetElement, direction = 'down') {
+                removeTutorialArrow();
+                
+                const arrow = document.createElement('div');
+                arrow.id = 'tutorial-arrow';
+                arrow.className = direction === 'down' ? 'tutorial-arrow tutorial-arrow-down' : 'tutorial-arrow';
+                arrow.innerHTML = direction === 'down' ? '⬇️' : '➡️';
+                document.body.appendChild(arrow);
+                
+                const rect = targetElement.getBoundingClientRect();
+                if (direction === 'down') {
+                    arrow.style.top = (rect.top - 60) + 'px';
+                    arrow.style.left = (rect.left + rect.width / 2 - 24) + 'px';
+                } else {
+                    arrow.style.top = (rect.top + rect.height / 2 - 24) + 'px';
+                    arrow.style.left = (rect.left - 60) + 'px';
+                }
+            }
+            
+            function removeTutorialArrow() {
+                const existingArrow = document.getElementById('tutorial-arrow');
+                if (existingArrow) {
+                    existingArrow.remove();
+                }
             }
 
             function executeTutorialStep() {
                 document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                removeTutorialArrow();
                 
                 if (tutorialStep >= tutorialSteps.length) {
                     endTutorial();
@@ -2622,6 +2676,95 @@
                 if (step.action === 'next') {
                     app.tutorial.nextBtn.textContent = (tutorialStep === tutorialSteps.length - 1) ? 'Concluir' : 'Próximo';
                     app.tutorial.nextBtn.onclick = advanceTutorial;
+                } else if (step.action === 'show_arrow_to_process') {
+                    app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.disabled = false;
+                    app.tutorial.nextBtn.onclick = () => {
+                        app.tutorial.modal.classList.add('hidden');
+                        if (targetElement) {
+                            createTutorialArrow(targetElement, 'down');
+                            targetElement.classList.add('tutorial-highlight');
+                            
+                            targetElement.addEventListener('click', function handler() {
+                                setTimeout(() => {
+                                    removeTutorialArrow();
+                                    document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                                    advanceTutorial();
+                                }, 150);
+                            }, { once: true });
+                        }
+                    };
+                } else if (step.action === 'show_arrow_to_context') {
+                    app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.disabled = false;
+                    app.tutorial.nextBtn.onclick = () => {
+                        app.tutorial.modal.classList.add('hidden');
+                        const contextInput = document.getElementById('context-input');
+                        if (contextInput) {
+                            createTutorialArrow(contextInput, 'down');
+                            contextInput.classList.add('tutorial-highlight');
+                            
+                            // Monitora quando o usuário salva o formulário
+                            app.modal.form.addEventListener('submit', function handler(e) {
+                                setTimeout(() => {
+                                    removeTutorialArrow();
+                                    document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                                    
+                                    // Pular os pop-ups de "Fazer Agora" e "Agendar"
+                                    // Fechar os modais automaticamente se abrirem
+                                    const closeQuickActionModal = () => {
+                                        if (!app.quickActionModal.modal.classList.contains('hidden')) {
+                                            app.quickActionModal.modal.classList.add('hidden');
+                                        }
+                                    };
+                                    
+                                    const closeScheduleModal = () => {
+                                        if (!app.scheduleModal.modal.classList.contains('hidden')) {
+                                            app.scheduleModal.modal.classList.add('hidden');
+                                        }
+                                    };
+                                    
+                                    // Verificar e fechar modais a cada 100ms
+                                    const checkModalsInterval = setInterval(() => {
+                                        closeQuickActionModal();
+                                        closeScheduleModal();
+                                    }, 100);
+                                    
+                                    // Após 1 segundo, avançar para o próximo step e parar de verificar
+                                    setTimeout(() => {
+                                        clearInterval(checkModalsInterval);
+                                        advanceTutorial();
+                                    }, 1000);
+                                }, 150);
+                            }, { once: true });
+                        }
+                    };
+                } else if (step.action === 'wait_for_choice') {
+                    // Ocultar os botões padrão do tutorial
+                    app.tutorial.nextBtn.style.display = 'none';
+                    app.tutorial.skipBtn.style.display = 'none';
+                    
+                    // Adicionar event listeners para os novos botões
+                    setTimeout(() => {
+                        const finishBtn = document.getElementById('tutorial-finish-inbox');
+                        const continueBtn = document.getElementById('tutorial-continue-projects');
+                        
+                        if (finishBtn) {
+                            finishBtn.addEventListener('click', () => {
+                                app.tutorial.nextBtn.style.display = 'block';
+                                app.tutorial.skipBtn.style.display = 'block';
+                                endTutorial();
+                            }, { once: true });
+                        }
+                        
+                        if (continueBtn) {
+                            continueBtn.addEventListener('click', () => {
+                                app.tutorial.nextBtn.style.display = 'block';
+                                app.tutorial.skipBtn.style.display = 'block';
+                                advanceTutorial();
+                            }, { once: true });
+                        }
+                    }, 100);
                 } else if (step.action === 'wait_for_project') {
                     app.tutorial.nextBtn.textContent = 'Aguardando...';
                     app.tutorial.nextBtn.disabled = true;
@@ -2743,17 +2886,47 @@
                             }
                         }
                     }, 500);
-                } else {
+                } else if (step.action === 'submit_form') {
                     app.tutorial.nextBtn.textContent = 'Entendi';
                     app.tutorial.nextBtn.disabled = false;
                     app.tutorial.nextBtn.onclick = () => {
                         app.tutorial.modal.classList.add('hidden');
                         if (targetElement) {
                             targetElement.classList.add('tutorial-highlight');
-                            const eventType = step.action === 'submit_form' ? 'submit' : 'click';
-                            const listenerTarget = step.action === 'submit_form' ? app.modal.form : targetElement;
                             
-                            listenerTarget.addEventListener(eventType, function handler(e) {
+                            app.modal.form.addEventListener('submit', function handler(e) {
+                                setTimeout(() => {
+                                    document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                                    advanceTutorial();
+                                }, 150);
+                            }, { once: true });
+                        }
+                    };
+                } else if (step.action === 'click_target') {
+                    app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.disabled = false;
+                    app.tutorial.nextBtn.onclick = () => {
+                        app.tutorial.modal.classList.add('hidden');
+                        if (targetElement) {
+                            targetElement.classList.add('tutorial-highlight');
+                            
+                            targetElement.addEventListener('click', function handler() {
+                                setTimeout(() => {
+                                    document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+                                    advanceTutorial();
+                                }, 150);
+                            }, { once: true });
+                        }
+                    };
+                } else if (step.action === 'click_target_special') {
+                    app.tutorial.nextBtn.textContent = 'Entendi';
+                    app.tutorial.nextBtn.disabled = false;
+                    app.tutorial.nextBtn.onclick = () => {
+                        app.tutorial.modal.classList.add('hidden');
+                        if (targetElement) {
+                            targetElement.classList.add('tutorial-highlight');
+                            
+                            targetElement.addEventListener('click', function handler() {
                                 setTimeout(() => {
                                     document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
                                     advanceTutorial();
