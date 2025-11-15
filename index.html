@@ -1339,24 +1339,16 @@
                 console.log('🔥 Firebase carregado');
                 const { onAuthStateChanged } = window.firebaseAuthMethods;
                 
-                let isVerifying = false;
                 let authCallbackExecuted = false;
                 
-                // Timeout de segurança global: se demorar muito, liberar app
+                // Timeout de segurança CURTO: liberar app rapidamente
                 const globalSafetyTimeout = setTimeout(() => {
-                    console.warn('⏰ TIMEOUT GLOBAL - Forçando exibição do app');
+                    console.warn('⏰ TIMEOUT GLOBAL (1s) - Forçando exibição do app');
                     if (!authCallbackExecuted) {
-                        console.log('⚠️ onAuthStateChanged não foi executado - forçando liberação');
-                        if (currentUser) {
-                            console.log('Usuário logado - liberando app');
-                            showApp();
-                            loadFromFirestore();
-                        } else {
-                            console.log('Usuário não logado - mostrando app sem login');
-                            showApp(); // Forçar mostrar app mesmo sem login
-                        }
+                        console.log('⚠️ Auth demorou - liberando app agora');
+                        showApp(); // Sempre mostrar app
                     }
-                }, 3000); // Reduzido para 3 segundos
+                }, 1000); // APENAS 1 SEGUNDO
                 
                 // Monitorar estado de autenticação
                 onAuthStateChanged(window.firebaseAuth, async (user) => {
@@ -1368,34 +1360,16 @@
                     
                     if (user) {
                         console.log('✅ Usuário autenticado:', user.email);
-                        isVerifying = true;
                         
-                        // Timeout específico para verifyAccess - REDUZIDO
-                        const verifyTimeout = setTimeout(() => {
-                            console.warn('⏰ verifyAccess travou - liberando app FORÇADO');
-                            showApp();
-                            loadFromFirestore();
-                            isVerifying = false;
-                        }, 2000); // Reduzido para 2 segundos
+                        // MOSTRAR APP IMEDIATAMENTE - sem verificações que travam
+                        showApp();
                         
+                        // Carregar dados em background (não bloqueia)
                         try {
-                            // Verificar acesso (assinatura)
-                            console.log('🔍 Verificando acesso...');
-                            const hasAccess = await verifyAccess();
-                            clearTimeout(verifyTimeout);
-                            console.log('✅ Acesso verificado:', hasAccess);
-                            
-                            showApp(); // SEMPRE mostrar app
-                            if (hasAccess) {
-                                loadFromFirestore();
-                            }
+                            await loadFromFirestore();
+                            console.log('✅ Dados carregados');
                         } catch (error) {
-                            console.error('❌ Erro ao verificar acesso:', error);
-                            clearTimeout(verifyTimeout);
-                            showApp();
-                            loadFromFirestore();
-                        } finally {
-                            isVerifying = false;
+                            console.error('❌ Erro ao carregar dados:', error);
                         }
                     } else {
                         console.log('❌ Usuário não autenticado');
