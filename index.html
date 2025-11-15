@@ -427,16 +427,23 @@
 
     <!-- Modal de Cronograma do Projeto -->
     <div id="gantt-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto relative">
-            <div class="flex justify-between items-center mb-6">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col relative">
+            <div class="flex justify-between items-center p-6 pb-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                 <h3 id="gantt-project-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
-                <button id="gantt-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
+                <div class="flex gap-3 items-center">
+                    <button id="gantt-export-pdf-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center gap-2">
+                        📄 Exportar PDF
+                    </button>
+                    <button id="gantt-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
+                </div>
             </div>
             
-            <div id="gantt-project-info" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"></div>
-            
-            <div id="gantt-chart-container" class="overflow-x-auto">
-                <div id="gantt-chart" class="min-w-full"></div>
+            <div class="flex-grow overflow-y-auto p-6">
+                <div id="gantt-project-info" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"></div>
+                
+                <div id="gantt-chart-container" class="overflow-x-auto">
+                    <div id="gantt-chart" class="min-w-full"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -468,11 +475,11 @@
                 </div>
                 
                 <div class="flex gap-3 mt-6">
-                    <button id="edit-subtask-save-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
-                        Salvar
-                    </button>
                     <button id="edit-subtask-cancel-btn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
                         Cancelar
+                    </button>
+                    <button id="edit-subtask-save-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">
+                        Salvar
                     </button>
                 </div>
             </div>
@@ -883,6 +890,7 @@
                     chartContainer: document.getElementById('gantt-chart-container'),
                     chart: document.getElementById('gantt-chart'),
                     closeBtn: document.getElementById('gantt-close-btn'),
+                    exportPdfBtn: document.getElementById('gantt-export-pdf-btn'),
                 },
                 editSubtask: {
                     modal: document.getElementById('edit-subtask-modal'),
@@ -1815,7 +1823,6 @@
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end flex-shrink-0">
                              ${isProject ? `
-                                <button data-id="${task.id}" class="gantt-btn bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Ver cronograma">📊 Cronograma</button>
                                 <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
                              ` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
@@ -1905,7 +1912,16 @@
                     </div>
                 `; 
                 
-                container.innerHTML = `<h4 class="text-sm font-bold text-gray-700 dark:text-gray-400 mb-2">Ações do Projeto</h4><div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>${formHTML}`; 
+                container.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-sm font-bold text-gray-700 dark:text-gray-400">Ações do Projeto</h4>
+                        <button data-id="${projectId}" class="gantt-btn bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center gap-2" title="Ver cronograma">
+                            📊 Cronograma
+                        </button>
+                    </div>
+                    <div class="space-y-2">${project.subTasks.length > 0 ? subTasksHTML : '<p class="text-gray-600 dark:text-gray-500 text-sm py-2">Nenhuma ação adicionada a este projeto.</p>'}</div>
+                    ${formHTML}
+                `; 
             };
             
             const renderListByStatus = (status, element, emptyMessage, options = {}) => { 
@@ -3273,6 +3289,143 @@
                 app.gantt.modal.classList.remove('hidden');
             }
 
+            // --- EXPORTAR CRONOGRAMA PARA PDF ---
+            function exportGanttToPDF() {
+                const projectTitle = app.gantt.projectTitle.textContent;
+                
+                // Criar uma nova janela com o conteúdo do cronograma
+                const printWindow = window.open('', '', 'width=1200,height=800');
+                
+                const projectInfoContent = app.gantt.projectInfo.innerHTML;
+                const chartContent = app.gantt.chart.innerHTML;
+                
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Cronograma - ${projectTitle}</title>
+                        <style>
+                            * { margin: 0; padding: 0; box-sizing: border-box; }
+                            body { 
+                                font-family: system-ui, -apple-system, sans-serif; 
+                                padding: 20px; 
+                                background: white; 
+                                color: #1f2937;
+                            }
+                            h1 { 
+                                font-size: 24px; 
+                                font-weight: bold; 
+                                margin-bottom: 20px; 
+                                color: #111827;
+                                text-align: center;
+                            }
+                            .project-info { 
+                                background: #eff6ff; 
+                                padding: 15px; 
+                                border-radius: 8px; 
+                                margin-bottom: 20px;
+                            }
+                            .project-info > div { 
+                                display: flex; 
+                                gap: 20px; 
+                                font-size: 14px; 
+                                flex-wrap: wrap;
+                            }
+                            .project-info > div > div { 
+                                flex: 1; 
+                                min-width: 200px;
+                            }
+                            .project-info .font-semibold { 
+                                font-weight: 600; 
+                                color: #374151;
+                            }
+                            .project-info .ml-2 { 
+                                margin-left: 8px; 
+                                color: #111827;
+                            }
+                            #gantt-chart { 
+                                border: 1px solid #e5e7eb; 
+                                border-radius: 8px; 
+                                overflow: hidden;
+                            }
+                            .flex { display: flex; }
+                            .flex-grow { flex-grow: 1; }
+                            .flex-shrink-0 { flex-shrink: 0; }
+                            .items-start { align-items: flex-start; }
+                            .justify-between { justify-content: space-between; }
+                            .border-b { border-bottom: 1px solid #e5e7eb; }
+                            .border-b-2 { border-bottom: 2px solid #d1d5db; }
+                            .border-r { border-right: 1px solid #e5e7eb; }
+                            .border-gray-300 { border-color: #d1d5db; }
+                            .border-gray-200 { border-color: #e5e7eb; }
+                            .border-gray-700 { border-color: #374151; }
+                            .bg-gray-100 { background-color: #f3f4f6; }
+                            .bg-gray-200 { background-color: #e5e7eb; }
+                            .bg-blue-500 { background-color: #3b82f6; }
+                            .bg-green-500 { background-color: #10b981; }
+                            .bg-red-500 { background-color: #ef4444; }
+                            .text-gray-900 { color: #111827; }
+                            .text-gray-700 { color: #374151; }
+                            .text-gray-600 { color: #4b5563; }
+                            .text-gray-500 { color: #6b7280; }
+                            .text-gray-400 { color: #9ca3af; }
+                            .text-white { color: white; }
+                            .text-green-700 { color: #15803d; }
+                            .text-red-700 { color: #b91c1c; }
+                            .font-bold { font-weight: bold; }
+                            .font-semibold { font-weight: 600; }
+                            .font-medium { font-medium: 500; }
+                            .text-xs { font-size: 0.75rem; }
+                            .text-sm { font-size: 0.875rem; }
+                            .text-center { text-align: center; }
+                            .line-through { text-decoration: line-through; }
+                            .p-2 { padding: 0.5rem; }
+                            .p-3 { padding: 0.75rem; }
+                            .mt-1 { margin-top: 0.25rem; }
+                            .w-64 { width: 16rem; }
+                            .sticky { position: sticky; }
+                            .top-0 { top: 0; }
+                            .z-10 { z-index: 10; }
+                            .relative { position: relative; }
+                            .absolute { position: absolute; }
+                            .rounded-md { border-radius: 0.375rem; }
+                            .shadow-md { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+                            .truncate { 
+                                overflow: hidden; 
+                                text-overflow: ellipsis; 
+                                white-space: nowrap; 
+                            }
+                            .min-w-full { min-width: 100%; }
+                            @media print {
+                                body { padding: 10px; }
+                                h1 { font-size: 20px; margin-bottom: 15px; }
+                                .project-info { padding: 10px; margin-bottom: 15px; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Cronograma do Projeto: ${projectTitle}</h1>
+                        <div class="project-info">${projectInfoContent}</div>
+                        <div id="gantt-chart">${chartContent}</div>
+                        <script>
+                            window.onload = function() {
+                                setTimeout(function() {
+                                    window.print();
+                                    window.onafterprint = function() {
+                                        window.close();
+                                    };
+                                }, 500);
+                            };
+                        </script>
+                    </body>
+                    </html>
+                `;
+                
+                printWindow.document.write(htmlContent);
+                printWindow.document.close();
+            }
+
 
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
@@ -3953,6 +4106,11 @@
             // Event listener para fechar o modal de Gantt
             app.gantt.closeBtn.addEventListener('click', () => {
                 app.gantt.modal.classList.add('hidden');
+            });
+
+            // Event listener para exportar cronograma em PDF
+            app.gantt.exportPdfBtn.addEventListener('click', () => {
+                exportGanttToPDF();
             });
 
             // Event listeners para o modal de edição de sub-tarefa
