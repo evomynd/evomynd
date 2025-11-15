@@ -1369,32 +1369,32 @@
             
             // Inicializar Firebase e Auth
             waitForFirebase().then(() => {
+                console.log('🔥 Firebase carregado');
                 const { onAuthStateChanged } = window.firebaseAuthMethods;
                 
                 let isVerifying = false;
+                let authCallbackExecuted = false;
                 
                 // Timeout de segurança global: se demorar muito, liberar app
                 const globalSafetyTimeout = setTimeout(() => {
                     console.warn('⏰ TIMEOUT GLOBAL - Forçando exibição do app');
-                    if (currentUser) {
-                        console.log('Usuário logado - liberando app');
-                        showApp();
-                        if (!isVerifying) {
-                            loadFromFirestore();
-                        }
-                    } else {
-                        console.log('Usuário não logado - mostrando tela de login');
-                        if (REQUIRE_LOGIN) {
-                            showLoginRequired();
-                        } else {
+                    if (!authCallbackExecuted) {
+                        console.log('⚠️ onAuthStateChanged não foi executado - forçando liberação');
+                        if (currentUser) {
+                            console.log('Usuário logado - liberando app');
                             showApp();
+                            loadFromFirestore();
+                        } else {
+                            console.log('Usuário não logado - mostrando app sem login');
+                            showApp(); // Forçar mostrar app mesmo sem login
                         }
                     }
-                }, 5000); // 5 segundos
+                }, 3000); // Reduzido para 3 segundos
                 
                 // Monitorar estado de autenticação
                 onAuthStateChanged(window.firebaseAuth, async (user) => {
                     console.log('🔄 onAuthStateChanged disparado:', user?.email || 'sem usuário');
+                    authCallbackExecuted = true;
                     clearTimeout(globalSafetyTimeout); // Cancelar timeout global
                     currentUser = user;
                     updateUserUI(user);
@@ -1403,18 +1403,22 @@
                         console.log('✅ Usuário autenticado:', user.email);
                         isVerifying = true;
                         
-                        // Timeout específico para verifyAccess
+                        // Timeout específico para verifyAccess - REDUZIDO
                         const verifyTimeout = setTimeout(() => {
-                            console.warn('⏰ verifyAccess travou - liberando app');
+                            console.warn('⏰ verifyAccess travou - liberando app FORÇADO');
                             showApp();
                             loadFromFirestore();
-                        }, 3000); // 3 segundos
+                            isVerifying = false;
+                        }, 2000); // Reduzido para 2 segundos
                         
                         try {
                             // Verificar acesso (assinatura)
+                            console.log('🔍 Verificando acesso...');
                             const hasAccess = await verifyAccess();
                             clearTimeout(verifyTimeout);
+                            console.log('✅ Acesso verificado:', hasAccess);
                             
+                            showApp(); // SEMPRE mostrar app
                             if (hasAccess) {
                                 loadFromFirestore();
                             }
@@ -1457,6 +1461,15 @@
                     const checkoutUrl = `https://mpago.la/2174QUB?external_reference=${userId}`;
                     window.open(checkoutUrl, '_blank');
                 });
+                
+                console.log('🔐 Monitoramento de autenticação ativado');
+            }).catch(error => {
+                console.error('❌ ERRO CRÍTICO ao carregar Firebase:', error);
+                // Se Firebase falhar completamente, mostrar app em 1 segundo
+                setTimeout(() => {
+                    console.log('🆘 EMERGÊNCIA: Forçando exibição do app após erro no Firebase');
+                    showApp();
+                }, 1000);
             });
             
             // --- PWA: INSTALAÇÃO DO APP ---
@@ -4164,10 +4177,33 @@
             });
 
             // --- INICIALIZAÇÃO ---
+            console.log('📱 Iniciando aplicação...');
             applyTheme(currentTheme); // Aplica o tema salvo
             render();
-            startTutorial();
-            showNextReviewDate();
+            
+            // Tentar iniciar tutorial com proteção
+            try {
+                if (typeof startTutorial === 'function') {
+                    startTutorial();
+                } else {
+                    console.warn('⚠️ Função startTutorial não encontrada');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao iniciar tutorial:', error);
+            }
+            
+            // Tentar mostrar próxima data de revisão com proteção
+            try {
+                if (typeof showNextReviewDate === 'function') {
+                    showNextReviewDate();
+                } else {
+                    console.warn('⚠️ Função showNextReviewDate não encontrada');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao mostrar próxima revisão:', error);
+            }
+            
+            console.log('✅ Aplicação iniciada com sucesso');
         });
     </script>
 </body>
