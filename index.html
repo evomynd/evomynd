@@ -279,12 +279,6 @@
         <main>
             <!-- Visualização: Caixa de Entrada -->
             <div id="inbox-view" class="view">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="text" id="new-task-input" placeholder="O que está na sua mente?" class="flex-grow bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md py-3 px-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                        <button id="add-task-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 flex-shrink-0">Adicionar</button>
-                    </div>
-                </div>
                 <div id="inbox-list" class="mt-8"></div>
             </div>
 
@@ -680,8 +674,8 @@
             const app = {
                 navTabs: document.querySelectorAll('.nav-tab'),
                 views: document.querySelectorAll('.view'),
-                newTaskInput: document.getElementById('new-task-input'),
-                addTaskBtn: document.getElementById('add-task-btn'),
+                // newTaskInput: document.getElementById('new-task-input'), // Removido
+                // addTaskBtn: document.getElementById('add-task-btn'), // Removido
                 inboxList: document.getElementById('inbox-list'),
                 nextActionsList: document.getElementById('next-actions-list'),
                 projectsList: document.getElementById('projects-list'),
@@ -1947,29 +1941,30 @@
                 });
             };
             
-            const addTask = () => { 
-                const text = app.newTaskInput.value.trim(); 
-                console.log('🔵 addTask chamado. Texto:', text);
-                if (text) { 
-                    const newTask = { 
-                        id: Date.now().toString(), 
-                        text: text, 
-                        status: 'inbox', 
-                        context: null, 
-                        dueDate: null, 
-                        dueTime: null 
-                    };
-                    tasks.unshift(newTask); 
-                    console.log('✅ Nova tarefa criada:', newTask);
-                    console.log('📋 Total de tarefas:', tasks.length);
-                    app.newTaskInput.value = ''; 
-                    saveTasks();
-                    render(); 
-                    console.log('🔄 Render concluído');
-                } else {
-                    console.log('⚠️ Texto vazio, não adicionado');
-                }
-            };
+            // Função addTask removida - agora usamos botões diretos em cada lista
+            // const addTask = () => { 
+            //     const text = app.newTaskInput.value.trim(); 
+            //     console.log('🔵 addTask chamado. Texto:', text);
+            //     if (text) { 
+            //         const newTask = { 
+            //             id: Date.now().toString(), 
+            //             text: text, 
+            //             status: 'inbox', 
+            //             context: null, 
+            //             dueDate: null, 
+            //             dueTime: null 
+            //         };
+            //         tasks.unshift(newTask); 
+            //         console.log('✅ Nova tarefa criada:', newTask);
+            //         console.log('📋 Total de tarefas:', tasks.length);
+            //         app.newTaskInput.value = ''; 
+            //         saveTasks();
+            //         render(); 
+            //         console.log('🔄 Render concluído');
+            //     } else {
+            //         console.log('⚠️ Texto vazio, não adicionado');
+            //     }
+            // };
             
             const showConfirm = (message, onConfirm, okText = 'OK', cancelText = 'Cancelar') => { 
                 app.confirmModal.text.textContent = message; 
@@ -2965,8 +2960,8 @@
 
 
             // --- EVENT LISTENERS ---
-            app.addTaskBtn.addEventListener('click', addTask);
-            app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
+            // app.addTaskBtn.addEventListener('click', addTask); // Removido - campo de input removido
+            // app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask()); // Removido
             
             // Event listeners para botões de adicionar diretamente em cada lista
             document.getElementById('add-next-action-btn')?.addEventListener('click', addDirectNextAction);
@@ -2975,14 +2970,14 @@
             document.getElementById('add-someday-btn')?.addEventListener('click', addDirectSomeday);
             document.getElementById('add-reference-btn')?.addEventListener('click', addDirectReference);
             
-            app.newTaskInput.addEventListener('focus', () => {
-                setTimeout(() => {
-                    app.newTaskInput.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                    });
-                }, 300);
-            });
+            // app.newTaskInput.addEventListener('focus', () => { // Removido
+            //     setTimeout(() => {
+            //         app.newTaskInput.scrollIntoView({
+            //             behavior: 'smooth',
+            //             block: 'center',
+            //         });
+            //     }, 300);
+            // });
             
             app.navTabs.forEach(tab => tab.addEventListener('click', () => { 
                 currentView = tab.dataset.view; 
