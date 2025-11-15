@@ -425,30 +425,6 @@
     </div>
 
 
-    <!-- Modal de Cronograma do Projeto -->
-    <div id="gantt-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col relative">
-            <div class="flex justify-between items-center p-6 pb-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-                <h3 id="gantt-project-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
-                <div class="flex gap-3 items-center">
-                    <button id="gantt-export-pdf-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center gap-2">
-                        📄 Exportar PDF
-                    </button>
-                    <button id="gantt-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
-                </div>
-            </div>
-            
-            <div class="flex-grow overflow-y-auto p-6">
-                <div id="gantt-project-info" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"></div>
-                
-                <div id="gantt-chart-container" class="overflow-x-auto">
-                    <div id="gantt-chart" class="min-w-full"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Modal de Edição de Ação do Projeto -->
     <div id="edit-subtask-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
         <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative">
@@ -882,15 +858,6 @@
                     somedayBtn: document.getElementById('tutorial-someday-btn'),
                     referenceBtn: document.getElementById('tutorial-reference-btn'),
                     cancelBtn: document.getElementById('tutorial-selection-cancel-btn'),
-                },
-                gantt: {
-                    modal: document.getElementById('gantt-modal'),
-                    projectTitle: document.getElementById('gantt-project-title'),
-                    projectInfo: document.getElementById('gantt-project-info'),
-                    chartContainer: document.getElementById('gantt-chart-container'),
-                    chart: document.getElementById('gantt-chart'),
-                    closeBtn: document.getElementById('gantt-close-btn'),
-                    exportPdfBtn: document.getElementById('gantt-export-pdf-btn'),
                 },
                 editSubtask: {
                     modal: document.getElementById('edit-subtask-modal'),
@@ -3166,18 +3133,32 @@
                 }
             }
 
-            // --- CRONOGRAMA DE GANTT ---
-            function showGanttChart(projectId) {
-                const project = findTask(projectId);
-                if (!project || !project.subTasks || project.subTasks.length === 0) {
-                    alert('Este projeto não tem ações para exibir no cronograma.');
-                    return;
-                }
-
-                // Atualizar título e informações do projeto
-                app.gantt.projectTitle.textContent = project.text;
-                
-                const projectInfoHTML = `
+            // --- EVENT LISTENERS ---
+            app.addTaskBtn.addEventListener('click', addTask);
+            app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
+            
+            // Event listeners para botões de adicionar diretamente em cada lista
+            document.getElementById('add-next-action-btn')?.addEventListener('click', addDirectNextAction);
+            document.getElementById('add-project-btn')?.addEventListener('click', addDirectProject);
+            document.getElementById('add-waiting-btn')?.addEventListener('click', addDirectWaiting);
+            document.getElementById('add-someday-btn')?.addEventListener('click', addDirectSomeday);
+            document.getElementById('add-reference-btn')?.addEventListener('click', addDirectReference);
+            
+            app.newTaskInput.addEventListener('focus', () => {
+                setTimeout(() => {
+                    app.newTaskInput.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                    });
+                }, 300);
+            });
+            
+            app.navTabs.forEach(tab => tab.addEventListener('click', () => { 
+                currentView = tab.dataset.view; 
+                render(); 
+            }));
+            
+            // Event listener para dropdown de contextos (usando event delegation)
                     <div class="flex flex-col sm:flex-row gap-4 text-sm">
                         <div class="flex-1">
                             <span class="font-semibold text-gray-700 dark:text-gray-300">Data de Início:</span>
