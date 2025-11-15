@@ -425,6 +425,23 @@
     </div>
 
 
+    <!-- Modal de Cronograma do Projeto -->
+    <div id="gantt-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] hidden">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="gantt-project-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                <button id="gantt-close-btn" class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 text-3xl font-bold leading-none">&times;</button>
+            </div>
+            
+            <div id="gantt-project-info" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"></div>
+            
+            <div id="gantt-chart-container" class="overflow-x-auto">
+                <div id="gantt-chart" class="min-w-full"></div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Timer Overlay -->
     <div id="timer-overlay" class="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-95 dark:bg-opacity-95 flex flex-col items-center justify-center p-4 text-gray-900 dark:text-white hidden z-50">
         <h2 id="timer-task-text" class="text-3xl md:text-5xl font-bold mb-8 text-center"></h2>
@@ -820,6 +837,14 @@
                     somedayBtn: document.getElementById('tutorial-someday-btn'),
                     referenceBtn: document.getElementById('tutorial-reference-btn'),
                     cancelBtn: document.getElementById('tutorial-selection-cancel-btn'),
+                },
+                gantt: {
+                    modal: document.getElementById('gantt-modal'),
+                    projectTitle: document.getElementById('gantt-project-title'),
+                    projectInfo: document.getElementById('gantt-project-info'),
+                    chartContainer: document.getElementById('gantt-chart-container'),
+                    chart: document.getElementById('gantt-chart'),
+                    closeBtn: document.getElementById('gantt-close-btn'),
                 },
                 settings: {
                     modal: document.getElementById('settings-modal'),
@@ -1742,7 +1767,10 @@
                            </div>
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-0 sm:ml-4 flex-wrap justify-end flex-shrink-0">
-                             ${isProject ? `<button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>` : ''}
+                             ${isProject ? `
+                                <button data-id="${task.id}" class="gantt-btn bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Ver cronograma">📊 Cronograma</button>
+                                <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
+                             ` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
                             ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Editar</button>` : ''}
                             ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
@@ -3063,6 +3091,138 @@
                 }
             }
 
+            // --- CRONOGRAMA DE GANTT ---
+            function showGanttChart(projectId) {
+                const project = findTask(projectId);
+                if (!project || !project.subTasks || project.subTasks.length === 0) {
+                    alert('Este projeto não tem ações para exibir no cronograma.');
+                    return;
+                }
+
+                // Atualizar título e informações do projeto
+                app.gantt.projectTitle.textContent = project.text;
+                
+                const projectInfoHTML = `
+                    <div class="flex flex-col sm:flex-row gap-4 text-sm">
+                        <div class="flex-1">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Data de Início:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">${project.startDate ? new Date(project.startDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'Não definida'}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Data de Conclusão:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">${project.dueDate ? new Date(project.dueDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'Não definida'}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Total de Ações:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">${project.subTasks.length}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Concluídas:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">${project.subTasks.filter(st => st.completed).length}</span>
+                        </div>
+                    </div>
+                `;
+                app.gantt.projectInfo.innerHTML = projectInfoHTML;
+
+                // Filtrar apenas ações com data
+                const actionsWithDate = project.subTasks.filter(st => st.dueDate);
+                
+                if (actionsWithDate.length === 0) {
+                    app.gantt.chart.innerHTML = '<p class="text-gray-600 dark:text-gray-400 text-center py-8">Nenhuma ação possui data definida para exibir no cronograma.</p>';
+                    app.gantt.modal.classList.remove('hidden');
+                    return;
+                }
+
+                // Ordenar por data
+                actionsWithDate.sort((a, b) => {
+                    const dateA = new Date(`${a.dueDate}T${a.dueTime || '00:00'}`);
+                    const dateB = new Date(`${b.dueDate}T${b.dueTime || '00:00'}`);
+                    return dateA - dateB;
+                });
+
+                // Encontrar data mínima e máxima
+                const firstDate = new Date(actionsWithDate[0].dueDate + 'T00:00:00');
+                const lastDate = new Date(actionsWithDate[actionsWithDate.length - 1].dueDate + 'T00:00:00');
+                
+                // Adicionar margem de 1 dia antes e depois
+                const minDate = new Date(firstDate);
+                minDate.setDate(minDate.getDate() - 1);
+                const maxDate = new Date(lastDate);
+                maxDate.setDate(maxDate.getDate() + 1);
+                
+                const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24));
+                const dayWidth = Math.max(40, 800 / totalDays); // Mínimo 40px por dia
+
+                // Gerar cabeçalho do calendário
+                let headerHTML = '<div class="flex border-b-2 border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700/50 sticky top-0 z-10">';
+                headerHTML += '<div class="w-64 flex-shrink-0 p-3 font-bold text-gray-900 dark:text-white border-r border-gray-300 dark:border-gray-600">Ação</div>';
+                headerHTML += '<div class="flex-grow flex">';
+                
+                for (let i = 0; i < totalDays; i++) {
+                    const currentDate = new Date(minDate);
+                    currentDate.setDate(currentDate.getDate() + i);
+                    const dayStr = currentDate.getDate();
+                    const monthStr = currentDate.toLocaleDateString('pt-BR', { month: 'short' });
+                    const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+                    
+                    headerHTML += `
+                        <div class="flex-shrink-0 text-center p-2 border-r border-gray-200 dark:border-gray-600 ${isWeekend ? 'bg-gray-200 dark:bg-gray-600/30' : ''}" style="width: ${dayWidth}px;">
+                            <div class="text-xs font-semibold text-gray-900 dark:text-white">${dayStr}</div>
+                            <div class="text-xs text-gray-600 dark:text-gray-400">${monthStr}</div>
+                        </div>
+                    `;
+                }
+                
+                headerHTML += '</div></div>';
+
+                // Gerar barras das ações
+                let barsHTML = '';
+                const now = new Date();
+                
+                actionsWithDate.forEach((action, index) => {
+                    const actionDate = new Date(action.dueDate + 'T00:00:00');
+                    const daysFromStart = Math.floor((actionDate - minDate) / (1000 * 60 * 60 * 24));
+                    const leftPosition = daysFromStart * dayWidth;
+                    
+                    // Determinar duração da barra (baseado em horários se disponíveis)
+                    let barWidth = dayWidth;
+                    if (action.dueTime && action.endTime) {
+                        const startTime = new Date(`${action.dueDate}T${action.dueTime}`);
+                        const endTime = new Date(`${action.dueDate}T${action.endTime}`);
+                        const durationHours = (endTime - startTime) / (1000 * 60 * 60);
+                        // Barra proporcional ao tempo (máximo 1 dia)
+                        barWidth = Math.min(dayWidth, (dayWidth * durationHours) / 24);
+                    }
+                    
+                    const isOverdue = actionDate < now && !action.completed;
+                    const barColor = action.completed ? 'bg-green-500' : isOverdue ? 'bg-red-500' : 'bg-blue-500';
+                    const textColor = action.completed ? 'text-green-700 dark:text-green-300 line-through' : isOverdue ? 'text-red-700 dark:text-red-300' : 'text-gray-900 dark:text-white';
+                    
+                    barsHTML += `
+                        <div class="flex border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition" style="min-height: 50px;">
+                            <div class="w-64 flex-shrink-0 p-3 border-r border-gray-200 dark:border-gray-700">
+                                <div class="text-sm ${textColor} font-medium">${action.text}</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    ${action.dueTime || ''} ${action.endTime ? `- ${action.endTime}` : ''}
+                                    ${action.completed ? ' ✓' : ''}
+                                    ${isOverdue ? ' ⚠️' : ''}
+                                </div>
+                            </div>
+                            <div class="flex-grow relative" style="min-width: ${totalDays * dayWidth}px;">
+                                <div class="absolute ${barColor} rounded-md shadow-md hover:shadow-lg transition h-8 top-2 cursor-pointer" 
+                                     style="left: ${leftPosition}px; width: ${barWidth}px;"
+                                     title="${action.text} - ${new Date(action.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')} ${action.dueTime || ''} ${action.endTime ? `- ${action.endTime}` : ''}">
+                                    <div class="text-white text-xs px-2 py-1 truncate font-semibold">${action.text.substring(0, 20)}${action.text.length > 20 ? '...' : ''}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                app.gantt.chart.innerHTML = headerHTML + '<div class="relative">' + barsHTML + '</div>';
+                app.gantt.modal.classList.remove('hidden');
+            }
+
 
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
@@ -3250,6 +3410,9 @@
                 if (button.classList.contains('edit-btn')) openTaskModal(findTask(id), 'edit');
                 if (button.classList.contains('delete-btn')) deleteTask(id);
                 if (button.classList.contains('done-btn')) deleteTask(id);
+                if (button.classList.contains('gantt-btn')) {
+                    showGanttChart(id);
+                }
                 if (button.classList.contains('toggle-subtasks-btn')) {
                     const container = document.getElementById(`subtasks-container-${id}`);
                     if (container) {
@@ -3716,6 +3879,11 @@
 
             app.tutorialSelection.cancelBtn.addEventListener('click', () => {
                 app.tutorialSelection.modal.classList.add('hidden');
+            });
+
+            // Event listener para fechar o modal de Gantt
+            app.gantt.closeBtn.addEventListener('click', () => {
+                app.gantt.modal.classList.add('hidden');
             });
 
             // Botão de renovar assinatura no modal de configurações
