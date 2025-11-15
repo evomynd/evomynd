@@ -165,7 +165,7 @@
                 <div class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                     EVOMYND
                 </div>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">Getting Things Done</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">Evolua sua mente. Organize seu mundo.</p>
             </div>
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
         </div>
@@ -214,21 +214,21 @@
                 <button id="settings-btn" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-bold py-2 px-4 rounded-md transition shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">⚙️</button>
             </div>
             <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">EVOMYND</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Produtividade NÃO é sinônimo de estresse.</p>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Evolua sua mente. Organize seu mundo.</p>
         </header>
 
-        <div class="mb-8 text-center flex gap-4 justify-center">
-            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-2 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
+        <div class="mb-6 text-center flex gap-3 justify-center">
+            <button data-view="calendar-view" class="nav-tab inline-flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg text-center transition font-semibold text-sm w-full sm:w-auto bg-white dark:bg-gray-800 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                 Calendário
             </button>
-            <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-1 p-4 rounded-lg text-center transition font-semibold text-lg w-full sm:w-auto sm:px-10 bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+            <button id="weekly-review-btn" class="inline-flex flex-col items-center justify-center gap-0.5 py-2 px-4 rounded-lg text-center transition font-semibold text-sm w-full sm:w-auto bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                <div class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                         <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>Revisão Semanal</span>
+                    <span>Revisão</span>
                 </div>
                 <span id="next-review-date" class="text-xs font-normal opacity-75"></span>
             </button>
@@ -262,12 +262,22 @@
                     <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Filtre por Contexto</h2>
                     <div id="context-filters" class="flex flex-wrap gap-3"></div>
                 </div>
+                <div class="mb-4">
+                    <button id="add-next-action-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto">
+                        ➕ Adicionar Próxima Ação
+                    </button>
+                </div>
                 <div id="next-actions-list"></div>
             </div>
             <div id="projects-view" class="view hidden">
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                     <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Projetos Ativos</h2>
                     <p class="text-gray-600 dark:text-gray-400 mt-1">Resultados que requerem mais de uma ação.</p>
+                </div>
+                <div class="mt-4 mb-4">
+                    <button id="add-project-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto">
+                        ➕ Adicionar Projeto
+                    </button>
                 </div>
                 <div id="projects-list" class="mt-8"></div>
             </div>
@@ -283,6 +293,11 @@
                     <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Aguardando Resposta/Evento</h2>
                      <p class="text-gray-600 dark:text-gray-400 mt-1">Itens que delegou ou que dependem de outros.</p>
                 </div>
+                <div class="mt-4 mb-4">
+                    <button id="add-waiting-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto">
+                        ➕ Adicionar Item Aguardando
+                    </button>
+                </div>
                 <div id="waiting-for-list" class="mt-8"></div>
             </div>
             <div id="someday-maybe-view" class="view hidden">
@@ -290,12 +305,22 @@
                     <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Algum Dia / Talvez</h2>
                      <p class="text-gray-600 dark:text-gray-400 mt-1">Ideias para o futuro, sem compromisso imediato.</p>
                 </div>
+                <div class="mt-4 mb-4">
+                    <button id="add-someday-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto">
+                        ➕ Adicionar Ideia Futura
+                    </button>
+                </div>
                 <div id="someday-maybe-list" class="mt-8"></div>
             </div>
             <div id="reference-view" class="view hidden">
                  <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                     <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Material de Referência</h2>
                      <p class="text-gray-600 dark:text-gray-400 mt-1">Informações úteis e não acionáveis.</p>
+                </div>
+                <div class="mt-4 mb-4">
+                    <button id="add-reference-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 shadow-lg hover:shadow-xl active:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto">
+                        ➕ Adicionar Referência
+                    </button>
                 </div>
                 <div id="reference-list" class="mt-8"></div>
             </div>
@@ -1946,6 +1971,83 @@
                 }
             };
             
+            // Funções para adicionar itens diretamente em cada lista
+            const addDirectNextAction = () => {
+                const newTask = {
+                    id: Date.now().toString(),
+                    text: '',
+                    status: 'next-action',
+                    context: null,
+                    dueDate: null,
+                    dueTime: null,
+                    endTime: null
+                };
+                tasks.unshift(newTask);
+                saveTasks();
+                openTaskModal(newTask, 'edit');
+            };
+            
+            const addDirectProject = () => {
+                const newTask = {
+                    id: Date.now().toString(),
+                    text: '',
+                    status: 'project',
+                    context: null,
+                    dueDate: null,
+                    dueTime: null,
+                    endTime: null,
+                    subTasks: []
+                };
+                tasks.unshift(newTask);
+                saveTasks();
+                openTaskModal(newTask, 'edit');
+            };
+            
+            const addDirectWaiting = () => {
+                const newTask = {
+                    id: Date.now().toString(),
+                    text: '',
+                    status: 'waiting',
+                    context: null,
+                    dueDate: null,
+                    dueTime: null,
+                    endTime: null
+                };
+                tasks.unshift(newTask);
+                saveTasks();
+                openTaskModal(newTask, 'edit');
+            };
+            
+            const addDirectSomeday = () => {
+                const newTask = {
+                    id: Date.now().toString(),
+                    text: '',
+                    status: 'someday',
+                    context: null,
+                    dueDate: null,
+                    dueTime: null,
+                    endTime: null
+                };
+                tasks.unshift(newTask);
+                saveTasks();
+                openTaskModal(newTask, 'edit');
+            };
+            
+            const addDirectReference = () => {
+                const newTask = {
+                    id: Date.now().toString(),
+                    text: '',
+                    status: 'reference',
+                    context: null,
+                    dueDate: null,
+                    dueTime: null,
+                    endTime: null
+                };
+                tasks.unshift(newTask);
+                saveTasks();
+                openTaskModal(newTask, 'edit');
+            };
+            
             const openTaskModal = (task, mode = 'process') => {
                 app.modal.title.textContent = mode === 'process' ? 'Processar Item' : 'Editar / Mover Item';
                 app.modal.taskId.value = task.id;
@@ -2032,7 +2134,10 @@
                 let text, context, isValid = true; 
                 app.modal.formError.textContent = ''; 
                 text = document.getElementById('task-text-input')?.value.trim(); 
-                if (!text) isValid = false;
+                if (!text) {
+                    app.modal.formError.textContent = 'Por favor, descreva o item.';
+                    return;
+                }
                 
                 const dueDateInput = document.getElementById('due-date-input');
                 const dueTimeInput = document.getElementById('due-time-input');
@@ -2093,21 +2198,25 @@
 
                 switch (destination) { 
                     case 'next-action':
-                        context = document.getElementById('context-input').value.trim(); 
-                        if (!context) isValid = false; 
+                        context = document.getElementById('context-input')?.value.trim(); 
+                        // Contexto é opcional no modo edit, obrigatório no modo process
+                        if (mode === 'process' && !context) {
+                            app.modal.formError.textContent = 'Contexto é obrigatório ao processar item.';
+                            return;
+                        }
                         if (context && !context.startsWith('@')) context = '@' + context; 
-                        task.context = context;
+                        task.context = context || null;
                         break; 
                     default: 
                         task.context = null; 
                         break; 
                 } 
-                if (isValid) { 
-                    console.log('✅ Validação passou. Salvando tarefa...');
-                    task.text = text; 
-                    task.status = destination; 
-                    console.log('📌 Status atualizado para:', destination);
-                    if (destination === 'project' && !task.subTasks) { 
+                
+                console.log('✅ Validação passou. Salvando tarefa...');
+                task.text = text; 
+                task.status = destination; 
+                console.log('📌 Status atualizado para:', destination);
+                if (destination === 'project' && !task.subTasks) { 
                         task.subTasks = []; 
                     }
                     saveTasks();
@@ -2132,10 +2241,6 @@
                     if (shouldAskCalendar) {
                         showCalendarPrompt(task);
                     }
-                } else { 
-                    console.log('❌ Validação falhou. isValid:', isValid);
-                    app.modal.formError.textContent = 'Por favor, preencha todos os campos necessários.'; 
-                } 
             };
             
             // Função para perguntar se quer adicionar ao calendário
@@ -2689,6 +2794,13 @@
             // --- EVENT LISTENERS ---
             app.addTaskBtn.addEventListener('click', addTask);
             app.newTaskInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
+            
+            // Event listeners para botões de adicionar diretamente em cada lista
+            document.getElementById('add-next-action-btn')?.addEventListener('click', addDirectNextAction);
+            document.getElementById('add-project-btn')?.addEventListener('click', addDirectProject);
+            document.getElementById('add-waiting-btn')?.addEventListener('click', addDirectWaiting);
+            document.getElementById('add-someday-btn')?.addEventListener('click', addDirectSomeday);
+            document.getElementById('add-reference-btn')?.addEventListener('click', addDirectReference);
             
             app.newTaskInput.addEventListener('focus', () => {
                 setTimeout(() => {
