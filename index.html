@@ -1819,9 +1819,9 @@
                                 <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
                              ` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
-                            ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Editar</button>` : ''}
+                            ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Editar">✏️</button>` : ''}
                             ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
-                            <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Apagar</button>
+                            <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Apagar">🗑️</button>
                         </div>
                     </div>
                 `;
