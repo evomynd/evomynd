@@ -1796,7 +1796,11 @@
                         <div class="flex items-start gap-4 flex-grow min-w-0">
                            <div class="text-lg font-mono text-gray-600 dark:text-gray-400 w-8 text-center flex-shrink-0 pt-1">${currentStatus.icon}</div>
                            <div class="flex-grow min-w-0">
-                                <span class="text-gray-900 dark:text-gray-300 break-words">${task.text}</span>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-gray-900 dark:text-gray-300 break-words">${task.text}</span>
+                                    ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn text-gray-600 hover:text-yellow-600 dark:text-gray-400 dark:hover:text-yellow-400 text-lg cursor-pointer transition" title="Editar">✏️</button>` : ''}
+                                    <button data-id="${task.id}" class="delete-btn text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 text-lg cursor-pointer transition" title="Apagar">🗑️</button>
+                                </div>
                                 ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1 break-words">${task.context}</p>` : ''}
                                 ${task.dueDate ? (() => {
                                     const taskDateTime = new Date(`${task.dueDate}T${task.dueTime || '23:59'}`);
@@ -1819,9 +1823,7 @@
                                 <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
                              ` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
-                            ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Editar">✏️</button>` : ''}
                             ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
-                            <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Apagar">🗑️</button>
                         </div>
                     </div>
                 `;
