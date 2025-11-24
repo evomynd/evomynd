@@ -1789,6 +1789,9 @@
                         <button data-id="${task.id}" class="do-now-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Fazer agora (menos de 2 minutos)">
                             ⚡ Fazer agora
                         </button>
+                        <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md inline-flex items-center shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Apagar">
+                            🗑️
+                        </button>
                     </div>`;
 
                 const mainItemHTML = `
@@ -1798,8 +1801,6 @@
                            <div class="flex-grow min-w-0">
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-gray-900 dark:text-gray-300 break-words">${task.text}</span>
-                                    ${task.status !== 'inbox' ? `<button data-id="${task.id}" class="edit-btn text-gray-600 hover:text-yellow-600 dark:text-gray-400 dark:hover:text-yellow-400 text-lg cursor-pointer transition" title="Editar">✏️</button>` : ''}
-                                    <button data-id="${task.id}" class="delete-btn text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 text-lg cursor-pointer transition" title="Apagar">🗑️</button>
                                 </div>
                                 ${task.context ? `<p class="text-xs text-blue-600 dark:text-blue-400 mt-1 break-words">${task.context}</p>` : ''}
                                 ${task.dueDate ? (() => {
@@ -1821,9 +1822,15 @@
                              ${isProject ? `
                                 <button data-id="${task.id}" class="gantt-btn bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Ver cronograma">📊 Cronograma</button>
                                 <button data-id="${task.id}" class="toggle-subtasks-btn bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Ações</button>
+                                <button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Editar">✏️</button>
+                                <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Apagar">🗑️</button>
                              ` : ''}
                             ${task.status === 'inbox' ? inboxActionsHTML : ''}
-                            ${task.status === 'next-action' ? `<button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>` : ''}
+                            ${task.status === 'next-action' ? `
+                                <button data-id="${task.id}" class="done-btn bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition">Concluir</button>
+                                <button data-id="${task.id}" class="edit-btn bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Editar">✏️</button>
+                                <button data-id="${task.id}" class="delete-btn bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded-md shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0 transition" title="Apagar">🗑️</button>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -2181,6 +2188,7 @@
             };
             
             const addDirectWaiting = () => {
+                console.log('🔵 [DEBUG] addDirectWaiting chamado');
                 const newTask = {
                     id: Date.now().toString(),
                     text: '',
@@ -2190,9 +2198,13 @@
                     dueTime: null,
                     endTime: null
                 };
+                console.log('🔵 [DEBUG] Nova tarefa criada:', newTask);
                 tasks.unshift(newTask);
+                console.log('🔵 [DEBUG] Tarefa adicionada ao array. Total de tarefas:', tasks.length);
                 saveTasks();
+                console.log('🔵 [DEBUG] saveTasks() executado');
                 openTaskModal(newTask, 'edit');
+                console.log('🔵 [DEBUG] Modal aberto para edição');
             };
             
             const addDirectSomeday = () => {
@@ -2226,9 +2238,14 @@
             };
             
             const openTaskModal = (task, mode = 'process') => {
+                console.log('🟡 [DEBUG] ========== openTaskModal INICIADO ==========');
+                console.log('🟡 [DEBUG] Tarefa:', task);
+                console.log('🟡 [DEBUG] Modo:', mode);
                 app.modal.title.textContent = mode === 'process' ? 'Processar Item' : 'Editar / Mover Item';
                 app.modal.taskId.value = task.id;
+                console.log('🟡 [DEBUG] Task ID definido:', task.id);
                 app.modal.mode.value = mode;
+                console.log('🟡 [DEBUG] Mode definido:', mode);
                 
                 // Salvar valores originais para comparação posterior
                 document.getElementById('original-due-date').value = task.dueDate || '';
@@ -2238,14 +2255,17 @@
                 app.modal.destinationContainer.style.display = 'block';
 
                 if (mode === 'process') {
+                    console.log('🟡 [DEBUG] Modo process - definindo destino para next-action');
                     // app.modal.taskText.textContent = task.text; // Removido - campo não existe mais
                     // app.modal.taskText.classList.remove('hidden'); // Removido
                     app.modal.form.elements.destination.value = 'next-action';
                     updateModalForm('next-action', task, mode);
                 } else { // 'edit' mode
+                    console.log('🟡 [DEBUG] Modo edit - definindo destino para:', task.status);
                     // app.modal.taskText.classList.add('hidden'); // Removido
                     const destination = task.status;
                     app.modal.form.elements.destination.value = destination;
+                    console.log('🟡 [DEBUG] Destination radio value definido:', destination);
                     updateModalForm(destination, task, mode);
                 }
                 
@@ -2261,7 +2281,9 @@
                     }
                 });
                 
+                console.log('🟡 [DEBUG] Modal configurado. Mostrando modal...');
                 app.modal.element.classList.remove('hidden');
+                console.log('🟡 [DEBUG] ========== openTaskModal CONCLUÍDO ==========');
             };
             
             const updateModalForm = (destination, task, mode) => {
@@ -2297,21 +2319,36 @@
 
             const saveTask = (e) => { 
                 e.preventDefault(); 
-                console.log('💾 saveTask iniciado');
+                console.log('🟢 [DEBUG] ========== saveTask INICIADO ==========');
                 const id = app.modal.taskId.value; 
+                console.log('🟢 [DEBUG] ID da tarefa:', id);
                 const mode = app.modal.mode.value;
+                console.log('🟢 [DEBUG] Modo:', mode);
                 const task = findTask(id); 
-                console.log('📝 Tarefa encontrada:', task);
+                console.log('🟢 [DEBUG] Tarefa encontrada:', task);
                 if (!task) {
-                    console.error('❌ Tarefa não encontrada com id:', id);
+                    console.error('❌ [DEBUG] Tarefa não encontrada com id:', id);
+                    console.error('❌ [DEBUG] Array de tarefas atual:', tasks);
                     return; 
                 }
-                const destination = app.modal.form.elements.destination.value; 
-                console.log('🎯 Destino selecionado:', destination);
+                
+                const destinationRadio = app.modal.form.elements.destination;
+                console.log('🟢 [DEBUG] Radio buttons de destino:', destinationRadio);
+                
+                if (!destinationRadio) {
+                    console.error('❌ [DEBUG] Elemento destination não encontrado no formulário!');
+                    console.error('❌ [DEBUG] Elementos do form:', app.modal.form.elements);
+                    return;
+                }
+                
+                const destination = destinationRadio.value; 
+                console.log('🟢 [DEBUG] Destino selecionado:', destination);
                 let text, context, isValid = true; 
                 app.modal.formError.textContent = ''; 
                 text = document.getElementById('task-text-input')?.value.trim(); 
+                console.log('🟢 [DEBUG] Texto da tarefa:', text);
                 if (!text) {
+                    console.warn('⚠️ [DEBUG] Texto vazio - mostrando erro');
                     app.modal.formError.textContent = 'Por favor, descreva o item.';
                     return;
                 }
@@ -2395,25 +2432,33 @@
                         }
                         if (context && !context.startsWith('@')) context = '@' + context; 
                         task.context = context || null;
+                        console.log('🟢 [DEBUG] Contexto definido:', task.context);
                         break; 
                     default: 
                         task.context = null; 
+                        console.log('🟢 [DEBUG] Contexto não aplicável para:', destination);
                         break; 
                 } 
                 
-                console.log('✅ Validação passou. Salvando tarefa...');
+                console.log('🟢 [DEBUG] ✅ Validação passou. Salvando tarefa...');
                 task.text = text; 
+                console.log('🟢 [DEBUG] Texto atualizado:', task.text);
                 task.status = destination; 
-                console.log('📌 Status atualizado para:', destination);
+                console.log('🟢 [DEBUG] Status atualizado para:', destination);
+                console.log('🟢 [DEBUG] Tarefa antes de salvar:', JSON.stringify(task, null, 2));
                 if (destination === 'project' && !task.subTasks) { 
                         task.subTasks = []; 
+                        console.log('🟢 [DEBUG] SubTasks inicializado para projeto');
                     }
+                    console.log('🟢 [DEBUG] Chamando saveTasks()...');
                     saveTasks();
-                    console.log('💾 saveTasks() executado');
+                    console.log('🟢 [DEBUG] saveTasks() executado. Total de tarefas:', tasks.length);
+                    console.log('🟢 [DEBUG] Fechando modal...');
                     closeModal(); 
-                    console.log('🔄 Chamando render()...');
+                    console.log('🟢 [DEBUG] Chamando render()...');
                     render();
-                    console.log('✅ Tarefa processada com sucesso!');
+                    console.log('🟢 [DEBUG] ✅ Tarefa salva com sucesso!');
+                    console.log('🟢 [DEBUG] ========== saveTask CONCLUÍDO ==========');
                     
                     // Perguntar se quer adicionar ao calendário
                     // - Modo process: sempre perguntar se tiver data/hora/endTime
